@@ -1,5 +1,6 @@
 package fr.uparis.backapp.model;
 
+import javax.sound.sampled.Line;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,15 +12,15 @@ public class Reseau {
 
     //lien vers le patern singleton ===> https://fr.wikipedia.org/wiki/Singleton_(patron_de_conception)
     private static Reseau instance;
-    private List<Station> stations;
-    private List<Section> sections;
+    private List<Station> stations = new ArrayList<>();
+    private List<Section> sections = new ArrayList<>();
 
 
     /**
      * Constructeur de la classe Reseau
      */
-    private Reseau(){
-        throw new IllegalStateException("Instance already created");
+    public Reseau(){
+        //throw new IllegalStateException("Instance already created");
     }
 
     /**
@@ -58,5 +59,51 @@ public class Reseau {
     public List<Section> djikstra(){
         //TODO define the function
         return null;
+    }
+
+    public void addStation(Station station){
+        for(Station s : stations){
+            if(s.getNomStation().equals(station.getNomStation())){
+                return;
+            }
+        }
+        this.stations.add(station);
+    }
+
+    public void addSection(Section section){
+        this.sections.add(section);
+    }
+
+    public void printStations(){
+        for(Station station : stations){
+            System.out.println(station.getNomStation());
+            if(station.getCorrespondances().size() > 1){
+                System.out.println("Correspondances : " + station.getCorrespondances().get(0).getNomLigne() + " " + station.getCorrespondances().get(1).getNomLigne());
+            }
+        }
+    }
+
+    public Station getStationByName(String value) {
+        for(Station station : stations){
+            if(station.getNomStation().equals(value)){
+                return station;
+            }
+        }
+        System.out.println("Station " + value + " not found");
+        return null;
+    }
+    public boolean isStationExist(String value){
+        for(Station station : stations){
+            if(station.getNomStation().equals(value)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void printSections() {
+        for(Section section : sections){
+            System.out.println(section.getStationDepart().getNomStation() + " -> " + section.getStationArrivee().getNomStation() + " Distance " + section.getDistance() + "km" + " Temps " + section.getDuree() + "min, LIGNE : " + section.getLigne().getNomLigne() );
+        }
     }
 }

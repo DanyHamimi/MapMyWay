@@ -1,5 +1,6 @@
 package fr.uparis.backapp.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +21,11 @@ public class Station {
     public Station(String nomStation, Cordonnee localisation, List<Ligne> correspondances) {
         this.nomStation = nomStation;
         this.localisation = localisation;
-        this.correspondances = correspondances;
+        if(correspondances == null) {
+            this.correspondances = new ArrayList<>();
+        } else {
+            this.correspondances = correspondances;
+        }
     }
 
     /**
@@ -69,6 +74,23 @@ public class Station {
      */
     public void setCorrespondances(List<Ligne> correspondances) {
         this.correspondances = correspondances;
+    }
+
+    public void addCorrespondance(Ligne ligne) {
+        this.correspondances.add(ligne);
+    }
+
+    public String getname() {
+        return nomStation;
+    }
+
+    public Ligne getLigneByNom(String nomLigne) {
+        for(Ligne lignes : this.correspondances) {
+            if(lignes.getNomLigne().equals(nomLigne)) {
+                return lignes;
+            }
+        }
+        return null;
     }
 
     // TODO define isNearByOrigin and isNearByDestination

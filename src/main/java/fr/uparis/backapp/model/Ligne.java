@@ -40,6 +40,15 @@ public class Ligne {
         this.nomLigne = nomLigne;
     }
 
+    public void addStation(Station station) {
+        for(Station s : stations) {
+            if(s.getNomStation().equals(station.getNomStation())) {
+                return;
+            }
+        }
+        this.stations.add(station);
+    }
+
     /**
      * Renvoie la liste des Station de la Ligne
      * @return la liste des Station de la Ligne
@@ -71,5 +80,8 @@ public class Ligne {
     public void setTempsDeparts(List<LocalTime> tempsDeparts) {
         this.tempsDeparts = tempsDeparts;
     }
+
+
+
 
 }
