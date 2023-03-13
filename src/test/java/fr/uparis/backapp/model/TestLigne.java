@@ -10,8 +10,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Testeur de la classe Ligne
+ */
 public class TestLigne {
 
+    /**
+     * Teste la construction de Ligne avec des parametres null
+     */
     @Test
     public void testConstructorWithNullValues() {
         Ligne ligne = new Ligne(null, null, null);
@@ -21,6 +27,9 @@ public class TestLigne {
         assertEquals(null, ligne.getTempsDeparts());
     }
 
+    /**
+     * Teste la construction de Ligne avec des listes vides
+     */
     @Test
     public void testConstructorWithEmptyValues() {
         List<Station> stations = new ArrayList<>();
@@ -32,6 +41,9 @@ public class TestLigne {
         assertEquals(tempsDeparts, ligne.getTempsDeparts());
     }
 
+    /**
+     * Teste la construction de Ligne avec des parametres corrects
+     */
     @Test
     public void testConstructorWithNonEmptyValues() {
         List<Station> stations = Arrays.asList(new Station("S1",null,new ArrayList<>()), new Station("S2",null,new ArrayList<>()));
@@ -42,12 +54,19 @@ public class TestLigne {
         assertEquals(stations, ligne.getStations());
         assertEquals(tempsDeparts, ligne.getTempsDeparts());
     }
+
+    /**
+     * Teste le Getter de nomLigne
+     */
     @Test
     public void testGetNomLigne() {
         Ligne ligne = new Ligne("L1", new ArrayList<>(), new ArrayList<>());
         assertEquals("L1", ligne.getNomLigne());
     }
 
+    /**
+     * Teste le Setter de nomLigne
+     */
     @Test
     public void testSetNomLigne() {
         Ligne ligne = new Ligne("L1", new ArrayList<>(), new ArrayList<>());
@@ -55,6 +74,9 @@ public class TestLigne {
         assertEquals("L2", ligne.getNomLigne());
     }
 
+    /**
+     * Teste le Getter de la liste des Station
+     */
     @Test
     public void testGetStations() {
         List<Station> stations = new ArrayList<>();
@@ -64,6 +86,9 @@ public class TestLigne {
         assertEquals(stations, ligne.getStations());
     }
 
+    /**
+     * Teste le Setter de la liste des Station
+     */
     @Test
     public void testSetStations() {
         List<Station> stations1 = new ArrayList<>();
@@ -79,6 +104,9 @@ public class TestLigne {
         assertEquals(stations2, ligne.getStations());
     }
 
+    /**
+     * Teste le Getter de la liste des horaires de departs
+     */
     @Test
     public void testGetTempsDeparts() {
         List<LocalTime> tempsDeparts = new ArrayList<>();
@@ -88,6 +116,9 @@ public class TestLigne {
         assertEquals(tempsDeparts, ligne.getTempsDeparts());
     }
 
+    /**
+     * Teste le Setter de la liste des horaires de departs
+     */
     @Test
     public void testSetTempsDeparts() {
         List<LocalTime> tempsDeparts1 = new ArrayList<>();

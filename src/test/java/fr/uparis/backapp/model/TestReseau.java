@@ -7,8 +7,14 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+/**
+ * Testeur de la classe Reseau
+ */
 public class TestReseau {
 
+    /**
+     * Teste le Getter de l'instance de Reseau
+     */
     @Test
     void testGetInstance() {
         Reseau reseau1 = Reseau.getInstance();
@@ -16,16 +22,25 @@ public class TestReseau {
         assertSame(reseau1, reseau2);
     }
 
+    /**
+     *
+     */
     @Test
     void testGetNearStationsByOrigin() {
         //TODO Write tests
     }
 
+    /**
+     *
+     */
     @Test
     void testGetNearByDestination() {
        //TODO write tests
     }
 
+    /**
+     * Teste le calcul des plus courts chemins du Reseau
+     */
     @Test
     void testDjikstra() {
         //TODO write tests

@@ -7,8 +7,14 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Testeur de la classe Station
+ */
 public class TestSection {
 
+    /**
+     * Teste le Getter sur la Station de depart
+     */
     @Test
     public void testGetStationDepart() {
         Station station1 = new Station("Station 1", new Cordonnee(0, 0), null);
@@ -20,6 +26,9 @@ public class TestSection {
         assertEquals(station1, section.getStationDepart());
     }
 
+    /**
+     * Teste le Setter sur la Station de depart
+     */
     @Test
     public void testSetStationDepart() {
         Station station1 = new Station("Station 1", new Cordonnee(0, 0), null);
@@ -32,6 +41,9 @@ public class TestSection {
         assertEquals(station2, section.getStationDepart());
     }
 
+    /**
+     * Teste le Getter sur la Station d'arrivee
+     */
     @Test
     public void testGetStationArrivee() {
         Station station1 = new Station("Station 1", new Cordonnee(0, 0), null);
@@ -43,6 +55,9 @@ public class TestSection {
         assertEquals(station2, section.getStationArrivee());
     }
 
+    /**
+     * Teste le Setter sur la Station d'arrivee
+     */
     @Test
     public void testSetStationArrivee() {
         Station station1 = new Station("Station 1", new Cordonnee(0, 0), null);
@@ -55,6 +70,9 @@ public class TestSection {
         assertEquals(station1, section.getStationArrivee());
     }
 
+    /**
+     * Teste le Getter sur la duree d'une Section
+     */
     @Test
     public void testGetDuree() {
         Station station1 = new Station("Station 1", new Cordonnee(0, 0), null);
@@ -66,6 +84,9 @@ public class TestSection {
         assertEquals(duree, section.getDuree());
     }
 
+    /**
+     * Teste le Setter sur la duree de la Section
+     */
     @Test
     public void testSetDuree() {
         Station stationDepart = new Station("Station A", new Cordonnee(0, 0), new ArrayList<>());

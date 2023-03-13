@@ -1,6 +1,7 @@
 package fr.uparis.backapp.model;
 
 public class Cordonnee {
+
     private double latitude;
     private double longitude;
 
@@ -12,7 +13,6 @@ public class Cordonnee {
     public double getLatitude() {
         return latitude;
     }
-
     public double getLongitude() {
         return longitude;
     }
