@@ -9,8 +9,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Testeur de la classe Station
+ */
 public class TestStation {
 
+    /**
+     * Teste de la construction d'une Station avec des parametres null
+     */
     @Test
     public void testConstructorWithNullValues() {
         Station station = new Station(null, null, null);
@@ -20,6 +26,9 @@ public class TestStation {
         assertEquals(null, station.getCorrespondances());
     }
 
+    /**
+     * Teste la construction d'une classe avec des parametres vides
+     */
     @Test
     public void testConstructorWithEmptyValues() {
         List<Ligne> correspondances = new ArrayList<>();
@@ -30,6 +39,9 @@ public class TestStation {
         assertEquals(correspondances, station.getCorrespondances());
     }
 
+    /**
+     * Teste la construction d'une Station avec des parametres corrects
+     */
     @Test
     public void testConstructorWithNonEmptyValues() {
         List<Ligne> correspondances = Arrays.asList(new Ligne("L1", null, null), new Ligne("L2", null, null));
@@ -40,12 +52,18 @@ public class TestStation {
         assertEquals(correspondances, station.getCorrespondances());
     }
 
+    /**
+     * Teste le Getter de nomStation
+     */
     @Test
     public void testGetNomStation() {
         Station station = new Station("S1", new Cordonnee(0, 0), null);
         assertEquals("S1", station.getNomStation());
     }
 
+    /**
+     * Teste le Setter de nomStation
+     */
     @Test
     public void testSetNomStation() {
         Station station = new Station("S1", new Cordonnee(0, 0), null);
@@ -53,6 +71,9 @@ public class TestStation {
         assertEquals("S2", station.getNomStation());
     }
 
+    /**
+     * Teste le Getter de Coordonnee d'une Station
+     */
     @Test
     public void testGetLocalisation() {
         Cordonnee cordonnee = new Cordonnee(48.859865, 2.346949);
@@ -60,6 +81,9 @@ public class TestStation {
         assertEquals(cordonnee, station.getLocalisation());
     }
 
+    /**
+     * Teste le Seter de Coordonnee d'une Station
+     */
     @Test
     public void testSetLocalisation() {
         Cordonnee cordonnee1 = new Cordonnee(48.859865, 2.346949);
@@ -69,6 +93,9 @@ public class TestStation {
         assertEquals(cordonnee2, station.getLocalisation());
     }
 
+    /**
+     * Teste le Getter sur la liste des correspondances d'une Station
+     */
     @Test
     public void testGetCorrespondances() {
         List<Ligne> correspondances = Arrays.asList(new Ligne("L1", null, null), new Ligne("L2", null, null));
@@ -76,6 +103,9 @@ public class TestStation {
         assertEquals(correspondances, station.getCorrespondances());
     }
 
+    /**
+     * Teste le Setter sur la liste des correspondances d'une' Station
+     */
     @Test
     public void testSetCorrespondances() {
         List<Ligne> correspondances1 = Arrays.asList(new Ligne("L1", null, null), new Ligne("L2", null, null));

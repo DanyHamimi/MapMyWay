@@ -4,8 +4,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testeur de la classe Coordonnee
+ */
 public class TestCordonee {
 
+    /**
+     * Teste la construction de la classe.
+     * Teste les Getters de latitude et longitude
+     */
     @Test
     public void testConstructorAndGetters() {
         Cordonnee cordonnee = new Cordonnee(48.8566, 2.3522);
@@ -13,6 +20,9 @@ public class TestCordonee {
         assertEquals(2.3522, cordonnee.getLongitude(), 0.0);
     }
 
+    /**
+     * Teste les Setters sur latitude et longitude
+     */
     @Test
     public void testSetters() {
         Cordonnee cordonnee = new Cordonnee(48.8566, 2.3522);
@@ -22,6 +32,9 @@ public class TestCordonee {
         assertEquals(4.85, cordonnee.getLongitude(), 0.0);
     }
 
+    /**
+     * Teste d'equals entre plusieurs Coordonnee
+     */
     @Test
     public void testEquals() {
         Cordonnee cordonnee1 = new Cordonnee(48.8566, 2.3522);
