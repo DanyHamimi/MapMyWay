@@ -36,7 +36,7 @@ public class Parser {
             }
         }
         catch (IOException e) {
-                e.printStackTrace();
+            e.printStackTrace();
         }
         List<String> Sections = new ArrayList<>();
         for(int i = 0; i < nameLignes.size(); i++){
@@ -44,7 +44,7 @@ public class Parser {
             for(int j = 0; j < lignesCSV.size(); j++){
                 String[] values = lignesCSV.get(j).split(";");
                 if(values[4].equals(nameLignes.get(i))){
-                    Cordonnee coordonneeDepart = new Cordonnee(Double.parseDouble(values[1].split(",")[0]), Double.parseDouble(values[1].split(",")[1]));
+                    Coordonnee coordonneeDepart = new Coordonnee(Double.parseDouble(values[1].split(",")[0]), Double.parseDouble(values[1].split(",")[1]));
                     if(!r.isStationExist(values[0])){
                         Station s = new Station(values[0], coordonneeDepart, null);
                         listStations.add(s);
@@ -56,7 +56,7 @@ public class Parser {
                         }
                     }
                     if(!r.isStationExist(values[2])){
-                        Cordonnee coordonneeArrivee = new Cordonnee(Double.parseDouble(values[3].split(",")[0]), Double.parseDouble(values[3].split(",")[1]));
+                        Coordonnee coordonneeArrivee = new Coordonnee(Double.parseDouble(values[3].split(",")[0]), Double.parseDouble(values[3].split(",")[1]));
                         Station s = new Station(values[2], coordonneeArrivee, null);
                         listStations.add(s);
                         r.addStation(s);
@@ -84,16 +84,14 @@ public class Parser {
             Section s = new Section(r.getStationByName(values[0]), r.getStationByName(values[2]), time, Double.parseDouble(correctLength), r.getStationByName(values[0]).getLigneByNom(values[4]));
             r.addSection(s);
         }
-
-
     }
 
     public String correctTime(String time){
         //Make a string correct time with the format hour : minute : second
         String correctedTime = String.format("%1$02d:%2$02d:%3$02d",
-                0,
-                Integer.parseInt(time.split(":")[0]),
-                Integer.parseInt(time.split(":")[1]));
+                               0,
+                               Integer.parseInt(time.split(":")[0]),
+                               Integer.parseInt(time.split(":")[1]));
         return correctedTime;
     }
 
@@ -102,5 +100,4 @@ public class Parser {
      * Affiche les horaires de passage d’un transport a une Station donnee.
      */
     public void lect_Time(){}
-
 }

@@ -41,4 +41,12 @@ public class TestCalculator {
     @Test
     public void testPlan3(){
     }
+
+    /**
+     * Teste si les stations proches obtenues sont celles attendues.
+     */
+    @Test
+    public void testGetNearStations(){
+        //TODO Write tests : mêmes tests que dans TestReseau
+    }
 }
