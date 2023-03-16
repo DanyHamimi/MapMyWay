@@ -7,18 +7,17 @@ import java.util.List;
  * Represente une Station du Reseau de transport
  */
 public class Station {
-
     private String nomStation;
-    private Cordonnee localisation;
+    private Coordonnee localisation;
     private List<Ligne> correspondances;
 
     /**
-     * Constructeur de la classe
+     * Constructeur de la classe Station
      * @param nomStation nom de la Station
      * @param localisation Coordonnee de la Station
      * @param correspondances liste des correspondances avec d'autres Ligne du Reseau
      */
-    public Station(String nomStation, Cordonnee localisation, List<Ligne> correspondances) {
+    public Station(String nomStation, Coordonnee localisation, List<Ligne> correspondances) {
         this.nomStation = nomStation;
         this.localisation = localisation;
         if(correspondances == null) {
@@ -48,7 +47,7 @@ public class Station {
      * Renvoie la Coordonnee de la Station
      * @return la Coordonne de la Station
      */
-    public Cordonnee getLocalisation() {
+    public Coordonnee getLocalisation() {
         return localisation;
     }
 
@@ -56,7 +55,7 @@ public class Station {
      * Met a jour la Coordonnee de la Station
      * @param localisation Coordonne de la Station
      */
-    public void setLocalisation(Cordonnee localisation) {
+    public void setLocalisation(Coordonnee localisation) {
         this.localisation = localisation;
     }
 
@@ -76,23 +75,40 @@ public class Station {
         this.correspondances = correspondances;
     }
 
+    /**
+     * Ajout d'une correspondance (càd une ligne) à la station
+     * @param ligne une nouvelle correspondance possible à la station courante
+     */
     public void addCorrespondance(Ligne ligne) {
         this.correspondances.add(ligne);
     }
 
-    public String getname() {
-        return nomStation;
+    /**
+     * Comparaison de deux stations.
+     * @param o objet avec lequel comparer
+     * @return true si et seulement si o et this représentent la même station,
+     * donc ont le même nom de station (unicité des noms de station)
+     */
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        return ((Station)o).getNomStation().equals(this.nomStation); //unicité des noms de station
     }
 
+    /**
+     * A l'aide du nom d'une ligne, vérifie si cette ligne appartient aux correspondances de la station, et la renvoie.
+     * @param nomLigne le nom de la ligne
+     * @return la ligne recherchée si elle existe, null sinon
+     */
     public Ligne getLigneByNom(String nomLigne) {
-        for(Ligne lignes : this.correspondances) {
-            if(lignes.getNomLigne().equals(nomLigne)) {
-                return lignes;
+        for(Ligne ligne : this.correspondances) {
+            if(ligne.getNomLigne().equals(nomLigne)) {
+                return ligne;
             }
         }
         return null;
     }
 
-    // TODO define isNearByOrigin and isNearByDestination
     // TODO discuss addTime function
 }

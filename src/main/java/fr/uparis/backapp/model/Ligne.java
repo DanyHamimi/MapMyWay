@@ -7,15 +7,14 @@ import java.util.List;
  * Represente une Ligne du Reseau de transport
  */
 public class Ligne {
-
-    private String nomLigne;
-    private List<Station> stations;
+    private String nomLigne; //nom de la ligne, unique
+    private List<Station> stations; //stations de la ligne
     private List<LocalTime> tempsDeparts;
 
     /**
-     * Constructeur de la classe
+     * Constructeur de la classe Ligne
      * @param nomLigne nom de la Ligne
-     * @param stations liste des Station desservis par la Ligne
+     * @param stations liste des Station desservies par la Ligne
      * @param tempsDeparts liste des horaires de departs de cette Ligne
      */
     public Ligne(String nomLigne, List<Station> stations, List<LocalTime> tempsDeparts) {
@@ -40,6 +39,10 @@ public class Ligne {
         this.nomLigne = nomLigne;
     }
 
+    /**
+     * Ajout d'une station à la ligne, si elle n'y est pas déjà.
+     * @param station la station à ajouter à la ligne
+     */
     public void addStation(Station station) {
         for(Station s : stations) {
             if(s.getNomStation().equals(station.getNomStation())) {
@@ -66,22 +69,18 @@ public class Ligne {
     }
 
     /**
-     * Renvoie la liste des horaires de departs de la Ligne
-     * @return la liste des horaires de departs de la Ligne
+     * Renvoie la liste des horaires de depart de la Ligne
+     * @return la liste des horaires de depart de la Ligne
      */
     public List<LocalTime> getTempsDeparts() {
         return tempsDeparts;
     }
 
     /**
-     * Met a jour la liste des horaires de departs de la Ligne
-     * @param tempsDeparts liste des horaires de departs de la Ligne
+     * Met a jour la liste des horaires de depart de la Ligne
+     * @param tempsDeparts liste des horaires de depart de la Ligne
      */
     public void setTempsDeparts(List<LocalTime> tempsDeparts) {
         this.tempsDeparts = tempsDeparts;
     }
-
-
-
-
 }

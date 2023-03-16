@@ -17,8 +17,8 @@ public class TestSection {
      */
     @Test
     public void testGetStationDepart() {
-        Station station1 = new Station("Station 1", new Cordonnee(0, 0), null);
-        Station station2 = new Station("Station 2", new Cordonnee(1, 1), null);
+        Station station1 = new Station("Station 1", new Coordonnee(0, 0), null);
+        Station station2 = new Station("Station 2", new Coordonnee(1, 1), null);
         LocalTime duree = LocalTime.of(0, 5);
         double distance = 1.0;
         Ligne ligne = new Ligne("Ligne A", null, null);
@@ -31,8 +31,8 @@ public class TestSection {
      */
     @Test
     public void testSetStationDepart() {
-        Station station1 = new Station("Station 1", new Cordonnee(0, 0), null);
-        Station station2 = new Station("Station 2", new Cordonnee(1, 1), null);
+        Station station1 = new Station("Station 1", new Coordonnee(0, 0), null);
+        Station station2 = new Station("Station 2", new Coordonnee(1, 1), null);
         LocalTime duree = LocalTime.of(0, 5);
         double distance = 1.0;
         Ligne ligne = new Ligne("Ligne A", null, null);
@@ -46,8 +46,8 @@ public class TestSection {
      */
     @Test
     public void testGetStationArrivee() {
-        Station station1 = new Station("Station 1", new Cordonnee(0, 0), null);
-        Station station2 = new Station("Station 2", new Cordonnee(1, 1), null);
+        Station station1 = new Station("Station 1", new Coordonnee(0, 0), null);
+        Station station2 = new Station("Station 2", new Coordonnee(1, 1), null);
         LocalTime duree = LocalTime.of(0, 5);
         double distance = 1.0;
         Ligne ligne = new Ligne("Ligne A", null, null);
@@ -60,8 +60,8 @@ public class TestSection {
      */
     @Test
     public void testSetStationArrivee() {
-        Station station1 = new Station("Station 1", new Cordonnee(0, 0), null);
-        Station station2 = new Station("Station 2", new Cordonnee(1, 1), null);
+        Station station1 = new Station("Station 1", new Coordonnee(0, 0), null);
+        Station station2 = new Station("Station 2", new Coordonnee(1, 1), null);
         LocalTime duree = LocalTime.of(0, 5);
         double distance = 1.0;
         Ligne ligne = new Ligne("Ligne A", null, null);
@@ -75,8 +75,8 @@ public class TestSection {
      */
     @Test
     public void testGetDuree() {
-        Station station1 = new Station("Station 1", new Cordonnee(0, 0), null);
-        Station station2 = new Station("Station 2", new Cordonnee(1, 1), null);
+        Station station1 = new Station("Station 1", new Coordonnee(0, 0), null);
+        Station station2 = new Station("Station 2", new Coordonnee(1, 1), null);
         LocalTime duree = LocalTime.of(0, 5);
         double distance = 1.0;
         Ligne ligne = new Ligne("Ligne A", null, null);
@@ -89,8 +89,8 @@ public class TestSection {
      */
     @Test
     public void testSetDuree() {
-        Station stationDepart = new Station("Station A", new Cordonnee(0, 0), new ArrayList<>());
-        Station stationArrivee = new Station("Station B", new Cordonnee(1, 1), new ArrayList<>());
+        Station stationDepart = new Station("Station A", new Coordonnee(0, 0), new ArrayList<>());
+        Station stationArrivee = new Station("Station B", new Coordonnee(1, 1), new ArrayList<>());
         Ligne ligne = new Ligne("Ligne 1", new ArrayList<>(), new ArrayList<>());
         LocalTime duree = LocalTime.of(0, 30); // 30 minutes
         double distance = 10.0;

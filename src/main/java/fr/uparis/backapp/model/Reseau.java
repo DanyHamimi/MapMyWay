@@ -1,6 +1,9 @@
 package fr.uparis.backapp.model;
 
 import javax.sound.sampled.Line;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +11,10 @@ import java.util.List;
  * Represente un Reseau de transport
  */
 public class Reseau {
-
-
     //lien vers le patern singleton ===> https://fr.wikipedia.org/wiki/Singleton_(patron_de_conception)
     private static Reseau instance;
-    private List<Station> stations = new ArrayList<>();
-    private List<Section> sections = new ArrayList<>();
+    private static List<Station> stations = new ArrayList<>(); //toutes les stations du réseau
+    private static List<Section> sections = new ArrayList<>(); //toutes les sections du réseau
 
 
     /**
@@ -35,25 +36,45 @@ public class Reseau {
     }
 
     /**
-     * Renvoie la liste des Stations en fonction de leur origine
-     * @return la liste des Stations en fonction de leur origine
+     * Calcule la distance entre deux coordonnées, avec une précision au mètre.
+     * @param origine coordonnée du point de départ
+     * @param destination coordonnée du point d'arrivée
+     * @return la distance entre origine et destination en km, avec au plus 3 chiffres après la virgule
      */
-    public List<Station> getNearStationsByOrigin(){
-        //TODO define the function
-        return new ArrayList<>();
+    static double distanceBetween(Coordonnee origine, Coordonnee destination){
+        double latOrigine=origine.getLatitudeRadian(), longOrigine=origine.getLongitudeRadian();
+        double latDestination=destination.getLatitudeRadian(), longDestination=destination.getLongitudeRadian();
+        double latDiff=latDestination-latOrigine, longDiff=longDestination-longOrigine;
+
+        double halfLatSin=Math.sin(latDiff/2), halfLongSin=Math.sin(longDiff/2);
+        double a=halfLatSin*halfLatSin + halfLongSin*halfLongSin * Math.cos(latOrigine) * Math.cos(latDestination);
+        double res=6372.795; //rayon moyen de la Terre en km
+        res*=2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return new BigDecimal(res).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
     }
 
     /**
-     * Renvoie la liste des Stations en fonction de leur destination
-     * @return la liste des Stations en fonction de leur destination
+     * Cherche les stations proches d'une coordonnée.
+     * @param coordonnee coordonnée du point de départ
+     * @param maxDistance distance maximale acceptable entre deux points, en km
+     * @param minDistance distance minimale acceptable entre deux points, en km
+     * @return la liste des stations dont la distance est majorée par maxDistance et minorée par minDistance
      */
-    public List<Station> getNearByDestination(){
-        //TODO define the function
-        return new ArrayList<>();
+    public static Station[] getNearStations(Coordonnee coordonnee, double maxDistance, double minDistance){
+        List<Station> nearStations=new ArrayList<>();
+        double distance;
+        for(Station s : stations){
+            distance=distanceBetween(coordonnee, s.getLocalisation());
+            if(distance>=minDistance && distance<=maxDistance)
+                nearStations.add(s);
+        }
+
+        return (Station[])nearStations.toArray();
     }
 
     /**
-     * Determine le plus court chemin pour se rendre a une Coordonnee a une autre en connaissant le Reseau
+     * Determine le plus court chemin pour se rendre d'une Coordonnee a une autre en connaissant le Reseau
      * @return la liste des plus courts chemins
      */
     public List<Section> djikstra(){
@@ -61,15 +82,23 @@ public class Reseau {
         return null;
     }
 
+    /**
+     * Ajout d'une station dans le réseau, si elle n'y est pas déjà.
+     * @param station la station à ajouter dans le réseau
+     */
     public void addStation(Station station){
         for(Station s : stations){
-            if(s.getNomStation().equals(station.getNomStation())){
+            if(s.equals(station)){
                 return;
             }
         }
         this.stations.add(station);
     }
 
+    /**
+     * Ajout d'une section dans le réseau
+     * @param section
+     */
     public void addSection(Section section){
         this.sections.add(section);
     }

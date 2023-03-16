@@ -9,7 +9,6 @@ import java.util.Timer;
  * Represente une Section du Reseau de transport
  */
 public class Section {
-
     private Station stationDepart;
     private Station stationArrivee;
     private LocalTime duree; // maybe it will be changed to double (number of minutes)
@@ -22,7 +21,7 @@ public class Section {
      * @param stationArrivee Station d'arrivee de la Section
      * @param duree duree estimee de la Section
      * @param distance distance de la Section
-     * @param ligne Ligne a utiliser
+     * @param ligne Ligne de la Section
      */
     public Section(Station stationDepart, Station stationArrivee, LocalTime duree, double distance,Ligne ligne) {
         this.stationDepart = stationDepart;
@@ -111,5 +110,20 @@ public class Section {
      */
     public void setLigne(Ligne ligne) {
         this.ligne = ligne;
+    }
+
+    /**
+     * Comparaison de deux sections.
+     * @param o objet avec lequel comparer
+     * @return true si o et this ont les mêmes stations
+     */
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        Section section = (Section)o;
+        return (section.getStationDepart().equals(this.getStationDepart()) && section.getStationArrivee().equals(this.getStationArrivee()))
+                //TODO : discuter de l'égalité dans les deux sens ou non
+            || (section.getStationDepart().equals(this.getStationArrivee()) && section.getStationArrivee().equals(this.getStationDepart()));
     }
 }
