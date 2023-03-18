@@ -2,6 +2,7 @@ package fr.uparis.backapp.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represente une Station du Reseau de transport
@@ -20,11 +21,7 @@ public class Station {
     public Station(String nomStation, Coordonnee localisation, List<Ligne> correspondances) {
         this.nomStation = nomStation;
         this.localisation = localisation;
-        if(correspondances == null) {
-            this.correspondances = new ArrayList<>();
-        } else {
-            this.correspondances = correspondances;
-        }
+        this.correspondances = Objects.requireNonNullElseGet(correspondances, ArrayList::new);
     }
 
     /**
@@ -96,6 +93,14 @@ public class Station {
         return ((Station)o).getNomStation().equals(this.nomStation); //unicité des noms de station
     }
 
+    @Override
+    public int hashCode() {
+        int result = nomStation.hashCode();
+        result = 31 * result + localisation.hashCode();
+//        result = 31 * result + (correspondances != null ? correspondances.hashCode() : 0);
+        return result;
+    }
+
     /**
      * A l'aide du nom d'une ligne, vérifie si cette ligne appartient aux correspondances de la station, et la renvoie.
      * @param nomLigne le nom de la ligne
@@ -108,6 +113,11 @@ public class Station {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return nomStation;
     }
 
     // TODO discuss addTime function

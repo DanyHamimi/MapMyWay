@@ -76,4 +76,28 @@ public class Coordonnee{
         return Double.compare(coordonnee.latitude, latitude) == 0
             && Double.compare(coordonnee.longitude, longitude) == 0;
     }
+
+    //TODO documenter la méthode
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(latitude);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(longitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    /**
+     * @return les cordonnee à partir d'une chaine de caractères
+     * @param coordonnees latitude et longitude séparées avec une virgule
+     */
+
+    public static Coordonnee getCoordonnesFromString(String coordonnees){
+        String [] splitCordonnees = coordonnees.split(",");
+        if(splitCordonnees.length!=2)
+            throw new IllegalArgumentException("Arguments invalides pour la contruction de coordonee" + coordonnees );
+        return new Coordonnee(Double.parseDouble(splitCordonnees[0]),Double.parseDouble(splitCordonnees[1]));
+    }
 }
