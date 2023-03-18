@@ -3,24 +3,24 @@ package fr.uparis.backapp.model;
 import javax.sound.sampled.Line;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represente un Reseau de transport
  */
 public class Reseau {
     //lien vers le patern singleton ===> https://fr.wikipedia.org/wiki/Singleton_(patron_de_conception)
-    private static Reseau instance;
-    private static List<Station> stations = new ArrayList<>(); //toutes les stations du réseau
-    private static List<Section> sections = new ArrayList<>(); //toutes les sections du réseau
+    private static Reseau instance=null;
+    private static Set<Station> stations;
+    private Set<Section> sections;
 
 
     /**
      * Constructeur de la classe Reseau
      */
-    public Reseau(){
+    private Reseau(){
         //throw new IllegalStateException("Instance already created");
     }
 

@@ -1,9 +1,7 @@
 package fr.uparis.backapp.model;
 
-import org.springframework.cglib.core.Local;
-
 import java.time.LocalTime;
-import java.util.Timer;
+import java.util.List;
 
 /**
  * Represente une Section du Reseau de transport
@@ -14,6 +12,7 @@ public class Section {
     private LocalTime duree; // maybe it will be changed to double (number of minutes)
     private double distance;
     private Ligne ligne;
+    private List<LocalTime> heuresDeparts;
 
     /**
      * Constructeur de la Section
@@ -31,6 +30,14 @@ public class Section {
         this.ligne = ligne;
 
     }
+    public Section(Station stationDepart, Station stationArrivee, LocalTime duree,Ligne ligne) {
+        this.stationDepart = stationDepart;
+        this.stationArrivee = stationArrivee;
+        this.duree = duree;
+        this.ligne = ligne;
+    }
+
+
 
     /**
      * Renvoie la Station de depart de la Section
@@ -113,6 +120,14 @@ public class Section {
     }
 
     /**
+     * Renvoie l'heure a laquelle le train part
+     * @return l'heure a laquelle le train part
+     */
+    public List<LocalTime> getHoraire() {
+        return heuresDeparts;
+    }
+
+    /**
      * Comparaison de deux sections.
      * @param o objet avec lequel comparer
      * @return true si o et this ont les mêmes stations
@@ -122,8 +137,18 @@ public class Section {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         Section section = (Section)o;
-        return (section.getStationDepart().equals(this.getStationDepart()) && section.getStationArrivee().equals(this.getStationArrivee()))
-                //TODO : discuter de l'égalité dans les deux sens ou non
-            || (section.getStationDepart().equals(this.getStationArrivee()) && section.getStationArrivee().equals(this.getStationDepart()));
+        return (section.getStationDepart().equals(this.getStationDepart()) && section.getStationArrivee().equals(this.getStationArrivee()));
+    }
+
+    /**
+     * Renvoie true si la section vas d'une station a l'autre.
+     * @param currentStation Station de départ
+     * @param futureStation Station d'arrivée
+     */
+    public boolean goFromTo(Station currentStation, Station futureStation) {
+        if (currentStation.equals(this.stationDepart) && futureStation.equals(this.stationArrivee)){
+            return true;
+        }
+        return false;
     }
 }

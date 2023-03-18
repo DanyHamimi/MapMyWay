@@ -1,15 +1,15 @@
 package fr.uparis.backapp.model;
 
 import java.time.LocalTime;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represente une Ligne du Reseau de transport
  */
 public class Ligne {
     private String nomLigne; //nom de la ligne, unique
-    private List<Station> stations; //stations de la ligne
-    private List<LocalTime> tempsDeparts;
+    private Set<Station> stations; //stations de la ligne
+    private List<LocalTime> tempsDeparts;//TODO it will maybe deleted, to be discussed
 
     /**
      * Constructeur de la classe Ligne
@@ -17,10 +17,16 @@ public class Ligne {
      * @param stations liste des Station desservies par la Ligne
      * @param tempsDeparts liste des horaires de departs de cette Ligne
      */
-    public Ligne(String nomLigne, List<Station> stations, List<LocalTime> tempsDeparts) {
+    public Ligne(String nomLigne, Set<Station> stations, List<LocalTime> tempsDeparts) {
         this.nomLigne = nomLigne;
         this.stations = stations;
         this.tempsDeparts = tempsDeparts;
+    }
+
+    public Ligne(String nomLigne){
+        this.nomLigne = nomLigne;
+        this.stations = new LinkedHashSet<>();
+        this.tempsDeparts = new ArrayList<>();
     }
 
     /**
@@ -56,7 +62,7 @@ public class Ligne {
      * Renvoie la liste des Station de la Ligne
      * @return la liste des Station de la Ligne
      */
-    public List<Station> getStations() {
+    public Set<Station> getStations() {
         return stations;
     }
 
@@ -64,7 +70,7 @@ public class Ligne {
      * Met a jour la liste des Station de la Ligne
      * @param stations liste des Station de la Ligne
      */
-    public void setStations(List<Station> stations) {
+    public void setStations(Set<Station> stations) {
         this.stations = stations;
     }
 
@@ -82,5 +88,27 @@ public class Ligne {
      */
     public void setTempsDeparts(List<LocalTime> tempsDeparts) {
         this.tempsDeparts = tempsDeparts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ligne ligne = (Ligne) o;
+
+        if (!Objects.equals(nomLigne, ligne.nomLigne)) return false;
+//        if (!Objects.equals(stations, ligne.stations)) return false;
+//        return Objects.equals(tempsDeparts, ligne.tempsDeparts);
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        String s = nomLigne + " : ";
+        for(Station station :stations ){
+            s+= station.getNomStation()+" -> ";
+        }
+        return s;
     }
 }
