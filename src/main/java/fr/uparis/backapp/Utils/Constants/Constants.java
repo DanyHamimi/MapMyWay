@@ -2,6 +2,7 @@ package fr.uparis.backapp.Utils.Constants;
 
 public class Constants {
     public static final String DELIMITER = ";";
+    public static final String CSV_FILE_PATH_PROPERTY = "map.data.file.path";
     public static final int STATION_DEPART_INDEX = 0;
     public static final int STATION_ARRIVEE_INDEX = 2;
     public static final int STATION_DEPART_COORDONEES_INDEX = 1;

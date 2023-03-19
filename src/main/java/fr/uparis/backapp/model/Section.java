@@ -28,16 +28,22 @@ public class Section {
         this.duree = duree;
         this.distance = distance;
         this.ligne = ligne;
-
     }
+
+
+    /**
+     * Constructeur de la Section
+     * @param stationDepart Station de depart de la Section
+     * @param stationArrivee Station d'arrivee de la Section
+     * @param duree duree estimee de la Section
+     * @param ligne Ligne de la Section
+     */
     public Section(Station stationDepart, Station stationArrivee, LocalTime duree,Ligne ligne) {
         this.stationDepart = stationDepart;
         this.stationArrivee = stationArrivee;
         this.duree = duree;
         this.ligne = ligne;
     }
-
-
 
     /**
      * Renvoie la Station de depart de la Section
@@ -125,6 +131,14 @@ public class Section {
      */
     public List<LocalTime> getHoraire() {
         return heuresDeparts;
+    }
+
+    /**
+     * Met a jour les heures de départs pour la section
+     * @param heuresDeparts l'ensemble d'heures de départs de la sections
+     */
+    public void setHeuresDeparts(List<LocalTime> heuresDeparts) {
+        this.heuresDeparts = heuresDeparts;
     }
 
     /**

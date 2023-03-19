@@ -17,8 +17,7 @@ public class DemoApplication {
 
         //SpringApplication.run(DemoApplication.class, args);
 
-        Parser p = new Parser();
-        p.parse();
+        Parser p = Parser.getInstance();
 //        Reseau r = new Reseau();
 //        p.lect_Net(r);
 //
