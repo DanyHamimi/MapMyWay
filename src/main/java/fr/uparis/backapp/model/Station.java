@@ -1,8 +1,6 @@
 package fr.uparis.backapp.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represente une Station du Reseau de transport
@@ -10,22 +8,24 @@ import java.util.Objects;
 public class Station {
     private String nomStation;
     private Coordonnee localisation;
-    private List<Ligne> correspondances;
+    private Set<Section> correspondances;
 
     /**
      * Constructeur de la classe Station
-     * @param nomStation nom de la Station
-     * @param localisation Coordonnee de la Station
+     *
+     * @param nomStation      nom de la Station
+     * @param localisation    Coordonnee de la Station
      * @param correspondances liste des correspondances avec d'autres Ligne du Reseau
      */
-    public Station(String nomStation, Coordonnee localisation, List<Ligne> correspondances) {
+    public Station(String nomStation, Coordonnee localisation, Set<Section> correspondances) {
         this.nomStation = nomStation;
         this.localisation = localisation;
-        this.correspondances = Objects.requireNonNullElseGet(correspondances, ArrayList::new);
+        this.correspondances = Objects.requireNonNullElseGet(correspondances, HashSet::new);
     }
 
     /**
      * Renvoie le nom de la Station
+     *
      * @return le nom de la Station
      */
     public String getNomStation() {
@@ -34,6 +34,7 @@ public class Station {
 
     /**
      * Met a jour le nom de la Station
+     *
      * @param nomStation nom de la Station
      */
     public void setNomStation(String nomStation) {
@@ -42,6 +43,7 @@ public class Station {
 
     /**
      * Renvoie la Coordonnee de la Station
+     *
      * @return la Coordonne de la Station
      */
     public Coordonnee getLocalisation() {
@@ -50,6 +52,7 @@ public class Station {
 
     /**
      * Met a jour la Coordonnee de la Station
+     *
      * @param localisation Coordonne de la Station
      */
     public void setLocalisation(Coordonnee localisation) {
@@ -58,41 +61,50 @@ public class Station {
 
     /**
      * Renvoie les correspondances avec les Ligne du Reseau
+     *
      * @return les correspondances avec les Ligne du Reseau
      */
-    public List<Ligne> getCorrespondances() {
+    public Set<Section> getCorrespondances() {
         return correspondances;
     }
 
     /**
      * Met a jour les correspondances avec les Ligne du Reseau
+     *
      * @param correspondances correspondances avec les Ligne du Reseau
      */
-    public void setCorrespondances(List<Ligne> correspondances) {
+    public void setCorrespondances(Set<Section> correspondances) {
         this.correspondances = correspondances;
     }
 
     /**
      * Ajout d'une correspondance (càd une ligne) à la station
-     * @param ligne une nouvelle correspondance possible à la station courante
+     *
+     * @param  section une nouvelle correspondance possible à la station courante
      */
-    public void addCorrespondance(Ligne ligne) {
-        this.correspondances.add(ligne);
+    public void addCorrespondance(Section section) {
+        this.correspondances.add(section);
     }
 
     /**
      * Comparaison de deux stations.
+     *
      * @param o objet avec lequel comparer
      * @return true si et seulement si o et this représentent la même station,
      * donc ont le même nom de station (unicité des noms de station)
      */
     @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
-        return ((Station)o).getNomStation().equals(this.nomStation); //unicité des noms de station
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        return ((Station) o).getNomStation().equals(this.nomStation); //unicité des noms de station
     }
 
+    /**
+     * Retourne une valeur de code de hachage pour la station.
+     *
+     * @return la valeur de code de hachage pour la station
+     */
     @Override
     public int hashCode() {
         int result = nomStation.hashCode();
@@ -102,19 +114,10 @@ public class Station {
     }
 
     /**
-     * A l'aide du nom d'une ligne, vérifie si cette ligne appartient aux correspondances de la station, et la renvoie.
-     * @param nomLigne le nom de la ligne
-     * @return la ligne recherchée si elle existe, null sinon
+     * Retourne une représentation sous forme de chaîne de caractères d'un objet Station.
+     *
+     * @return la représentation sous forme de chaîne de caractères d'un objet Station
      */
-    public Ligne getLigneByNom(String nomLigne) {
-        for(Ligne ligne : this.correspondances) {
-            if(ligne.getNomLigne().equals(nomLigne)) {
-                return ligne;
-            }
-        }
-        return null;
-    }
-
     @Override
     public String toString() {
         return nomStation;

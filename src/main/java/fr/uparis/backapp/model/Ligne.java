@@ -90,6 +90,12 @@ public class Ligne {
         this.tempsDeparts = tempsDeparts;
     }
 
+
+    /**
+     * Retourne une représentation sous forme de chaîne de caractères d'un objet Ligne.
+     *
+     * @return la représentation sous forme de chaîne de caractères d'un objet Ligne
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -101,6 +107,19 @@ public class Ligne {
 //        if (!Objects.equals(stations, ligne.stations)) return false;
 //        return Objects.equals(tempsDeparts, ligne.tempsDeparts);
         return true;
+    }
+
+    /**
+     * Retourne une valeur de code de hachage pour la ligne.
+     *
+     * @return la valeur de code de hachage pour la ligne
+     */
+    @Override
+    public int hashCode() {
+        int result = nomLigne != null ? nomLigne.hashCode() : 0;
+//        result = 31 * result + (stations != null ? stations.hashCode() : 0);
+//        result = 31 * result + (tempsDeparts != null ? tempsDeparts.hashCode() : 0);
+        return result;
     }
 
     @Override

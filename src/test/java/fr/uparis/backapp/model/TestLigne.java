@@ -3,9 +3,7 @@ package fr.uparis.backapp.model;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,7 +30,7 @@ public class TestLigne {
      */
     @Test
     public void testConstructorWithEmptyValues() {
-        List<Station> stations = new ArrayList<>();
+        Set<Station> stations = new LinkedHashSet<>();
         List<LocalTime> tempsDeparts = new ArrayList<>();
         Ligne ligne = new Ligne("", stations, tempsDeparts);
         assertNotNull(ligne);
@@ -46,7 +44,7 @@ public class TestLigne {
      */
     @Test
     public void testConstructorWithNonEmptyValues() {
-        List<Station> stations = Arrays.asList(new Station("S1",null,new ArrayList<>()), new Station("S2",null,new ArrayList<>()));
+        Set<Station> stations =Set.of(new Station("S1",null,new LinkedHashSet<>()), new Station("S2",null,new LinkedHashSet<>()));
         List<LocalTime> tempsDeparts = Arrays.asList(LocalTime.of(8, 0), LocalTime.of(9, 0));
         Ligne ligne = new Ligne("L1", stations, tempsDeparts);
         assertNotNull(ligne);
@@ -60,7 +58,7 @@ public class TestLigne {
      */
     @Test
     public void testGetNomLigne() {
-        Ligne ligne = new Ligne("L1", new ArrayList<>(), new ArrayList<>());
+        Ligne ligne = new Ligne("L1", new LinkedHashSet<>() , new ArrayList<>());
         assertEquals("L1", ligne.getNomLigne());
     }
 
@@ -69,7 +67,7 @@ public class TestLigne {
      */
     @Test
     public void testSetNomLigne() {
-        Ligne ligne = new Ligne("L1", new ArrayList<>(), new ArrayList<>());
+        Ligne ligne = new Ligne("L1", new LinkedHashSet<>(), new ArrayList<>());
         ligne.setNomLigne("L2");
         assertEquals("L2", ligne.getNomLigne());
     }
@@ -79,9 +77,9 @@ public class TestLigne {
      */
     @Test
     public void testGetStations() {
-        List<Station> stations = new ArrayList<>();
-        stations.add(new Station("S1",null,new ArrayList<>()));
-        stations.add(new Station("S2",null,new ArrayList<>()));
+        Set<Station> stations = new LinkedHashSet<>();
+        stations.add(new Station("S1",new Coordonnee(1,2),new LinkedHashSet<>()));
+        stations.add(new Station("S2",new Coordonnee(2,2),new LinkedHashSet<>()));
         Ligne ligne = new Ligne("L1", stations, new ArrayList<>());
         assertEquals(stations, ligne.getStations());
     }
@@ -91,14 +89,14 @@ public class TestLigne {
      */
     @Test
     public void testSetStations() {
-        List<Station> stations1 = new ArrayList<>();
-        stations1.add(new Station("S1",null,new ArrayList<>()));
-        stations1.add(new Station("S2",null,new ArrayList<>()));
+        Set<Station> stations1 = new LinkedHashSet<>();
+        stations1.add(new Station("S1",new Coordonnee(1,2),new LinkedHashSet<>()));
+        stations1.add(new Station("S2",new Coordonnee(2,2),new LinkedHashSet<>()));
         Ligne ligne = new Ligne("L1", stations1, new ArrayList<>());
 
-        List<Station> stations2 = new ArrayList<>();
-        stations2.add(new Station("S3",null,new ArrayList<>()));
-        stations2.add(new Station("S4",null,new ArrayList<>()));
+        Set<Station> stations2 = new LinkedHashSet<>();
+        stations2.add(new Station("S3",new Coordonnee(1,2),new LinkedHashSet<>()));
+        stations2.add(new Station("S4",new Coordonnee(2,2),new LinkedHashSet<>()));
 
         ligne.setStations(stations2);
         assertEquals(stations2, ligne.getStations());
@@ -112,7 +110,7 @@ public class TestLigne {
         List<LocalTime> tempsDeparts = new ArrayList<>();
         tempsDeparts.add(LocalTime.of(8, 0));
         tempsDeparts.add(LocalTime.of(9, 0));
-        Ligne ligne = new Ligne("L1", new ArrayList<>(), tempsDeparts);
+        Ligne ligne = new Ligne("L1", new LinkedHashSet<>(), tempsDeparts);
         assertEquals(tempsDeparts, ligne.getTempsDeparts());
     }
 
@@ -124,7 +122,7 @@ public class TestLigne {
         List<LocalTime> tempsDeparts1 = new ArrayList<>();
         tempsDeparts1.add(LocalTime.of(8, 0));
         tempsDeparts1.add(LocalTime.of(9, 0));
-        Ligne ligne = new Ligne("L1", new ArrayList<>(), tempsDeparts1);
+        Ligne ligne = new Ligne("L1", new LinkedHashSet<>(), tempsDeparts1);
 
         List<LocalTime> tempsDeparts2 = new ArrayList<>();
         tempsDeparts2.add(LocalTime.of(10, 0));

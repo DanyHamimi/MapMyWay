@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -89,9 +90,9 @@ public class TestSection {
      */
     @Test
     public void testSetDuree() {
-        Station stationDepart = new Station("Station A", new Coordonnee(0, 0), new ArrayList<>());
-        Station stationArrivee = new Station("Station B", new Coordonnee(1, 1), new ArrayList<>());
-        Ligne ligne = new Ligne("Ligne 1", new ArrayList<>(), new ArrayList<>());
+        Station stationDepart = new Station("Station A", new Coordonnee(0, 0), new HashSet<>());
+        Station stationArrivee = new Station("Station B", new Coordonnee(1, 1), new HashSet<>());
+        Ligne ligne = new Ligne("Ligne 1", new HashSet<>(), new ArrayList<>());
         LocalTime duree = LocalTime.of(0, 30); // 30 minutes
         double distance = 10.0;
         Section section = new Section(stationDepart, stationArrivee, duree, distance, ligne);
