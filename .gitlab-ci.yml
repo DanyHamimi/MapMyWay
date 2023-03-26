@@ -13,13 +13,19 @@ build:
   stage: build
   script:
     - mvn clean compile
+  tags:
+    - GAUFRE_RUNNER
 
 test:
   stage: test
   script:
     - mvn test
+  tags:
+    - GAUFRE_RUNNER
 
 deploy:
   stage: deploy
   script:
-    - echo "Deploying..."
+    - echo "Deploying...."
+  tags:
+    - GAUFRE_RUNNER
