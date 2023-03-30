@@ -4,97 +4,93 @@ import java.time.LocalTime;
 import java.util.*;
 
 /**
- * Represente une Ligne du Reseau de transport
+ * Représente une Ligne du Reseau de transport
  */
 public class Ligne {
-    private String nomLigne; //nom de la ligne, unique
-    private Set<Station> stations; //stations de la ligne
-    private List<LocalTime> tempsDeparts;//TODO it will maybe deleted, to be discussed
+    final private String nomLigne; //nom de la ligne, unique
+    final private Set<Station> stations; //stations de la ligne
+    final private Set<LocalTime> horairesDepart;//TODO it will maybe deleted, to be discussed
 
     /**
-     * Constructeur de la classe Ligne
-     * @param nomLigne nom de la Ligne
-     * @param stations liste des Station desservies par la Ligne
-     * @param tempsDeparts liste des horaires de departs de cette Ligne
+     * Constructeur de la classe Ligne à partir de tous les attributs.
+     * @param nomLigne nom de la Ligne.
+     * @param stations liste des Station desservies par la Ligne.
+     * @param horairesDepart liste des horaires de departs de cette Ligne.
      */
-    public Ligne(String nomLigne, Set<Station> stations, List<LocalTime> tempsDeparts) {
+    public Ligne(String nomLigne, Set<Station> stations, Set<LocalTime> horairesDepart) {
         this.nomLigne = nomLigne;
         this.stations = stations;
-        this.tempsDeparts = tempsDeparts;
-    }
-
-    public Ligne(String nomLigne){
-        this.nomLigne = nomLigne;
-        this.stations = new LinkedHashSet<>();
-        this.tempsDeparts = new ArrayList<>();
+        this.horairesDepart = horairesDepart;
     }
 
     /**
-     * Renvoie le nom de la Ligne
-     * @return le nom de la Ligne
+     * Constructeur de la classe Ligne à partir du nom de la Ligne.
+     * @param nomLigne nom de la Ligne.
+     */
+    public Ligne(String nomLigne){
+        this(nomLigne, new HashSet<>(), new HashSet<>());
+    }
+
+    /**
+     * Renvoie le nom de la Ligne.
+     * @return le nom de la Ligne.
      */
     public String getNomLigne() {
         return nomLigne;
     }
 
     /**
-     * Met a jour le nom de la Ligne
-     * @param nomLigne nom de la Ligne
-     */
-    public void setNomLigne(String nomLigne) {
-        this.nomLigne = nomLigne;
-    }
-
-    /**
-     * Ajout d'une station à la ligne, si elle n'y est pas déjà.
-     * @param station la station à ajouter à la ligne
-     */
-    public void addStation(Station station) {
-        for(Station s : stations) {
-            if(s.getNomStation().equals(station.getNomStation())) {
-                return;
-            }
-        }
-        this.stations.add(station);
-    }
-
-    /**
-     * Renvoie la liste des Station de la Ligne
-     * @return la liste des Station de la Ligne
+     * Renvoie la liste des Station de la Ligne.
+     * @return la liste des Station de la Ligne.
      */
     public Set<Station> getStations() {
         return stations;
     }
 
     /**
-     * Met a jour la liste des Station de la Ligne
-     * @param stations liste des Station de la Ligne
+     * Ajout d'une station à la Ligne, si elle n'y est pas déjà.
+     * @param station la station à ajouter à la Ligne.
      */
-    public void setStations(Set<Station> stations) {
-        this.stations = stations;
+    public void addStation(Station station) {
+        this.stations.add(station);
     }
 
     /**
-     * Renvoie la liste des horaires de depart de la Ligne
-     * @return la liste des horaires de depart de la Ligne
+     * Suppression d'une station de la Ligne, si elle existe.
+     * @param station la station à enlever de la Ligne.
      */
-    public List<LocalTime> getTempsDeparts() {
-        return tempsDeparts;
+    public void removeStation(Station station) {
+        this.stations.remove(station);
     }
 
     /**
-     * Met a jour la liste des horaires de depart de la Ligne
-     * @param tempsDeparts liste des horaires de depart de la Ligne
+     * Renvoie la liste des horaires de départ de la Ligne.
+     * @return la liste des horaires de départ de la Ligne.
      */
-    public void setTempsDeparts(List<LocalTime> tempsDeparts) {
-        this.tempsDeparts = tempsDeparts;
+    public Set<LocalTime> getHorairesDepart() {
+        return horairesDepart;
     }
 
+    /**
+     * Ajout d'un horaire de départ à la Ligne, si elle n'y est pas déjà.
+     * @param horaire l'horaire de départ à ajouter à la Ligne.
+     */
+    public void addHoraireDepart(LocalTime horaire) {
+        this.horairesDepart.add(horaire);
+    }
 
     /**
-     * Retourne une représentation sous forme de chaîne de caractères d'un objet Ligne.
-     *
-     * @return la représentation sous forme de chaîne de caractères d'un objet Ligne
+     * Suppression d'un horaire de départ de la Ligne, si elle existe.
+     * @param horaire l'horaire de départ à enlever de la Ligne.
+     */
+    public void removeHoraireDepart(LocalTime horaire) {
+        this.horairesDepart.remove(horaire);
+    }
+
+    /**
+     * Comparaison de deux Ligne.
+     * @param o objet avec lequel comparer.
+     * @return true si les objets comparés portent le même nom, false sinon.
      */
     @Override
     public boolean equals(Object o) {
@@ -102,32 +98,31 @@ public class Ligne {
         if (o == null || getClass() != o.getClass()) return false;
 
         Ligne ligne = (Ligne) o;
-
-        if (!Objects.equals(nomLigne, ligne.nomLigne)) return false;
-//        if (!Objects.equals(stations, ligne.stations)) return false;
-//        return Objects.equals(tempsDeparts, ligne.tempsDeparts);
-        return true;
+        return Objects.equals(nomLigne, ligne.nomLigne);
     }
 
     /**
-     * Retourne une valeur de code de hachage pour la ligne.
-     *
-     * @return la valeur de code de hachage pour la ligne
+     * Retourne une valeur de code de hachage pour Ligne.
+     * @return la valeur de code de hachage pour Ligne.
      */
     @Override
     public int hashCode() {
-        int result = nomLigne != null ? nomLigne.hashCode() : 0;
-//        result = 31 * result + (stations != null ? stations.hashCode() : 0);
-//        result = 31 * result + (tempsDeparts != null ? tempsDeparts.hashCode() : 0);
+        int result = 17;
+        result = 31 * result + nomLigne.hashCode();
+        result = 31 * result + stations.hashCode();
+        result = 31 * result + horairesDepart.hashCode();
         return result;
     }
 
+    /**
+     * Retourne une représentation sous forme de chaîne de caractères d'un objet Ligne.
+     * @return la représentation sous forme de chaîne de caractères d'un objet Ligne.
+     */
     @Override
     public String toString() {
         String s = nomLigne + " : ";
-        for(Station station :stations ){
-            s+= station.getNomStation()+" -> ";
-        }
+        for(Station station: stations) s += station.getNomStation() + " ";
+        for(LocalTime time: horairesDepart) s += "\n    " + time;
         return s;
     }
 }

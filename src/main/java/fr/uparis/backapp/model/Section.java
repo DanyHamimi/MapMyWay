@@ -1,168 +1,170 @@
 package fr.uparis.backapp.model;
 
 import java.time.LocalTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Represente une Section du Reseau de transport
+ * Représente une Section du Reseau de transport
  */
 public class Section {
-    private Station stationDepart;
-    private Station stationArrivee;
-    private LocalTime duree; // maybe it will be changed to double (number of minutes)
-    private double distance;
-    private Ligne ligne;
-    private List<LocalTime> heuresDeparts;
+    final private Station stationDepart;
+    final private Station stationArrivee;
+    final private LocalTime duree; // maybe it will be changed to double (number of minutes)
+    final private double distance;
+    final private Ligne ligne;
+    final private Set<LocalTime> horairesDepart;
 
     /**
-     * Constructeur de la Section
-     * @param stationDepart Station de depart de la Section
-     * @param stationArrivee Station d'arrivee de la Section
-     * @param duree duree estimee de la Section
-     * @param distance distance de la Section
-     * @param ligne Ligne de la Section
+     * Constructeur de la Section.
+     * @param stationDepart Station de depart de la Section.
+     * @param stationArrivee Station d'arrivée de la Section.
+     * @param duree durée estimée de la Section.
+     * @param distance distance de la Section.
+     * @param ligne Ligne de la Section.
      */
-    public Section(Station stationDepart, Station stationArrivee, LocalTime duree, double distance,Ligne ligne) {
+    public Section(Station stationDepart, Station stationArrivee, LocalTime duree, double distance, Ligne ligne) {
+        if(stationDepart.equals(stationArrivee)) throw new IllegalArgumentException();
         this.stationDepart = stationDepart;
         this.stationArrivee = stationArrivee;
         this.duree = duree;
         this.distance = distance;
         this.ligne = ligne;
-    }
-
-
-    /**
-     * Constructeur de la Section
-     * @param stationDepart Station de depart de la Section
-     * @param stationArrivee Station d'arrivee de la Section
-     * @param duree duree estimee de la Section
-     * @param ligne Ligne de la Section
-     */
-    public Section(Station stationDepart, Station stationArrivee, LocalTime duree,Ligne ligne) {
-        this.stationDepart = stationDepart;
-        this.stationArrivee = stationArrivee;
-        this.duree = duree;
-        this.ligne = ligne;
+        this.horairesDepart = new HashSet<>();
     }
 
     /**
-     * Renvoie la Station de depart de la Section
-     * @return la Station de depart de la Section
+     * Renvoie la Station de départ de la Section.
+     * @return la Station de départ de la Section.
      */
     public Station getStationDepart() {
         return stationDepart;
     }
 
     /**
-     * Met a jout la Station de depart de la Section
-     * @param stationDepart Station de depart de la Section
-     */
-    public void setStationDepart(Station stationDepart) {
-        this.stationDepart = stationDepart;
-    }
-
-    /**
-     * Renvoie la Station d'arrivee de la Section
-     * @return la Station d'arrivee de la Section
+     * Renvoie la Station d'arrivée de la Section.
+     * @return la Station d'arrivée de la Section.
      */
     public Station getStationArrivee() {
         return stationArrivee;
     }
 
     /**
-     * Met a jour la Station d'arrivee de la Section
-     * @param stationArrivee Station d'arrivee de la Section
-     */
-    public void setStationArrivee(Station stationArrivee) {
-        this.stationArrivee = stationArrivee;
-    }
-
-    /**
-     * Renvoie la duree de la Section
-     * @return la duree de la Section
+     * Renvoie la durée de la Section.
+     * @return la durée de la Section.
      */
     public LocalTime getDuree() {
         return duree;
     }
 
     /**
-     * Met a jour la duree de la Section
-     * @param duree duree de la Section
-     */
-    public void setDuree(LocalTime duree) {
-        this.duree = duree;
-    }
-
-    /**
-     * Renvoie la distance de la Section
-     * @return la distance de la Section
+     * Renvoie la distance de la Section.
+     * @return la distance de la Section.
      */
     public double getDistance() {
         return distance;
     }
 
     /**
-     * Met a jour la distance de la Section
-     * @param distance distance de la Section
-     */
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    /**
-     * Renvoie la Ligne utiliser par la Section
-     * @return la Ligne utiliser par la Section
+     * Renvoie la Ligne utilisée par la Section.
+     * @return la Ligne utilisée par la Section.
      */
     public Ligne getLigne() {
         return ligne;
     }
 
     /**
-     * Met a jour la Ligne utiliser par la Section
-     * @param ligne Ligne utiliser par la Section
+     * Renvoie les heures de départ de la Section.
+     * @return les heures de départ de la Section.
      */
-    public void setLigne(Ligne ligne) {
-        this.ligne = ligne;
+    public Set<LocalTime> getHorairesDepart() {
+        return horairesDepart;
     }
 
     /**
-     * Renvoie l'heure a laquelle le train part
-     * @return l'heure a laquelle le train part
+     * Ajout d'un horaire de départ à la Section, si elle n'y est pas déjà.
+     * @param horaire l'horaire de départ à ajouter à la Section.
      */
-    public List<LocalTime> getHoraire() {
-        return heuresDeparts;
+    public void addHoraireDepart(LocalTime horaire) {
+        this.horairesDepart.add(horaire);
     }
 
     /**
-     * Met a jour les heures de départs pour la section
-     * @param heuresDeparts l'ensemble d'heures de départs de la sections
+     * Suppression d'un horaire de départ de la Section, si elle existe.
+     * @param horaire l'horaire de départ à enlever de la Section.
      */
-    public void setHeuresDeparts(List<LocalTime> heuresDeparts) {
-        this.heuresDeparts = heuresDeparts;
+    public void removeHoraireDepart(LocalTime horaire) {
+        this.horairesDepart.remove(horaire);
     }
 
     /**
-     * Comparaison de deux sections.
-     * @param o objet avec lequel comparer
-     * @return true si o et this ont les mêmes stations
+     * Comparaison de deux Section.
+     * @param o objet avec lequel comparer.
+     * @return true si o et this ont les mêmes stations de départ et d'arrivée.
      */
     @Override
     public boolean equals(Object o){
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
         Section section = (Section)o;
-        return (section.getStationDepart().equals(this.getStationDepart()) && section.getStationArrivee().equals(this.getStationArrivee()));
+        return section.getStationDepart().equals(this.getStationDepart()) && section.getStationArrivee().equals(this.getStationArrivee());
     }
 
     /**
-     * Renvoie true si la section vas d'une station a l'autre.
-     * @param currentStation Station de départ
-     * @param futureStation Station d'arrivée
+     * Retourne une valeur de code de hachage pour Section.
+     * @return la valeur de code de hachage pour Section.
      */
-    public boolean goFromTo(Station currentStation, Station futureStation) {
-        if (currentStation.equals(this.stationDepart) && futureStation.equals(this.stationArrivee)){
-            return true;
-        }
-        return false;
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + stationDepart.hashCode();
+        result = 31 * result + stationArrivee.hashCode();
+        result = 31 * result + duree.hashCode();
+        long temp = Double.doubleToLongBits(distance);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + ligne.hashCode();
+        result = 31 * result + horairesDepart.hashCode();
+        return result;
+    }
+
+    /**
+     * Retourne une représentation sous forme de chaîne de caractères d'un objet Coordonnee.
+     * @return la représentation sous forme de chaîne de caractères d'un objet Coordonnee.
+     */
+    @Override
+    public String toString() {
+        String s = this.getLigne().getNomLigne() + " : ";
+        s += this.stationDepart.getNomStation() + " -> " + this.stationArrivee.getNomStation();
+        s += " (durée = " + this.duree + ", distance = " + this.distance + " km)";
+        for(LocalTime time: this.horairesDepart) s += "\n    " + time;
+        return s;
+    }
+
+    /**
+     * Regarde si la Section démarre d'une certaine station.
+     * @param currentStation station de départ.
+     * @return l'égalité entre la station donnée et celle de départ de la Section.
+     */
+    public boolean isFrom(Station currentStation) {
+        return currentStation.equals(this.stationDepart);
+    }
+
+    /**
+     * Regarde si la Section va jusqu'à une certaine station.
+     * @param nextStation station d'arrivée.
+     * @return l'égalité entre la station donnée et celle d'arrivée de la Section.
+     */
+    public boolean isGoingTo(Station nextStation) {
+        return nextStation.equals(this.stationArrivee);
+    }
+
+    /**
+     * Regarde si la Section va d'une certaine station à une autre.
+     * @param currentStation station de départ.
+     * @param nextStation station d'arrivée.
+     * @return l'égalité entre les stations données et celles de la Section.
+     */
+    public boolean isGoingFromTo(Station currentStation, Station nextStation){
+        return isFrom(currentStation) && isGoingTo(nextStation);
     }
 }
