@@ -1,134 +1,121 @@
 package fr.uparis.backapp.model;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
-import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testeur de la classe Ligne
  */
 public class TestLigne {
+    final private Ligne ligne = new Ligne("L1");
+
+    @AfterEach
+    public void clear() {
+        ligne.getStations().clear();
+        ligne.getHorairesDepart().clear();
+    }
 
     /**
-     * Teste la construction de Ligne avec des parametres null
+     * Teste la construction de Ligne avec des paramètres null.
      */
     @Test
     public void testConstructorWithNullValues() {
         Ligne ligne = new Ligne(null, null, null);
         assertNotNull(ligne);
-        assertEquals(null, ligne.getNomLigne());
-        assertEquals(null, ligne.getStations());
-        assertEquals(null, ligne.getTempsDeparts());
+        assertNull(ligne.getNomLigne());
+        assertNull(ligne.getStations());
+        assertNull(ligne.getHorairesDepart());
     }
 
     /**
-     * Teste la construction de Ligne avec des listes vides
-     */
-    @Test
-    public void testConstructorWithEmptyValues() {
-        Set<Station> stations = new LinkedHashSet<>();
-        List<LocalTime> tempsDeparts = new ArrayList<>();
-        Ligne ligne = new Ligne("", stations, tempsDeparts);
-        assertNotNull(ligne);
-        assertEquals("", ligne.getNomLigne());
-        assertEquals(stations, ligne.getStations());
-        assertEquals(tempsDeparts, ligne.getTempsDeparts());
-    }
-
-    /**
-     * Teste la construction de Ligne avec des parametres corrects
-     */
-    @Test
-    public void testConstructorWithNonEmptyValues() {
-        Set<Station> stations =Set.of(new Station("S1",null,new LinkedHashSet<>()), new Station("S2",null,new LinkedHashSet<>()));
-        List<LocalTime> tempsDeparts = Arrays.asList(LocalTime.of(8, 0), LocalTime.of(9, 0));
-        Ligne ligne = new Ligne("L1", stations, tempsDeparts);
-        assertNotNull(ligne);
-        assertEquals("L1", ligne.getNomLigne());
-        assertEquals(stations, ligne.getStations());
-        assertEquals(tempsDeparts, ligne.getTempsDeparts());
-    }
-
-    /**
-     * Teste le Getter de nomLigne
+     * Teste le Getter du nom de la Ligne.
      */
     @Test
     public void testGetNomLigne() {
-        Ligne ligne = new Ligne("L1", new LinkedHashSet<>() , new ArrayList<>());
         assertEquals("L1", ligne.getNomLigne());
     }
 
     /**
-     * Teste le Setter de nomLigne
+     * Teste sur les stations de la Ligne : get, ajout et suppression.
      */
     @Test
-    public void testSetNomLigne() {
-        Ligne ligne = new Ligne("L1", new LinkedHashSet<>(), new ArrayList<>());
-        ligne.setNomLigne("L2");
-        assertEquals("L2", ligne.getNomLigne());
+    public void testsStations() {
+        Station station1 = new Station("S1", new Coordonnee(1,2));
+        Station station2 = new Station("S2", new Coordonnee(2,2));
+
+        assertEquals(0, ligne.getStations().size());
+
+        ligne.removeStation(station1);
+        assertEquals(0, ligne.getStations().size());
+
+        ligne.addStation(station1);
+        ligne.addStation(station1);
+        ligne.addStation(station2);
+        assertEquals(2, ligne.getStations().size());
+
+        ligne.removeStation(station1);
+        assertEquals(1, ligne.getStations().size());
+        assertFalse(ligne.getStations().contains(station1));
+        assertTrue(ligne.getStations().contains(station2));
     }
 
     /**
-     * Teste le Getter de la liste des Station
+     * Tests sur les horaires de départ : get, ajout et suppression.
      */
     @Test
-    public void testGetStations() {
-        Set<Station> stations = new LinkedHashSet<>();
-        stations.add(new Station("S1",new Coordonnee(1,2),new LinkedHashSet<>()));
-        stations.add(new Station("S2",new Coordonnee(2,2),new LinkedHashSet<>()));
-        Ligne ligne = new Ligne("L1", stations, new ArrayList<>());
-        assertEquals(stations, ligne.getStations());
+    public void testsHoraires() {
+        LocalTime horaire1 = LocalTime.now();
+        LocalTime horaire2 = LocalTime.of(0, 5);
+
+        assertEquals(0, ligne.getHorairesDepart().size());
+
+        ligne.removeHoraireDepart(horaire1);
+        assertEquals(0, ligne.getHorairesDepart().size());
+
+        ligne.addHoraireDepart(horaire1);
+        ligne.addHoraireDepart(horaire2);
+        assertEquals(2, ligne.getHorairesDepart().size());
+
+        ligne.removeHoraireDepart(horaire1);
+        assertEquals(1, ligne.getHorairesDepart().size());
+        assertFalse(ligne.getHorairesDepart().contains(horaire1));
+        assertTrue(ligne.getHorairesDepart().contains(horaire2));
     }
 
     /**
-     * Teste le Setter de la liste des Station
+     * Tests d'égalité.
      */
     @Test
-    public void testSetStations() {
-        Set<Station> stations1 = new LinkedHashSet<>();
-        stations1.add(new Station("S1",new Coordonnee(1,2),new LinkedHashSet<>()));
-        stations1.add(new Station("S2",new Coordonnee(2,2),new LinkedHashSet<>()));
-        Ligne ligne = new Ligne("L1", stations1, new ArrayList<>());
+    public void testsEquals() {
+        Ligne ligne1 = new Ligne("L1");
+        assertEquals(ligne, ligne1);
+        assertEquals(ligne.hashCode(), ligne1.hashCode());
 
-        Set<Station> stations2 = new LinkedHashSet<>();
-        stations2.add(new Station("S3",new Coordonnee(1,2),new LinkedHashSet<>()));
-        stations2.add(new Station("S4",new Coordonnee(2,2),new LinkedHashSet<>()));
-
-        ligne.setStations(stations2);
-        assertEquals(stations2, ligne.getStations());
+        Ligne ligne2 = new Ligne("L2");
+        assertNotEquals(ligne, ligne2);
+        assertNotEquals(ligne.hashCode(), ligne2.hashCode());
     }
 
     /**
-     * Teste le Getter de la liste des horaires de departs
+     * Teste l'affichage d'une Section.
      */
     @Test
-    public void testGetTempsDeparts() {
-        List<LocalTime> tempsDeparts = new ArrayList<>();
-        tempsDeparts.add(LocalTime.of(8, 0));
-        tempsDeparts.add(LocalTime.of(9, 0));
-        Ligne ligne = new Ligne("L1", new LinkedHashSet<>(), tempsDeparts);
-        assertEquals(tempsDeparts, ligne.getTempsDeparts());
-    }
+    public void testsToString() {
+        assertEquals("L1 : ", ligne.toString());
 
-    /**
-     * Teste le Setter de la liste des horaires de departs
-     */
-    @Test
-    public void testSetTempsDeparts() {
-        List<LocalTime> tempsDeparts1 = new ArrayList<>();
-        tempsDeparts1.add(LocalTime.of(8, 0));
-        tempsDeparts1.add(LocalTime.of(9, 0));
-        Ligne ligne = new Ligne("L1", new LinkedHashSet<>(), tempsDeparts1);
+        Station station1 = new Station("S1", new Coordonnee(1,2));
+        Station station2 = new Station("S2", new Coordonnee(1,2));
+        ligne.addStation(station1);
+        ligne.addStation(station2);
 
-        List<LocalTime> tempsDeparts2 = new ArrayList<>();
-        tempsDeparts2.add(LocalTime.of(10, 0));
-        tempsDeparts2.add(LocalTime.of(11, 0));
+        LocalTime horaire = LocalTime.of(15, 0);
+        ligne.addHoraireDepart(horaire);
 
-        ligne.setTempsDeparts(tempsDeparts2);
-        assertEquals(tempsDeparts2, ligne.getTempsDeparts());
+        assertEquals("L1 : S2 S1 \n    15:00", ligne.toString());
     }
 }

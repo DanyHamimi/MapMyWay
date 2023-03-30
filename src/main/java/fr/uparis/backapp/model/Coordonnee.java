@@ -4,13 +4,13 @@ package fr.uparis.backapp.model;
  * Représente une coordonnée gps
  */
 public class Coordonnee{
-    private double latitude; //latitude en degré
-    private double longitude; //longitude en degré
+    final private double latitude; //latitude en degré
+    final private double longitude; //longitude en degré
 
     /**
-     * Constructeur de la classe Coordonnee
-     * @param latitude latitude de la coordonnée en degré
-     * @param longitude longitude de la coordonnée en degré
+     * Constructeur de la classe Coordonnee à partir de deux doubles.
+     * @param latitude latitude de la coordonnée en degré.
+     * @param longitude longitude de la coordonnée en degré.
      */
     public Coordonnee(double latitude, double longitude){
         this.latitude = latitude;
@@ -18,86 +18,95 @@ public class Coordonnee{
     }
 
     /**
-     * @return la latitude en degré
+     * Constructeur de la classe Coordonne à partir d'une chaîne de caractères correctement formatée.
+     * @param coordonnee latitude et longitude séparées par une virgule.
+     */
+    public Coordonnee(String coordonnee){
+        Double[] splitCoordonnee = splitCoordonnee(coordonnee);
+        this.latitude = splitCoordonnee[0];
+        this.longitude = splitCoordonnee[1];
+    }
+
+    /**
+     * Vérifie si une chaîne de caractères est bien dans le format désiré, afin d'instancier une Coordonnee avec.
+     * Dans le cas contraire, une exception est levée.
+     * @param coordonnee hypothétiquement une chaîne de caractères représentant latitude et longitude séparées par une virgule.
+     * @return un tableau de doubles, comportant respectivement latitude et longitude en son sein.
+     */
+    private Double[] splitCoordonnee(String coordonnee){
+        String[] splitCoordonnee = coordonnee.split(",");
+        if(splitCoordonnee.length!=2)
+            throw new IllegalArgumentException("Arguments invalides pour la construction de coordonnée" + coordonnee);
+        return new Double[]{Double.parseDouble(splitCoordonnee[0]), Double.parseDouble(splitCoordonnee[1])};
+    }
+
+    /**
+     * Renvoie la latitude en degré.
+     * @return la latitude en degré.
      */
     public double getLatitude(){
         return latitude;
     }
 
     /**
-     * Transforme la latitude de la coordonnée de degré à radian.
-     * @return la latitude en radian
+     * Renvoie la latitude de la coordonnée en radian, après conversion depuis des degrés.
+     * @return la latitude en radian.
      */
     public double getLatitudeRadian(){
         return Math.toRadians(latitude);
     }
 
     /**
-     * @return la longitude en degré
+     * Renvoie la longitude en degré.
+     * @return la longitude en degré.
      */
     public double getLongitude(){
         return longitude;
     }
 
     /**
-     * Transforme la longitude de la coordonnée de degré à radian.
-     * @return la longitude en radian
+     * Renvoie la longitude de la coordonnée en radian, après conversion depuis des degrés.
+     * @return la longitude en radian.
      */
     public double getLongitudeRadian(){
         return Math.toRadians(longitude);
     }
 
     /**
-     * Setter de la latitude en degré.
-     * @param latitude latitude en degré
-     */
-    public void setLatitude(double latitude){
-        this.latitude = latitude;
-    }
-
-    /**
-     * Setter de la longitude en degré.
-     * @param longitude longitude en degré
-     */
-    public void setLongitude(double longitude){
-        this.longitude = longitude;
-    }
-
-    /**
      * Comparaison de deux coordonnées.
-     * @param o objet avec lequel comparer
-     * @return true si o et this ont les mêmes latitude et longitude, false sinon
+     * @param o objet avec lequel comparer.
+     * @return true si les objets comparés ont les mêmes latitude et longitude, false sinon.
      */
     @Override
     public boolean equals(Object o){
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
+
         Coordonnee coordonnee = (Coordonnee) o;
         return Double.compare(coordonnee.latitude, latitude) == 0
             && Double.compare(coordonnee.longitude, longitude) == 0;
     }
 
-    //TODO documenter la méthode
+    /**
+     * Retourne une valeur de code de hachage pour Coordonnee.
+     * @return la valeur de code de hachage pour Coordonnee.
+     */
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(latitude);
-        result = (int) (temp ^ (temp >>> 32));
+        int result = 17;
+        long temp = Double.doubleToLongBits(latitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(longitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
     /**
-     * @return les cordonnee à partir d'une chaine de caractères
-     * @param coordonnees latitude et longitude séparées avec une virgule
+     * Retourne une représentation sous forme de chaîne de caractères d'un objet Coordonnee.
+     * @return la représentation sous forme de chaîne de caractères d'un objet Coordonnee.
      */
-
-    public static Coordonnee getCoordonnesFromString(String coordonnees){
-        String [] splitCordonnees = coordonnees.split(",");
-        if(splitCordonnees.length!=2)
-            throw new IllegalArgumentException("Arguments invalides pour la contruction de coordonee" + coordonnees );
-        return new Coordonnee(Double.parseDouble(splitCordonnees[0]),Double.parseDouble(splitCordonnees[1]));
+    @Override
+    public String toString() {
+        return "latitude = " + this.latitude + " ; longitude = " + this.longitude;
     }
 }

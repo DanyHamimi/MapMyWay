@@ -1,6 +1,5 @@
 package fr.uparis.backapp;
 
-import fr.uparis.backapp.Utils.Parser;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
@@ -8,22 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class DemoApplication {
-
     /**
-     * Lance l'application
-     * @param args
+     * Lance l'application.
+     * @param args nécessaire pour lancer l'application.
      */
     public static void main(String[] args) {
-
         //SpringApplication.run(DemoApplication.class, args);
 
-        Parser p = Parser.getInstance();
-//        Reseau r = new Reseau();
-//        p.lect_Net(r);
-//
-//        r.printStations();
-//        r.printSections();
-
+        //Reseau r = Reseau.getInstance();
     }
-
 }
