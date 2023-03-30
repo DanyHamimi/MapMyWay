@@ -22,8 +22,7 @@ public class Reseau {
         Parser parser = Parser.getInstance();
         sections = parser.getSections();
         stations = new HashSet<>();
-        parser.getStations().forEach(this::addStation);
-    }
+        for(Station station: parser.getStations()) stations.add(station);    }
 
     /**
      * Renvoie l'instance de la classe Reseau.

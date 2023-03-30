@@ -3,7 +3,9 @@ package fr.uparis.backapp.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -15,7 +17,7 @@ public class TestSection {
     private Section section;
     final private Station station1 = new Station("Station 1", new Coordonnee(0, 0));
     final private Station station2 = new Station("Station 2", new Coordonnee(1, 1));
-    final private LocalTime duree = LocalTime.of(0, 5);
+    final private Duration duree = Duration.of(5, ChronoUnit.SECONDS);
     final private double distance = 1.0;
     final private Ligne ligne = new Ligne("Ligne A");
 
@@ -57,7 +59,7 @@ public class TestSection {
      */
     @Test
     public void testGetDuree() {
-        assertEquals(LocalTime.of(0, 5), section.getDuree());
+        assertEquals(Duration.of(5, ChronoUnit.SECONDS), section.getDuree());
     }
 
     /**
@@ -119,11 +121,11 @@ public class TestSection {
      */
     @Test
     public void testsToString() {
-        assertEquals("Ligne A : Station 1 -> Station 2 (durée = 00:05, distance = 1.0 km)", section.toString());
+        assertEquals("Ligne A : Station 1 -> Station 2 (durée = PT5S, distance = 1.0 km)", section.toString());
 
         LocalTime horaire = LocalTime.of(15, 0);
         section.addHoraireDepart(horaire);
-        assertEquals("Ligne A : Station 1 -> Station 2 (durée = 00:05, distance = 1.0 km)\n    15:00", section.toString());
+        assertEquals("Ligne A : Station 1 -> Station 2 (durée = PT5S, distance = 1.0 km)\n    15:00", section.toString());
     }
 
     /**

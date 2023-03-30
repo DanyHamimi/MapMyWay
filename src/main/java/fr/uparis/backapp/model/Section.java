@@ -1,5 +1,6 @@
 package fr.uparis.backapp.model;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.Set;
 public class Section {
     final private Station stationDepart;
     final private Station stationArrivee;
-    final private LocalTime duree; // maybe it will be changed to double (number of minutes)
+    final private Duration duree;
     final private double distance;
     final private Ligne ligne;
     final private Set<LocalTime> horairesDepart;
@@ -23,7 +24,7 @@ public class Section {
      * @param distance distance de la Section.
      * @param ligne Ligne de la Section.
      */
-    public Section(Station stationDepart, Station stationArrivee, LocalTime duree, double distance, Ligne ligne) {
+    public Section(Station stationDepart, Station stationArrivee, Duration duree, double distance, Ligne ligne) {
         if(stationDepart.equals(stationArrivee)) throw new IllegalArgumentException();
         this.stationDepart = stationDepart;
         this.stationArrivee = stationArrivee;
@@ -53,7 +54,7 @@ public class Section {
      * Renvoie la durée de la Section.
      * @return la durée de la Section.
      */
-    public LocalTime getDuree() {
+    public Duration getDuree() {
         return duree;
     }
 
@@ -116,14 +117,9 @@ public class Section {
      */
     @Override
     public int hashCode() {
-        int result = 17;
-        result = 31 * result + stationDepart.hashCode();
-        result = 31 * result + stationArrivee.hashCode();
-        result = 31 * result + duree.hashCode();
-        long temp = Double.doubleToLongBits(distance);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + ligne.hashCode();
-        result = 31 * result + horairesDepart.hashCode();
+        int result = stationDepart != null ? stationDepart.hashCode() : 0;
+        result = 31 * result + (stationArrivee != null ? stationArrivee.hashCode() : 0);
+        result = 31 * result + (ligne != null ? ligne.hashCode() : 0);
         return result;
     }
 
@@ -135,7 +131,7 @@ public class Section {
     public String toString() {
         String s = this.getLigne().getNomLigne() + " : ";
         s += this.stationDepart.getNomStation() + " -> " + this.stationArrivee.getNomStation();
-        s += " (durée = " + this.duree + ", distance = " + this.distance + " km)";
+        s += " (durée = " + this.duree.toString() + ", distance = " + this.distance + " km)";
         for(LocalTime time: this.horairesDepart) s += "\n    " + time;
         return s;
     }

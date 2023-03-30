@@ -2,7 +2,9 @@ package fr.uparis.backapp.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 
@@ -14,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
  */
 public class TestReseau {
     final private Reseau reseau = Reseau.getInstance();
-    final private int NB_STATIONS = 712; //tri sur excel par nom de station puis par coordonnée
-                                         //et comparaison avec la formule =IF(AND(A2=A1;B2=B1);C1;C1+1)
+    final private int NB_STATIONS = 308; //tri sur excel par nom de station (sans prise en compte des coordonnées)
+                                         //et comparaison avec la formule =IF(A2=A1;C1;C1+1)
     final private int NB_SECTIONS = 1770; //nombre de lignes du fichier excel fourni
 
     /**
@@ -51,7 +53,7 @@ public class TestReseau {
         //Cas où supprimer une section supprime aussi les stations
         Station station1 = new Station("station 1", new Coordonnee(1, 0));
         Station station2 = new Station("station 2", new Coordonnee(1, 0));
-        Section section = new Section(station1, station2, LocalTime.of(4, 0), 1.0, new Ligne("ligne"));
+        Section section = new Section(station1, station2, Duration.of(5, ChronoUnit.SECONDS), 1.0, new Ligne("ligne"));
         reseau.addSection(section);
         assertEquals(NB_STATIONS + 2, stations.size());
 
@@ -69,7 +71,7 @@ public class TestReseau {
 
         Station station1 = new Station("station 1", new Coordonnee(1, 0));
         Station station2 = new Station("station 2", new Coordonnee(1, 0));
-        Section section = new Section(station1, station2, LocalTime.of(4, 0), 1.0, new Ligne("ligne"));
+        Section section = new Section(station1, station2, Duration.of(5, ChronoUnit.SECONDS), 1.0, new Ligne("ligne"));
 
         reseau.removeSection(section);
         assertEquals(NB_SECTIONS, sections.size());

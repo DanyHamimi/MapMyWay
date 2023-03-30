@@ -116,6 +116,6 @@ public class TestLigne {
         LocalTime horaire = LocalTime.of(15, 0);
         ligne.addHoraireDepart(horaire);
 
-        assertEquals("L1 : S2 S1 \n    15:00", ligne.toString());
+        assertEquals("L1 : S1 S2 \n    15:00", ligne.toString());
     }
 }
