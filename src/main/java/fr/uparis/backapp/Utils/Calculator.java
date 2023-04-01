@@ -1,6 +1,6 @@
 package fr.uparis.backapp.Utils;
 
-import fr.uparis.backapp.Utils.Constants.Constants;
+import fr.uparis.backapp.Utils.constants.Constants;
 import fr.uparis.backapp.model.Coordonnee;
 import fr.uparis.backapp.model.Reseau;
 import fr.uparis.backapp.model.Section;
