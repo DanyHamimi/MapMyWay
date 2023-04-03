@@ -60,7 +60,7 @@ public class Station {
      * @param section une nouvelle correspondance possible à la station courante.
      */
     public void addCorrespondance(Section section) {
-        if(section.getStationDepart().equals(this) || section.getStationArrivee().equals(this))
+        if (section.getStationDepart().equals(this))
             this.correspondances.add(section);
     }
 
@@ -82,9 +82,8 @@ public class Station {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Station station = (Station)o;
-        return station.getNomStation().equals(this.nomStation)
-            && station.getLocalisation().equals(this.localisation); //unicité des noms de station
+        Station station = (Station) o;
+        return station.getNomStation().equals(this.nomStation); //unicité des noms de station
     }
 
     /**
@@ -93,9 +92,7 @@ public class Station {
      */
     @Override
     public int hashCode() {
-        int result = 17;
-        result = 31 * result + nomStation.hashCode();
-        result = 31 * result + localisation.hashCode();
+        int result = nomStation.hashCode();
         return result;
     }
 
@@ -106,7 +103,7 @@ public class Station {
     @Override
     public String toString() {
         String s = nomStation + " (" + this.localisation + ") -> ";
-        for(Section section: correspondances) s += section.getLigne().getNomLigne() + " ";
+        for (Section section : correspondances) s += section.getLigne().getNomLigne() + " ";
         return s;
     }
 

@@ -3,7 +3,9 @@ package fr.uparis.backapp.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,17 +45,17 @@ public class TestStation {
      */
     @Test
     public void testsCorrespondances() {
-        LocalTime duree = LocalTime.now();
+        Duration duree = Duration.of(5, ChronoUnit.SECONDS);
         double distance = 10.5;
         Ligne ligne = new Ligne("ligne");
 
         //sections qui vont effectivement être ajoutées
         Station station1 = new Station("station1", new Coordonnee(1.2, 1.2));
         Section section1 = new Section(station, station1, duree, distance, ligne);
-        Section section2 = new Section(station1, station, duree, distance, ligne);
 
-        //section non ajoutée, car ne concerne pas station (ni station de départ, ni station d'arrivée)
+        //section non ajoutée, car ne concerne pas station (station de départ différent)
         Station station2 = new Station("station2", new Coordonnee(1.2, 2.2));
+        Section section2 = new Section(station1, station, duree, distance, ligne);
         Section section3 = new Section(station1, station2, duree, distance, ligne);
 
 
@@ -64,14 +66,14 @@ public class TestStation {
 
         station.addCorrespondance(section1);
         station.addCorrespondance(section1); //doublon qui ne va pas être ajouté
-        station.addCorrespondance(section2);
-        station.addCorrespondance(section3);
-        assertEquals(2, station.getCorrespondances().size());
+        station.addCorrespondance(section2); //station de départ ne correspond pas
+        station.addCorrespondance(section3); //station de départ ne correspond pas
+        assertEquals(1, station.getCorrespondances().size());
+        assertTrue(station.getCorrespondances().contains(section1));
 
         station.removeCorrespondance(section1);
-        assertEquals(1, station.getCorrespondances().size());
+        assertEquals(0, station.getCorrespondances().size());
         assertFalse(station.getCorrespondances().contains(section1));
-        assertTrue(station.getCorrespondances().contains(section2));
     }
 
     /**
@@ -84,8 +86,8 @@ public class TestStation {
         assertEquals(station.hashCode(), station1.hashCode());
 
         Station station2 = new Station("nomStation", new Coordonnee(1, 4));
-        assertNotEquals(station, station2);
-        assertNotEquals(station.hashCode(), station2.hashCode());
+        assertEquals(station, station2);
+        assertEquals(station.hashCode(), station2.hashCode());
 
         Station station3 = new Station("nomStation3", new Coordonnee(1, 2));
         assertNotEquals(station, station3);
@@ -100,7 +102,7 @@ public class TestStation {
         assertEquals("nomStation (latitude = 1.0 ; longitude = 2.0) -> ", station.toString());
 
         Station station1 = new Station("station1", new Coordonnee(1.2, 1.2));
-        LocalTime duree = LocalTime.now();
+        Duration duree = Duration.of(5, ChronoUnit.SECONDS);
         double distance = 10.5;
         Ligne ligne = new Ligne("ligne");
         Section section1 = new Section(station, station1, duree, distance, ligne);

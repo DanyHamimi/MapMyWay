@@ -7,7 +7,7 @@ import fr.uparis.backapp.model.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalTime;
+import java.time.Duration;
 import java.util.*;
 
 /**
@@ -16,6 +16,7 @@ import java.util.*;
 public class Parser {
     private static Parser instance = null;
     final private Map<String, Ligne> carte;
+    final private Map<String, Station> stationMap;
     final private Set<Section> sectionsSet;
 
     /**
@@ -23,8 +24,9 @@ public class Parser {
      * Initialise les structures de données carte et sectionsSet.
      */
     private Parser() {
-        carte = new HashMap<>();
-        sectionsSet = new HashSet<>();
+        carte = new LinkedHashMap<>();
+        stationMap = new HashMap<>();
+        sectionsSet = new LinkedHashSet<>();
     }
 
     /**
@@ -58,13 +60,15 @@ public class Parser {
     }
 
     /**
-     * Renvoie les stations du réseau, avec potentiellement des doublons.
+     * Renvoie les stations du réseau.
+     *
      * @return les stations du réseau.
      */
-    public List<Station> getStations() {
-        List<Station> stations = new ArrayList<>();
-        for(Ligne ligne: carte.values()) stations.addAll(ligne.getStations());
-        return stations;
+    public Station[] getStations() {
+        List<Station> stations = stationMap.values().stream().toList();
+        Station[] res = new Station[stations.size()];
+        for(int i = 0; i < stations.size(); i++) res[i] = stations.get(i);
+        return res;
     }
 
     /**
@@ -80,19 +84,28 @@ public class Parser {
         List<String[]> lines = getFileLines(config.getProperty(Constants.CSV_FILE_PATH_PROPERTY));
 
         lines.forEach(l -> {
-            Station stationDepart = new Station(l[Constants.STATION_DEPART_INDEX], new Coordonnee(l[Constants.STATION_DEPART_COORDONEES_INDEX]));
-            Station stationArrivee = new Station(l[Constants.STATION_ARRIVEE_INDEX], new Coordonnee(l[Constants.STATION_ARRIVEE_COORDONEES_INDEX]));
+            Station stationDepart = stationMap.getOrDefault(l[Constants.STATION_DEPART_INDEX],
+                    new Station(l[Constants.STATION_DEPART_INDEX], new Coordonnee(l[Constants.STATION_DEPART_COORDONEES_INDEX])));
+            Station stationArrivee = stationMap.getOrDefault(l[Constants.STATION_ARRIVEE_INDEX],
+                    new Station(l[Constants.STATION_ARRIVEE_INDEX], new Coordonnee(l[Constants.STATION_ARRIVEE_COORDONEES_INDEX])));
 
             Ligne ligne = carte.getOrDefault(l[Constants.NOM_LIGNE_INDEX], new Ligne(l[Constants.NOM_LIGNE_INDEX]));
             ligne.addStation(stationDepart);
             ligne.addStation(stationArrivee);
             carte.put(l[Constants.NOM_LIGNE_INDEX], ligne);
 
-            LocalTime duree = LocalTime.parse(correctTime(l[Constants.DUREE_INDEX]));
-            double distance = Double.parseDouble(l[Constants.DISTANCE_INDEX]);
+            Duration duree = correctDuration(l[Constants.DUREE_INDEX]);
+            double distance = correctDistance(l[Constants.DISTANCE_INDEX]);
 
             Section section = new Section(stationDepart, stationArrivee, duree, distance, ligne);
             sectionsSet.add(section);
+
+            stationDepart.addCorrespondance(section);
+            //On ajoute le trajet inverse
+            stationArrivee.addCorrespondance(new Section(stationArrivee, stationDepart, duree, distance, ligne));
+
+            stationMap.put(l[Constants.STATION_DEPART_INDEX], stationDepart);
+            stationMap.put(l[Constants.STATION_ARRIVEE_INDEX], stationArrivee);
         });
     }
 
@@ -105,29 +118,35 @@ public class Parser {
         List<String[]> lines = new ArrayList<>();
         try {
             lines = Files.readAllLines(Paths.get(filePath))
-                         .stream()
-                         .map(line -> line.split(Constants.DELIMITER))
-                         .toList();
-        }
-        catch (IOException e) {
+                    .stream()
+                    .map(line -> line.split(Constants.DELIMITER))
+                    .toList();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return lines;
     }
 
     /**
-     * Convertit une chaîne de caractères de temps en une chaîne de temps correctement formatée avec le format "heure:minute:seconde".
-     * @param time la chaîne de temps à corriger dans le format "minute:seconde".
-     * @return la chaîne de temps corrigée dans le format "heure:minute:seconde".
+     * Convertit une chaîne de caractères de temps en une durée.
+     * @param time la chaîne de temps à convertir en durée.
+     * @return la durée décrite par la chaîne de caractères en entrée.
      * @throws NumberFormatException si la chaîne de temps d'entrée ne peut pas être analysée en entiers pour les minutes et les secondes.
      */
-    private String correctTime(String time) {
-        String[] times = time.split(":");
-        //Make a string correct time with the format hour : minute : second
-        return String.format("%1$02d:%2$02d:%3$02d",
-                              0,
-                              Integer.parseInt(times[0]),
-                              Integer.parseInt(times[1]));
+    private Duration correctDuration(String time) {
+        double seconds = Double.parseDouble(time.replace(':', '.')) * 10;
+        int approximativeSeconds = (int) Math.ceil(seconds);
+        return Duration.ofMinutes(approximativeSeconds / 60).plusSeconds(approximativeSeconds % 60);
+    }
+
+    /**
+     * Convertit une chaîne de caractères de distance en dixième de km, en une distance en km.
+     *
+     * @param distance la chaîne de caractère de distance à convertir.
+     * @return une distance en km.
+     */
+    private double correctDistance(String distance) {
+        return Double.parseDouble(distance) / 10;
     }
 
     /**

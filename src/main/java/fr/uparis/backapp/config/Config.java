@@ -8,6 +8,9 @@ public class Config {
     private static Config instance = null;
     private static Properties prop;
 
+    /**
+     * Constructeur pour le singleton Config.
+     */
     private Config() {
         prop = new Properties();
         try (InputStream input = Config.class.getClassLoader().getResourceAsStream("application.properties")) {
@@ -18,12 +21,21 @@ public class Config {
         }
     }
 
+    /**
+     * Renvoie l'instance de la classe Config.
+     * @return l'instance de la classe Config.
+     */
     public static Config getInstance() {
         if (instance == null) instance = new Config();
         return instance;
     }
 
-    public static String getProperty(String key) {
+    /**
+     * Renvoie une propriété qui a pour clé key.
+     * @param key la clé de la propriété demandée.
+     * @return La propriété correspondant à la clé.
+     */
+    public String getProperty(String key) {
         return prop.getProperty(key);
     }
 }

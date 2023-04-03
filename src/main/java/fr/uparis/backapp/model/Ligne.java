@@ -27,12 +27,13 @@ public class Ligne {
      * Constructeur de la classe Ligne à partir du nom de la Ligne.
      * @param nomLigne nom de la Ligne.
      */
-    public Ligne(String nomLigne){
-        this(nomLigne, new HashSet<>(), new HashSet<>());
+    public Ligne(String nomLigne) {
+        this(nomLigne, new LinkedHashSet<>(), new HashSet<>());
     }
 
     /**
      * Renvoie le nom de la Ligne.
+     *
      * @return le nom de la Ligne.
      */
     public String getNomLigne() {
@@ -41,6 +42,7 @@ public class Ligne {
 
     /**
      * Renvoie la liste des Station de la Ligne.
+     *
      * @return la liste des Station de la Ligne.
      */
     public Set<Station> getStations() {
@@ -49,6 +51,7 @@ public class Ligne {
 
     /**
      * Ajout d'une station à la Ligne, si elle n'y est pas déjà.
+     *
      * @param station la station à ajouter à la Ligne.
      */
     public void addStation(Station station) {
@@ -57,6 +60,7 @@ public class Ligne {
 
     /**
      * Suppression d'une station de la Ligne, si elle existe.
+     *
      * @param station la station à enlever de la Ligne.
      */
     public void removeStation(Station station) {
@@ -65,6 +69,7 @@ public class Ligne {
 
     /**
      * Renvoie la liste des horaires de départ de la Ligne.
+     *
      * @return la liste des horaires de départ de la Ligne.
      */
     public Set<LocalTime> getHorairesDepart() {
@@ -73,6 +78,7 @@ public class Ligne {
 
     /**
      * Ajout d'un horaire de départ à la Ligne, si elle n'y est pas déjà.
+     *
      * @param horaire l'horaire de départ à ajouter à la Ligne.
      */
     public void addHoraireDepart(LocalTime horaire) {
@@ -81,6 +87,7 @@ public class Ligne {
 
     /**
      * Suppression d'un horaire de départ de la Ligne, si elle existe.
+     *
      * @param horaire l'horaire de départ à enlever de la Ligne.
      */
     public void removeHoraireDepart(LocalTime horaire) {
@@ -89,6 +96,7 @@ public class Ligne {
 
     /**
      * Comparaison de deux Ligne.
+     *
      * @param o objet avec lequel comparer.
      * @return true si les objets comparés portent le même nom, false sinon.
      */
@@ -103,6 +111,7 @@ public class Ligne {
 
     /**
      * Retourne une valeur de code de hachage pour Ligne.
+     *
      * @return la valeur de code de hachage pour Ligne.
      */
     @Override
@@ -121,8 +130,8 @@ public class Ligne {
     @Override
     public String toString() {
         String s = nomLigne + " : ";
-        for(Station station: stations) s += station.getNomStation() + " ";
-        for(LocalTime time: horairesDepart) s += "\n    " + time;
+        for (Station station : stations) s += station.getNomStation() + " ";
+        for (LocalTime time : horairesDepart) s += "\n    " + time;
         return s;
     }
 }
