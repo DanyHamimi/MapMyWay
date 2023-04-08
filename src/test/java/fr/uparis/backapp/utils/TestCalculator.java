@@ -1,4 +1,4 @@
-package fr.uparis.backapp.Utils;
+package fr.uparis.backapp.utils;
 
 import fr.uparis.backapp.model.Coordonnee;
 import fr.uparis.backapp.model.Reseau;

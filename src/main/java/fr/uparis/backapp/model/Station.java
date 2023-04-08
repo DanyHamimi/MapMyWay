@@ -106,6 +106,4 @@ public class Station {
         for (Section section : correspondances) s += section.getLigne().getNomLigne() + " ";
         return s;
     }
-
-    // TODO discuss addTime function
 }

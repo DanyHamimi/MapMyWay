@@ -87,24 +87,6 @@ public class TestReseau {
     }
 
     /**
-     * Teste le calcul de distance entre deux coordonnées.
-     */
-    /*@Test
-    void testDistanceBetween(){
-        Coordonnee origine1 = new Coordonnee(52.2296756, 21.0122287);
-        Coordonnee destination1 = new Coordonnee(52.2296756, 21.0122287);
-        assertEquals(0.000, Reseau.distanceBetween(origine1, destination1));
-
-        Coordonnee origine2 = new Coordonnee(48.948559, 2.063739);
-        Coordonnee destination2 = new Coordonnee(48.94796491807184, 2.0651253924818516);
-        assertEquals(0.121, Reseau.distanceBetween(origine2, destination2)); //résultat depuis Google Maps
-
-        Coordonnee origine3 = new Coordonnee(52.2296756, 21.0122287);
-        Coordonnee destination3 = new Coordonnee(52.406374, 16.9251681);
-        assertEquals(278.537, Reseau.distanceBetween(origine3, destination3)); //résultat depuis un site de calcul
-    }*/
-
-    /**
      * Teste si les stations proches obtenues sont celles attendues.
      */
     @Test

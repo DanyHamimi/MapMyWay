@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -100,6 +103,11 @@ public class TestSection {
         assertEquals(1, section.getHorairesDepart().size());
         assertFalse(section.getHorairesDepart().contains(horaire1));
         assertTrue(section.getHorairesDepart().contains(horaire2));
+
+        section.addHorairesDepart(List.of(horaire1, horaire1, horaire2));
+        assertEquals(2, section.getHorairesDepart().size());
+        assertTrue(section.getHorairesDepart().contains(horaire1));
+        assertTrue(section.getHorairesDepart().contains(horaire2));
     }
 
     /**
@@ -133,10 +141,38 @@ public class TestSection {
      */
     @Test
     public void testIsGoingFromTo() {
-        assertTrue(section.isGoingFromTo(station1, station2));
+        assertTrue(section.areStations(station1, station2));
 
         Station station3 = new Station("Station 3", new Coordonnee(0, 0));
-        assertFalse(section.isGoingFromTo(station1, station3));
-        assertFalse(section.isGoingFromTo(station3, station2));
+        assertFalse(section.areStations(station1, station3));
+        assertFalse(section.areStations(station3, station2));
+    }
+
+    /**
+     * Test le déplacement d'une section à une autre, sur la même ligne.
+     */
+    @Test
+    public void testMoveToNextSection(){
+        Station station3 = new Station("Station3", new Coordonnee("4, 5"));
+        Section section1 = new Section(station2, station3, duree, distance, ligne);
+        Section section2 = new Section(station3, station2, duree, distance, ligne);
+
+        Station station4 = new Station("Station4", new Coordonnee(4, 5));
+        Ligne ligne2 = new Ligne("ligne2");
+        Section section3 = new Section(station2, station4, duree, distance, ligne2);
+
+        Set<Section> sectionSet = new HashSet<>();
+        sectionSet.add(section);
+        sectionSet.add(section1); //même ligne
+        sectionSet.add(section2); //même ligne, mais pas la bonne station de départ
+        sectionSet.add(section3); //pas la même ligne
+
+        Section nextSection = section.moveToNextSectionInTheSameLine(sectionSet);
+        assertEquals(section1, nextSection);
+        assertNotEquals(section2, nextSection);
+        assertNotEquals(section3, nextSection);
+
+        assertEquals(section1, section2.moveToNextSectionInTheSameLine(sectionSet));
+        assertEquals(section2, section1.moveToNextSectionInTheSameLine(sectionSet));
     }
 }
