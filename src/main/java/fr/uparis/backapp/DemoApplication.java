@@ -1,6 +1,7 @@
 package fr.uparis.backapp;
 
 import fr.uparis.backapp.model.Reseau;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
@@ -13,7 +14,7 @@ public class DemoApplication {
      * @param args nécessaire pour lancer l'application.
      */
     public static void main(String[] args) {
-        //SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(DemoApplication.class, args);
 
         Reseau r = Reseau.getInstance();
     }
