@@ -1,10 +1,12 @@
 package fr.uparis.backapp.model;
 
-import fr.uparis.backapp.Utils.Parser;
+import fr.uparis.backapp.utils.Parser;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+
+import static fr.uparis.backapp.utils.Utils.distanceBetween;
 
 /**
  * Représente un Reseau de transport
@@ -22,7 +24,8 @@ public class Reseau {
         Parser parser = Parser.getInstance();
         sections = parser.getSections();
         stations = new HashSet<>();
-        for(Station station: parser.getStations()) stations.add(station);    }
+        for(Station station: parser.getStations()) stations.add(station);
+    }
 
     /**
      * Renvoie l'instance de la classe Reseau.
@@ -57,7 +60,7 @@ public class Reseau {
     public void removeStation(Station station) {
         stations.remove(station);
         List<Section> toDelete = sections.stream()
-                                         .filter(s -> s.isFrom(station) || s.isGoingTo(station))
+                                         .filter(s -> s.isStationDepart(station) || s.isStationArrivee(station))
                                          .toList();
         for(Section s: toDelete) removeSection(s);
     }
@@ -88,29 +91,10 @@ public class Reseau {
      */
     public void removeSection(Section section) {
         sections.remove(section);
-        if(sections.stream().noneMatch(s -> s.isFrom(section.getStationDepart()) || s.isGoingTo(section.getStationDepart())))
+        if(sections.stream().noneMatch(s -> s.isStationDepart(section.getStationDepart()) || s.isStationArrivee(section.getStationDepart())))
             removeStation(section.getStationDepart());
-        if(sections.stream().noneMatch(s -> s.isFrom(section.getStationArrivee()) || s.isGoingTo(section.getStationArrivee())))
+        if(sections.stream().noneMatch(s -> s.isStationDepart(section.getStationArrivee()) || s.isStationArrivee(section.getStationArrivee())))
             removeStation(section.getStationArrivee());
-    }
-
-    /**
-     * Calcule la distance entre deux coordonnées, avec une précision au mètre.
-     * @param origine coordonnée du point de départ.
-     * @param destination coordonnée du point d'arrivée.
-     * @return la distance entre origine et destination en km, avec au plus 3 chiffres après la virgule.
-     */
-    private static double distanceBetween(Coordonnee origine, Coordonnee destination) {
-        double latOrigine = origine.getLatitudeRadian(), longOrigine = origine.getLongitudeRadian();
-        double latDestination = destination.getLatitudeRadian(), longDestination = destination.getLongitudeRadian();
-        double latDiff = latDestination - latOrigine, longDiff = longDestination - longOrigine;
-
-        double halfLatSin = Math.sin(latDiff / 2), halfLongSin = Math.sin(longDiff / 2);
-        double a = halfLatSin * halfLatSin + halfLongSin * halfLongSin * Math.cos(latOrigine) * Math.cos(latDestination);
-        double res = 6372.795; //rayon moyen de la Terre en km
-        res *= 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return new BigDecimal(res).setScale(3, RoundingMode.HALF_EVEN).doubleValue();
     }
 
     /**

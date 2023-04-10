@@ -1,6 +1,6 @@
 package fr.uparis.backapp.web;
 
-import fr.uparis.backapp.Utils.Parser;
+import fr.uparis.backapp.utils.Parser;
 import fr.uparis.backapp.model.Station;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
