@@ -86,7 +86,7 @@ public class TestSection {
      */
     @Test
     public void testsHoraires() {
-        LocalTime horaire1 = LocalTime.now();
+        LocalTime horaire1 = LocalTime.of(22, 50);
         LocalTime horaire2 = LocalTime.of(0, 5);
 
         assertEquals(0, section.getHorairesDepart().size());
@@ -98,6 +98,8 @@ public class TestSection {
         section.addHoraireDepart(horaire1);
         section.addHoraireDepart(horaire2);
         assertEquals(2, section.getHorairesDepart().size());
+        assertEquals(horaire2, section.getHoraireProchainDepart(LocalTime.of(0, 4)));
+        assertEquals(null, section.getHoraireProchainDepart(LocalTime.of(23, 59)));
 
         section.removeHoraireDepart(horaire1);
         assertEquals(1, section.getHorairesDepart().size());
@@ -133,7 +135,7 @@ public class TestSection {
 
         LocalTime horaire = LocalTime.of(15, 0);
         section.addHoraireDepart(horaire);
-        assertEquals("Ligne A : Station 1 -> Station 2 (durée = PT5S, distance = 1.0 km)\n    15:00", section.toString());
+        assertEquals("Ligne A : Station 1 -> Station 2 (durée = PT5S, distance = 1.0 km, à 15:00)", section.toString());
     }
 
     /**

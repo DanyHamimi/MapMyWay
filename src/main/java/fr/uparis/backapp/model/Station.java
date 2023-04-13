@@ -1,5 +1,6 @@
 package fr.uparis.backapp.model;
 
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -9,9 +10,11 @@ public class Station {
     final private String nomStation;
     final private Coordonnee localisation;
     final private Set<Section> correspondances;
+    private LocalTime horaireDePassage;
 
     /**
      * Constructeur de la classe Station à partir de tous les attributs.
+     *
      * @param nomStation nom de la Station.
      * @param localisation Coordonnee de la Station.
      * @param correspondances liste des correspondances avec d'autres Ligne du Reseau.
@@ -24,6 +27,7 @@ public class Station {
 
     /**
      * Constructeur de la classe Station à partir du nom de la station et de sa localisation.
+     *
      * @param nomStation nom de la Station.
      * @param localisation Coordonnee de la Station.
      */
@@ -33,6 +37,7 @@ public class Station {
 
     /**
      * Renvoie le nom de la Station.
+     *
      * @return le nom de la Station.
      */
     public String getNomStation() {
@@ -41,6 +46,7 @@ public class Station {
 
     /**
      * Renvoie la Coordonnee de la Station.
+     *
      * @return la Coordonne de la Station.
      */
     public Coordonnee getLocalisation() {
@@ -49,6 +55,7 @@ public class Station {
 
     /**
      * Renvoie les correspondances avec les Ligne du Reseau.
+     *
      * @return les correspondances avec les Ligne du Reseau.
      */
     public Set<Section> getCorrespondances() {
@@ -57,6 +64,7 @@ public class Station {
 
     /**
      * Ajout d'une correspondance à la Station, si elle n'y est pas déjà.
+     *
      * @param section une nouvelle correspondance possible à la station courante.
      */
     public void addCorrespondance(Section section) {
@@ -66,17 +74,26 @@ public class Station {
 
     /**
      * Suppression d'une correspondance de la Station, si elle existe.
+     *
      * @param section une ancienne correspondance possible depuis la station courante.
      */
     public void removeCorrespondance(Section section) {
         this.correspondances.remove(section);
     }
 
+    public LocalTime getHoraireDePassage() {
+        return horaireDePassage;
+    }
+
+    public void setHoraireDePassage(LocalTime horaireDePassage) {
+        this.horaireDePassage = horaireDePassage;
+    }
+
     /**
      * Comparaison de deux stations.
+     *
      * @param o objet avec lequel comparer.
-     * @return true si et seulement si o et this représentent la même station,
-     * donc ont le même nom de station (unicité des noms de station).
+     * @return si o et this représentent la même station, donc ont le même nom de station (unicité des noms de station).
      */
     @Override
     public boolean equals(Object o) {
@@ -88,16 +105,17 @@ public class Station {
 
     /**
      * Retourne une valeur de code de hachage pour la station.
+     *
      * @return la valeur de code de hachage pour la station.
      */
     @Override
     public int hashCode() {
-        int result = nomStation.hashCode();
-        return result;
+        return nomStation.hashCode();
     }
 
     /**
      * Retourne une représentation sous forme de chaîne de caractères d'un objet Station.
+     *
      * @return la représentation sous forme de chaîne de caractères d'un objet Station.
      */
     @Override

@@ -9,6 +9,7 @@ public class Coordonnee{
 
     /**
      * Constructeur de la classe Coordonnee à partir de deux doubles.
+     *
      * @param latitude latitude de la coordonnée en degré.
      * @param longitude longitude de la coordonnée en degré.
      */
@@ -19,6 +20,7 @@ public class Coordonnee{
 
     /**
      * Constructeur de la classe Coordonne à partir d'une chaîne de caractères correctement formatée.
+     *
      * @param coordonnee latitude et longitude séparées par une virgule.
      */
     public Coordonnee(String coordonnee){
@@ -30,6 +32,7 @@ public class Coordonnee{
     /**
      * Vérifie si une chaîne de caractères est bien dans le format désiré, afin d'instancier une Coordonnee avec.
      * Dans le cas contraire, une exception est levée.
+     *
      * @param coordonnee hypothétiquement une chaîne de caractères représentant latitude et longitude séparées par une virgule.
      * @return un tableau de doubles, comportant respectivement latitude et longitude en son sein.
      */
@@ -42,6 +45,7 @@ public class Coordonnee{
 
     /**
      * Renvoie la latitude en degré.
+     *
      * @return la latitude en degré.
      */
     public double getLatitude(){
@@ -50,6 +54,7 @@ public class Coordonnee{
 
     /**
      * Renvoie la latitude de la coordonnée en radian, après conversion depuis des degrés.
+     *
      * @return la latitude en radian.
      */
     public double getLatitudeRadian(){
@@ -58,6 +63,7 @@ public class Coordonnee{
 
     /**
      * Renvoie la longitude en degré.
+     *
      * @return la longitude en degré.
      */
     public double getLongitude(){
@@ -66,6 +72,7 @@ public class Coordonnee{
 
     /**
      * Renvoie la longitude de la coordonnée en radian, après conversion depuis des degrés.
+     *
      * @return la longitude en radian.
      */
     public double getLongitudeRadian(){
@@ -74,6 +81,7 @@ public class Coordonnee{
 
     /**
      * Comparaison de deux coordonnées.
+     *
      * @param o objet avec lequel comparer.
      * @return true si les objets comparés ont les mêmes latitude et longitude, false sinon.
      */
@@ -89,6 +97,7 @@ public class Coordonnee{
 
     /**
      * Retourne une valeur de code de hachage pour Coordonnee.
+     *
      * @return la valeur de code de hachage pour Coordonnee.
      */
     @Override
@@ -103,6 +112,7 @@ public class Coordonnee{
 
     /**
      * Retourne une représentation sous forme de chaîne de caractères d'un objet Coordonnee.
+     *
      * @return la représentation sous forme de chaîne de caractères d'un objet Coordonnee.
      */
     @Override

@@ -3,6 +3,7 @@ package fr.uparis.backapp.utils;
 import fr.uparis.backapp.model.Coordonnee;
 import fr.uparis.backapp.model.Section;
 import fr.uparis.backapp.model.Station;
+import fr.uparis.backapp.utils.constants.Constants;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -12,6 +13,7 @@ import java.util.Set;
 public class Utils{
     /**
      * Arrondit le nombre en entrée et renvoie le même nombre avec une précision de trois chiffres après la virgule.
+     *
      * @param number le nombre à tronquer.
      * @return le nombre arrondi au supérieur avec une précision de 3 chiffres après la virgule.
      */
@@ -74,6 +76,7 @@ public class Utils{
 
     /**
      * Calcule la distance entre deux coordonnées, avec une précision au mètre.
+     *
      * @param origine coordonnée du point de départ.
      * @param destination coordonnée du point d'arrivée.
      * @return la distance entre origine et destination en km, avec une précision de 3 chiffres après la virgule.
@@ -89,5 +92,16 @@ public class Utils{
         res *= 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return truncateDoubleTo3Precision(res);
+    }
+
+    /**
+     * Renvoie la durée de marche moyenne d'une distance en km.
+     *
+     * @param distance la distance à parcourir à pied.
+     * @return la durée de marche moyenne pour parcourir une certaine distance.
+     */
+    public static Duration walkingDurationOf(double distance) {
+        long dureeEnSecondes = (long)(3600 * distance / Constants.AVERAGE_WALKING_SPEED);
+        return Duration.ofSeconds(dureeEnSecondes);
     }
 }
