@@ -6,6 +6,7 @@ import fr.uparis.backapp.model.Section;
 import fr.uparis.backapp.model.Station;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -94,9 +95,11 @@ public class TestParser {
 
         Section sectionLourmel1 = section1.get();
         assertEquals(NB_HORAIRES_LOURMEL_1, sectionLourmel1.getHorairesDepart().size());
+        assertTrue(sectionLourmel1.getHorairesDepart().contains(LocalTime.of(6, 4))); //premier départ
 
         Section sectionBoucicaut = section2.get();
         assertEquals(NB_HORAIRES_LOURMEL_1, sectionBoucicaut.getHorairesDepart().size());
+        assertTrue(sectionBoucicaut.getHorairesDepart().contains(LocalTime.of(6, 5, 22))); //durée de 42 secondes + 40 secondes d'attente
 
         Section sectionLourmel2 = section3.get();
         assertEquals(NB_HORAIRES_LOURMEL_2, sectionLourmel2.getHorairesDepart().size());

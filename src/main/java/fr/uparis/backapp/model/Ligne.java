@@ -13,6 +13,7 @@ public class Ligne {
 
     /**
      * Constructeur de la classe Ligne à partir de tous les attributs.
+     *
      * @param nomLigne nom de la Ligne.
      * @param stations liste des Station desservies par la Ligne.
      * @param horairesDepart liste des horaires de departs de cette Ligne.
@@ -25,6 +26,7 @@ public class Ligne {
 
     /**
      * Constructeur de la classe Ligne à partir du nom de la Ligne.
+     *
      * @param nomLigne nom de la Ligne.
      */
     public Ligne(String nomLigne) {
@@ -125,6 +127,7 @@ public class Ligne {
 
     /**
      * Retourne une représentation sous forme de chaîne de caractères d'un objet Ligne.
+     *
      * @return la représentation sous forme de chaîne de caractères d'un objet Ligne.
      */
     @Override

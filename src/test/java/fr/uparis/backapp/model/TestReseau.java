@@ -8,8 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Testeur de la classe Reseau
@@ -37,20 +36,26 @@ public class TestReseau {
         Set<Station> stations = reseau.getStations();
         assertEquals(NB_STATIONS, stations.size());
 
+
         //cas d'ajout et suppression simples
         Station station = new Station("station", new Coordonnee(1, 0));
 
         reseau.removeStation(station);
         assertEquals(NB_STATIONS, stations.size());
+        assertEquals(null, reseau.getStation("station"));
+        assertEquals(null, reseau.getStation(new Coordonnee(1, 0)));
 
         reseau.addStation(station);
         reseau.addStation(station); //doublon
         assertEquals(NB_STATIONS + 1, stations.size());
+        assertEquals(station, reseau.getStation("station"));
+        assertEquals(station, reseau.getStation(new Coordonnee(1, 0)));
 
         reseau.removeStation(station);
         assertEquals(NB_STATIONS, stations.size());
 
-        //Cas où supprimer une section supprime aussi les stations
+
+        //Cas où supprimer une station supprime aussi sections et stations en cascade
         Station station1 = new Station("station 1", new Coordonnee(1, 0));
         Station station2 = new Station("station 2", new Coordonnee(1, 0));
         Section section = new Section(station1, station2, Duration.of(5, ChronoUnit.SECONDS), 1.0, new Ligne("ligne"));
@@ -108,10 +113,47 @@ public class TestReseau {
     }
 
     /**
-     * Teste le calcul des plus courts chemins du Reseau
+     * Teste le calcul du plus court chemin avec dijkstra, qui donne un résultat.
      */
     @Test
-    void testDjikstra() {
-        //TODO write tests
+    void testDijkstraSuccessful(){
+        LocalTime horaireDepart = LocalTime.of(12, 28, 59, 0);
+        Station origine = reseau.getStation("Lourmel");
+        Station destination = reseau.getStation("Boucicaut");
+        Station destination2 = reseau.getStation("Félix Faure");
+        Station destination3 = reseau.getStation("Bir-Hakeim");
+
+        List<Section> trajetTrouve1 = reseau.djikstra(origine, destination, horaireDepart);
+        assertNotNull(trajetTrouve1);
+        assertEquals(1, trajetTrouve1.size()); //Lourmel ; Boucicaut
+
+        List<Section> trajetTrouve2 = reseau.djikstra(origine, destination2, horaireDepart);
+        assertNotNull(trajetTrouve2);
+        assertEquals(2, trajetTrouve2.size()); //Lourmel ; Boucicaut ; Félix Faure
+
+        List<Section> trajetTrouve3 = reseau.djikstra(origine, destination3, horaireDepart);
+        assertNotNull(trajetTrouve3);
+        assertEquals(6, trajetTrouve3.size()); //Lourmel ; Boucicaut ; Félix Faure ; Commerce ; La Motte-Picquet ; Dupleix ; Bir-Hakeim
+    }
+
+    /**
+     * Teste le calcul du plus court chemin avec dijkstra, qui ne donne pas de résultat.
+     */
+    @Test
+    void testDijkstraFailed(){
+        LocalTime horaireDepart = LocalTime.of(23, 58, 59, 0);
+        Station origine = reseau.getStation("Danube");
+        Station destination = reseau.getStation("Botzaris");
+        Station destination2 = reseau.getStation("Buttes Chaumont");
+        Station destination3 = reseau.getStation("Stalingrad");
+
+        List<Section> trajetTrouve = reseau.djikstra(origine, destination, horaireDepart);
+        assertNull(trajetTrouve);
+
+        List<Section> trajetTrouve2 = reseau.djikstra(origine, destination2, horaireDepart);
+        assertNull(trajetTrouve2);
+
+        List<Section> trajetTrouve3 = reseau.djikstra(origine, destination3, horaireDepart);
+        assertNull(trajetTrouve3);
     }
 }

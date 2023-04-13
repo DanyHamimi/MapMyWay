@@ -167,9 +167,9 @@ public class Parser {
      * @param map un dictionnaire contenant les horaires de départ pour chaque variant de ligne et chaque terminus.
      */
     private void addSchedulesToLines(Map<String, Map<String, List<LocalTime>>> map) {
-        map.forEach((variant, timesByTerminal) -> {
-            timesByTerminal.values().forEach(times -> times.forEach(time -> carte.get(variant).addHoraireDepart(time)));
-        });
+        map.forEach((variant, timesByTerminal) ->
+            timesByTerminal.values().forEach(times -> times.forEach(time -> carte.get(variant).addHoraireDepart(time)))
+        );
     }
 
     /**
@@ -179,20 +179,21 @@ public class Parser {
      * @throws IllegalArgumentException si l'une des stations de départ n'est pas présente dans le réseau.
      */
     private void calculate_schedules(Map<String, Map<String, List<LocalTime>>> map) {
-        map.forEach((variant, timesByTerminal) -> {
+        map.forEach((variant, timesByTerminal) ->
             timesByTerminal.forEach((terminal, times) -> {
                 Section sectionDepart = findSectionDepart(sectionsSet, terminal, variant);
                 if (sectionDepart == null)
                     throw new IllegalArgumentException("Station départ introuvable dans le réseau");
                 sectionDepart.addHorairesDepart(times);
                 propagateSchedules(sectionDepart);
-            });
-        });
+            })
+        );
     }
 
     /**
      * Calcule les horaires de départ de la section initiale et les propage à toutes les sections connectées à cette section,
-     * en utilisant les durées des sections pour calculer les horaires de départ des sections suivantes.
+     * en utilisant les durées des sections pour calculer les horaires de départ des sections suivantes,
+     * et en rajoutant 40 secondes à chaque arrêt.
      *
      * @param sectionDepart la section de départ à partir de laquelle propager les horaires de départ.
      */
@@ -203,7 +204,9 @@ public class Parser {
         while (nextSectionInTheSameLine != null) {
             Section finalCurrentSection = currentSection;
             Section finalNextSectionInTheSameLine = nextSectionInTheSameLine;
-            currentSection.getHorairesDepart().forEach(time -> finalNextSectionInTheSameLine.addHoraireDepart(time.plus(finalCurrentSection.getDuree())));
+            currentSection.getHorairesDepart().forEach(time ->
+                    finalNextSectionInTheSameLine.addHoraireDepart(time.plus(finalCurrentSection.getDuree())
+                                                                       .plus(Duration.ofSeconds(40)))); //40 secondes d'arrêt
 
             currentSection = nextSectionInTheSameLine;
             nextSectionInTheSameLine = currentSection.moveToNextSectionInTheSameLine(sectionsSet);

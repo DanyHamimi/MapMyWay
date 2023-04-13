@@ -91,7 +91,7 @@ public class TestUtils {
      * Teste le calcul de distance entre deux coordonnées.
      */
     @Test
-    void testDistanceBetween(){
+    void testDistanceBetween() {
         Coordonnee origine1 = new Coordonnee(52.2296756, 21.0122287);
         Coordonnee destination1 = new Coordonnee(52.2296756, 21.0122287);
         assertEquals(0.000, distanceBetween(origine1, destination1));
@@ -103,5 +103,18 @@ public class TestUtils {
         Coordonnee origine3 = new Coordonnee(52.2296756, 21.0122287);
         Coordonnee destination3 = new Coordonnee(52.406374, 16.9251681);
         assertEquals(278.537, distanceBetween(origine3, destination3)); //résultat depuis un site de calcul
+    }
+
+    /**
+     * Teste la durée de marche d'une certaine distance en km.
+     */
+    @Test
+    void testWalkingDuration() {
+        assertEquals(Duration.ofSeconds(0), walkingDurationOf(0));
+        assertEquals(Duration.ofHours(1), walkingDurationOf(5.0));
+        assertEquals(Duration.ofMinutes(30), walkingDurationOf(2.5));
+        assertEquals(Duration.ofMinutes(6), walkingDurationOf(0.5));
+        assertEquals(Duration.ofMinutes(3), walkingDurationOf(0.25));
+        assertEquals(Duration.ofMinutes(1).plusSeconds(12), walkingDurationOf(0.1));
     }
 }

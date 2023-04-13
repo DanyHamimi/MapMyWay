@@ -32,4 +32,9 @@ public class Constants {
      */
     public static final double DEFAULT_MAX_DISTANCE = 10.0; //distance maximale par défaut entre une coordonnée et une station, en km
     public static final double DEFAULT_MIN_DISTANCE = 0.0; //distance minimale par défaut à marcher pendant le trajet, en km
+
+    /**
+     * Vitesse moyenne de marche en km/h.
+     */
+    public static final double AVERAGE_WALKING_SPEED = 5.0;
 }

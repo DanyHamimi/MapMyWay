@@ -27,7 +27,7 @@ public class Section {
      * @param ligne          Ligne de la Section.
      */
     public Section(Station stationDepart, Station stationArrivee, Duration duree, double distance, Ligne ligne) {
-        if (stationDepart.equals(stationArrivee)) throw new IllegalArgumentException();
+        if(stationDepart.equals(stationArrivee)) throw new IllegalArgumentException();
         this.stationDepart = stationDepart;
         this.stationArrivee = stationArrivee;
         this.duree = duree;
@@ -88,6 +88,24 @@ public class Section {
      */
     public Set<LocalTime> getHorairesDepart() {
         return horairesDepart;
+    }
+
+    /**
+     * Renvoie l'heure du prochain départ.
+     *
+     * @param depart l'heure actuelle.
+     * @return l'heure du prochain départ.
+     */
+    public LocalTime getHoraireProchainDepart(LocalTime depart) {
+        LocalTime prochainDepart = LocalTime.MAX;
+        boolean hasProchainDepart = false;
+        for (LocalTime localTime : horairesDepart) {
+            if (localTime.isAfter(depart)) {
+                hasProchainDepart = true;
+                if(localTime.isBefore(prochainDepart)) prochainDepart = localTime;
+            }
+        }
+        return (hasProchainDepart)? prochainDepart : null;
     }
 
     /**
@@ -153,9 +171,10 @@ public class Section {
     public String toString() {
         String s = this.getLigne().getNomLigne() + " : ";
         s += this.stationDepart.getNomStation() + " -> " + this.stationArrivee.getNomStation();
-        s += " (durée = " + this.duree.toString() + ", distance = " + this.distance + " km)";
-        for (LocalTime time : this.horairesDepart) s += "\n    " + time;
-        return s;
+        s += " (durée = " + this.duree.toString() + ", distance = " + this.distance + " km";
+        if(!this.horairesDepart.isEmpty()) s += ", à";
+        for(LocalTime time: this.horairesDepart) s += " " + time;
+        return s + ")";
     }
 
     /**
