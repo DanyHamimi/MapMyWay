@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Testeur de la classe Constants
+ * Testeur de la classe Constants.
  */
-public class TestConstants{
+public class TestConstants {
     @Test
-    public void testValues(){
+    public void testValues() {
         Constants constants = new Constants();
 
         assertEquals("map.data.file.path", constants.MAP_DATA_FILE_PATH_PROPERTY);
@@ -29,7 +29,11 @@ public class TestConstants{
         assertEquals(2, constants.SCHEDULES_FILE_TIME_INDEX);
         assertEquals(3, constants.SCHEDULES_FILE_VARIANTE_INDEX);
 
-        assertEquals(10.0, constants.DEFAULT_MAX_DISTANCE);
+        assertEquals(0.85, constants.DEFAULT_MAX_DISTANCE);
         assertEquals(0.0, constants.DEFAULT_MIN_DISTANCE);
+
+        assertEquals(5.0, constants.AVERAGE_WALKING_SPEED);
+
+        assertEquals(5, constants.MAX_TRAJETS_NUMBER);
     }
 }

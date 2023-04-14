@@ -1,9 +1,9 @@
 package fr.uparis.backapp.model;
 
 /**
- * Représente une coordonnée gps
+ * Représente une coordonnée gps.
  */
-public class Coordonnee{
+public class Coordonnee {
     final private double latitude; //latitude en degré
     final private double longitude; //longitude en degré
 
@@ -13,7 +13,7 @@ public class Coordonnee{
      * @param latitude latitude de la coordonnée en degré.
      * @param longitude longitude de la coordonnée en degré.
      */
-    public Coordonnee(double latitude, double longitude){
+    public Coordonnee(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -23,7 +23,7 @@ public class Coordonnee{
      *
      * @param coordonnee latitude et longitude séparées par une virgule.
      */
-    public Coordonnee(String coordonnee){
+    public Coordonnee(String coordonnee) {
         Double[] splitCoordonnee = splitCoordonnee(coordonnee);
         this.latitude = splitCoordonnee[0];
         this.longitude = splitCoordonnee[1];
@@ -36,9 +36,9 @@ public class Coordonnee{
      * @param coordonnee hypothétiquement une chaîne de caractères représentant latitude et longitude séparées par une virgule.
      * @return un tableau de doubles, comportant respectivement latitude et longitude en son sein.
      */
-    private Double[] splitCoordonnee(String coordonnee){
+    private Double[] splitCoordonnee(String coordonnee) {
         String[] splitCoordonnee = coordonnee.split(",");
-        if(splitCoordonnee.length!=2)
+        if(splitCoordonnee.length != 2)
             throw new IllegalArgumentException("Arguments invalides pour la construction de coordonnée" + coordonnee);
         return new Double[]{Double.parseDouble(splitCoordonnee[0]), Double.parseDouble(splitCoordonnee[1])};
     }
@@ -48,7 +48,7 @@ public class Coordonnee{
      *
      * @return la latitude en degré.
      */
-    public double getLatitude(){
+    public double getLatitude() {
         return latitude;
     }
 
@@ -57,7 +57,7 @@ public class Coordonnee{
      *
      * @return la latitude en radian.
      */
-    public double getLatitudeRadian(){
+    public double getLatitudeRadian() {
         return Math.toRadians(latitude);
     }
 
@@ -66,7 +66,7 @@ public class Coordonnee{
      *
      * @return la longitude en degré.
      */
-    public double getLongitude(){
+    public double getLongitude() {
         return longitude;
     }
 
@@ -75,7 +75,7 @@ public class Coordonnee{
      *
      * @return la longitude en radian.
      */
-    public double getLongitudeRadian(){
+    public double getLongitudeRadian() {
         return Math.toRadians(longitude);
     }
 
@@ -86,7 +86,7 @@ public class Coordonnee{
      * @return true si les objets comparés ont les mêmes latitude et longitude, false sinon.
      */
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if(this == o) return true;
         if(o == null || getClass() != o.getClass()) return false;
 

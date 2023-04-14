@@ -1,4 +1,7 @@
-package fr.uparis.backapp.model;
+package fr.uparis.backapp.model.section;
+
+import fr.uparis.backapp.model.Ligne;
+import fr.uparis.backapp.model.lieu.Station;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -7,75 +10,51 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Représente une Section du Reseau de transport
+ * Représente une Section de transport dans le Reseau.
  */
-public class Section {
-    final private Station stationDepart;
-    final private Station stationArrivee;
-    final private Duration duree;
-    final private double distance;
-    final private Ligne ligne;
+public class SectionTransport extends Section {
+    final protected Ligne ligne;
     final private Set<LocalTime> horairesDepart;
 
     /**
-     * Constructeur de la Section.
+     * Constructeur de la SectionTransport.
      *
-     * @param stationDepart  Station de depart de la Section.
+     * @param stationDepart Station de depart de la Section.
      * @param stationArrivee Station d'arrivée de la Section.
-     * @param duree          durée estimée de la Section.
-     * @param distance       distance de la Section.
-     * @param ligne          Ligne de la Section.
+     * @param duree durée estimée de la Section.
+     * @param distance distance de la Section.
+     * @param ligne Ligne empruntée par la Section.
      */
-    public Section(Station stationDepart, Station stationArrivee, Duration duree, double distance, Ligne ligne) {
-        if(stationDepart.equals(stationArrivee)) throw new IllegalArgumentException();
-        this.stationDepart = stationDepart;
-        this.stationArrivee = stationArrivee;
-        this.duree = duree;
-        this.distance = distance;
+    public SectionTransport(Station stationDepart, Station stationArrivee, Duration duree, double distance, Ligne ligne) {
+        super(stationDepart, stationArrivee, duree, distance);
         this.ligne = ligne;
         this.horairesDepart = new HashSet<>();
     }
 
     /**
-     * Renvoie la Station de départ de la Section.
+     * Renvoie la station de départ de la Section.
      *
-     * @return la Station de départ de la Section.
+     * @return la station de départ de la Section.
      */
-    public Station getStationDepart() {
-        return stationDepart;
+    @Override
+    public Station getDepart() {
+        return (Station)depart;
     }
 
     /**
-     * Renvoie la Station d'arrivée de la Section.
+     * Renvoie la station d'arrivée de la Section.
      *
-     * @return la Station d'arrivée de la Section.
+     * @return la station d'arrivée de la Section.
      */
-    public Station getStationArrivee() {
-        return stationArrivee;
+    @Override
+    public Station getArrivee() {
+        return (Station)arrivee;
     }
 
     /**
-     * Renvoie la durée de la Section.
+     * Renvoie la Ligne empruntée par la Section.
      *
-     * @return la durée de la Section.
-     */
-    public Duration getDuree() {
-        return duree;
-    }
-
-    /**
-     * Renvoie la distance de la Section.
-     *
-     * @return la distance de la Section.
-     */
-    public double getDistance() {
-        return distance;
-    }
-
-    /**
-     * Renvoie la Ligne utilisée par la Section.
-     *
-     * @return la Ligne utilisée par la Section.
+     * @return la Ligne empruntée par la Section.
      */
     public Ligne getLigne() {
         return ligne;
@@ -99,7 +78,7 @@ public class Section {
     public LocalTime getHoraireProchainDepart(LocalTime depart) {
         LocalTime prochainDepart = LocalTime.MAX;
         boolean hasProchainDepart = false;
-        for (LocalTime localTime : horairesDepart) {
+        for (LocalTime localTime: horairesDepart) {
             if (localTime.isAfter(depart)) {
                 hasProchainDepart = true;
                 if(localTime.isBefore(prochainDepart)) prochainDepart = localTime;
@@ -143,10 +122,10 @@ public class Section {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Section section = (Section) o;
-        return section.getStationDepart().equals(this.getStationDepart()) && section.getStationArrivee().equals(this.getStationArrivee());
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        SectionTransport sectionTransport = (SectionTransport) o;
+        return sectionTransport.getDepart().equals(this.getDepart()) && sectionTransport.getArrivee().equals(this.getArrivee());
     }
 
     /**
@@ -156,8 +135,8 @@ public class Section {
      */
     @Override
     public int hashCode() {
-        int result = stationDepart != null ? stationDepart.hashCode() : 0;
-        result = 31 * result + (stationArrivee != null ? stationArrivee.hashCode() : 0);
+        int result = depart != null ? depart.hashCode() : 0;
+        result = 31 * result + (arrivee != null ? arrivee.hashCode() : 0);
         result = 31 * result + (ligne != null ? ligne.hashCode() : 0);
         return result;
     }
@@ -170,7 +149,7 @@ public class Section {
     @Override
     public String toString() {
         String s = this.getLigne().getNomLigne() + " : ";
-        s += this.stationDepart.getNomStation() + " -> " + this.stationArrivee.getNomStation();
+        s += this.depart.getNomLieu() + " -> " + this.arrivee.getNomLieu();
         s += " (durée = " + this.duree.toString() + ", distance = " + this.distance + " km";
         if(!this.horairesDepart.isEmpty()) s += ", à";
         for(LocalTime time: this.horairesDepart) s += " " + time;
@@ -184,7 +163,7 @@ public class Section {
      * @return l'égalité entre la station donnée et celle de départ de la Section.
      */
     public boolean isStationDepart(Station currentStation) {
-        return currentStation.equals(this.stationDepart);
+        return currentStation.equals(this.depart);
     }
 
     /**
@@ -194,14 +173,14 @@ public class Section {
      * @return l'égalité entre la station donnée et celle d'arrivée de la Section.
      */
     public boolean isStationArrivee(Station nextStation) {
-        return nextStation.equals(this.stationArrivee);
+        return nextStation.equals(this.arrivee);
     }
 
     /**
      * Regarde si la Section va d'une certaine station à une autre.
      *
      * @param currentStation station de départ.
-     * @param nextStation    station d'arrivée.
+     * @param nextStation station d'arrivée.
      * @return l'égalité entre les stations données et celles de la Section.
      */
     public boolean areStations(Station currentStation, Station nextStation) {
@@ -214,9 +193,9 @@ public class Section {
      * @param sections un ensemble de sections à parcourir.
      * @return la prochaine section dans la même ligne, ou null si aucune section n'est trouvée.
      */
-    public Section moveToNextSectionInTheSameLine(Set<Section> sections) {
-        for (Section section : sections)
-            if (section.isStationDepart(this.stationArrivee) && section.getLigne().equals(this.ligne))
+    public SectionTransport moveToNextSectionInTheSameLine(Set<SectionTransport> sections) {
+        for(SectionTransport section: sections)
+            if(section.isStationDepart((Station)arrivee) && section.getLigne().equals(this.ligne))
                 return section;
         return null;
     }

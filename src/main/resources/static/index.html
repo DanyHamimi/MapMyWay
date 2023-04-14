@@ -260,23 +260,23 @@
 
     let a = stations[0];
     let b = stations[1];
-    const section1 = [a, b];
+    const sectionTransport1 = [a, b];
 
     let c = stations[1];
     let d = stations[2];
-    const section2 = [c, d];
+    const sectionTransport2 = [c, d];
 
     let e = stations[2];
     let f = stations[3];
-    const section3 = [e, f];
+    const sectionTransport3 = [e, f];
 
     let g = stations[3];
     let h = stations[4];
     const section4 = [g, h];
 
     listeTrajet = [
-        ["1",[section1,section2,] ],
-        ["2",[section3,section4]
+        ["1",[sectionTransport1,sectionTransport2,] ],
+        ["2",[sectionTransport3,section4]
         ]];
 
 
@@ -458,10 +458,10 @@
                     lineColor = "black";
             }
 
-            trajet[1].forEach(section => {
+            trajet[1].forEach(sectionTransport => {
                 let lineCoordinates = [];
-                for (let i = 0; i < section.length; i++) {
-                    let station = section[i];
+                for (let i = 0; i < sectionTransport.length; i++) {
+                    let station = sectionTransport[i];
 
                     let marker = L.marker([station.latitude, station.longitude]).addTo(map);
                     marker.bindPopup(`<b>${station.nom}</b>`).openPopup();

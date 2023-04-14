@@ -1,7 +1,7 @@
 package fr.uparis.backapp.web;
 
 import fr.uparis.backapp.utils.Parser;
-import fr.uparis.backapp.model.Station;
+import fr.uparis.backapp.model.lieu.Station;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +39,7 @@ public class PagesController {
         List<String> valuesWithoutDuplicates = new ArrayList<>();
 
         for(Station station: parser.getStations()){
-            String stationNameAndCoordinates = station.getNomStation() + ";" + station.getLocalisation().getLatitude() + ";" + station.getLocalisation().getLongitude();
+            String stationNameAndCoordinates = station.getNomLieu() + ";" + station.getLocalisation().getLatitude() + ";" + station.getLocalisation().getLongitude();
             if (!valuesWithoutDuplicates.contains(stationNameAndCoordinates.split(";")[0])) {
                 valuesWithoutDuplicates.add(stationNameAndCoordinates.split(";")[0]);
                 values.add(stationNameAndCoordinates);

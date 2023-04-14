@@ -1,10 +1,12 @@
 package fr.uparis.backapp.model;
 
+import fr.uparis.backapp.model.lieu.Station;
+
 import java.time.LocalTime;
 import java.util.*;
 
 /**
- * Représente une Ligne du Reseau de transport
+ * Représente une Ligne de transport dans le Reseau.
  */
 public class Ligne {
     final private String nomLigne; //nom de la ligne, unique
@@ -104,8 +106,8 @@ public class Ligne {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
 
         Ligne ligne = (Ligne) o;
         return Objects.equals(nomLigne, ligne.nomLigne);
@@ -133,7 +135,7 @@ public class Ligne {
     @Override
     public String toString() {
         String s = nomLigne + " : ";
-        for (Station station : stations) s += station.getNomStation() + " ";
+        for (Station station : stations) s += station.getNomLieu() + " ";
         for (LocalTime time : horairesDepart) s += "\n    " + time;
         return s;
     }

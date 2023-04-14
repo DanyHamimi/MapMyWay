@@ -1,5 +1,6 @@
 package fr.uparis.backapp.model;
 
+import fr.uparis.backapp.model.lieu.Station;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testeur de la classe Ligne
+ * Testeur de la classe Ligne.
  */
 public class TestLigne {
     final private Ligne ligne = new Ligne("L1");
@@ -24,7 +25,7 @@ public class TestLigne {
      * Teste la construction de Ligne avec des paramètres null.
      */
     @Test
-    public void testConstructorWithNullValues() {
+    public void testsConstructorWithNullValues() {
         Ligne ligne = new Ligne(null, null, null);
         assertNotNull(ligne);
         assertNull(ligne.getNomLigne());
