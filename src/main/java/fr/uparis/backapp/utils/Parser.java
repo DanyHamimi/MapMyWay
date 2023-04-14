@@ -1,5 +1,7 @@
 package fr.uparis.backapp.utils;
 
+import fr.uparis.backapp.model.lieu.Station;
+import fr.uparis.backapp.model.section.SectionTransport;
 import fr.uparis.backapp.utils.constants.Constants;
 import fr.uparis.backapp.config.Config;
 import fr.uparis.backapp.model.*;
@@ -16,22 +18,22 @@ import static fr.uparis.backapp.utils.constants.Constants.*;
 import static fr.uparis.backapp.utils.Utils.*;
 
 /**
- * Permet de parser les donnees du client et de creer nos Objets.
+ * Singleton pour parser les données du client et pour créer nos Objets.
  */
 public class Parser {
     private static Parser instance = null;
-    final private Map<String, Ligne> carte;
-    final private Map<String, Station> stationMap;
-    final private Set<Section> sectionsSet;
+    final private Map<String, Ligne> lignes;
+    final private Map<String, Station> stations;
+    final private Set<SectionTransport> sections;
 
     /**
      * Constructeur privé pour créer une instance de la classe Parser.
      * Initialise les structures de données carte et sectionsSet.
      */
     private Parser() {
-        carte = new LinkedHashMap<>();
-        stationMap = new HashMap<>();
-        sectionsSet = new LinkedHashSet<>();
+        lignes = new LinkedHashMap<>();
+        stations = new HashMap<>();
+        sections = new LinkedHashSet<>();
     }
 
     /**
@@ -41,7 +43,7 @@ public class Parser {
      * @return l'instance unique de la classe Parser.
      */
     public static Parser getInstance() {
-        if (instance == null) {
+        if(instance == null) {
             instance = new Parser();
             instance.parseMap();
             instance.parseTime();
@@ -55,8 +57,8 @@ public class Parser {
      * @return les lignes du réseau.
      */
     public Ligne[] getLignes() {
-        Ligne[] lignes = new Ligne[carte.size()];
-        return carte.values().toArray(lignes);
+        Ligne[] lignes = new Ligne[this.lignes.size()];
+        return this.lignes.values().toArray(lignes);
     }
 
     /**
@@ -64,8 +66,8 @@ public class Parser {
      *
      * @return les sections du réseau.
      */
-    public Set<Section> getSections() {
-        return sectionsSet;
+    public Set<SectionTransport> getSections() {
+        return sections;
     }
 
     /**
@@ -74,7 +76,7 @@ public class Parser {
      * @return les stations du réseau.
      */
     public Station[] getStations() {
-        List<Station> stations = stationMap.values().stream().toList();
+        List<Station> stations = this.stations.values().stream().toList();
         Station[] res = new Station[stations.size()];
         for (int i = 0; i < stations.size(); i++) res[i] = stations.get(i);
         return res;
@@ -90,9 +92,9 @@ public class Parser {
         List<String[]> lines = new ArrayList<>();
         try {
             lines = Files.readAllLines(Paths.get(filePath))
-                    .stream()
-                    .map(line -> line.split(Constants.DELIMITER))
-                    .toList();
+                         .stream()
+                         .map(line -> line.split(Constants.DELIMITER))
+                         .toList();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -112,28 +114,29 @@ public class Parser {
         List<String[]> lines = getFileLines(config.getProperty(Constants.MAP_DATA_FILE_PATH_PROPERTY));
 
         lines.forEach(l -> {
-            Station stationDepart = stationMap.getOrDefault(l[Constants.STATION_DEPART_INDEX],
+            Station stationDepart = stations.getOrDefault(l[Constants.STATION_DEPART_INDEX],
                     new Station(l[Constants.STATION_DEPART_INDEX], new Coordonnee(l[Constants.STATION_DEPART_COORDONEES_INDEX])));
-            Station stationArrivee = stationMap.getOrDefault(l[Constants.STATION_ARRIVEE_INDEX],
+            Station stationArrivee = stations.getOrDefault(l[Constants.STATION_ARRIVEE_INDEX],
                     new Station(l[Constants.STATION_ARRIVEE_INDEX], new Coordonnee(l[Constants.STATION_ARRIVEE_COORDONEES_INDEX])));
+            stationDepart.addLocalisation(l[NOM_LIGNE_INDEX], new Coordonnee(l[STATION_DEPART_COORDONEES_INDEX]));
+            stationArrivee.addLocalisation(l[NOM_LIGNE_INDEX], new Coordonnee(l[STATION_ARRIVEE_COORDONEES_INDEX]));
+            stations.put(l[Constants.STATION_DEPART_INDEX], stationDepart);
+            stations.put(l[Constants.STATION_ARRIVEE_INDEX], stationArrivee);
 
-            Ligne ligne = carte.getOrDefault(l[Constants.NOM_LIGNE_INDEX], new Ligne(l[Constants.NOM_LIGNE_INDEX]));
+            Ligne ligne = lignes.getOrDefault(l[Constants.NOM_LIGNE_INDEX], new Ligne(l[Constants.NOM_LIGNE_INDEX]));
             ligne.addStation(stationDepart);
             ligne.addStation(stationArrivee);
-            carte.put(l[Constants.NOM_LIGNE_INDEX], ligne);
+            lignes.put(l[Constants.NOM_LIGNE_INDEX], ligne);
 
             Duration duree = correctDuration(l[Constants.DUREE_INDEX]);
             double distance = correctDistance(l[Constants.DISTANCE_INDEX]);
 
-            Section section = new Section(stationDepart, stationArrivee, duree, distance, ligne);
-            sectionsSet.add(section);
+            SectionTransport section = new SectionTransport(stationDepart, stationArrivee, duree, distance, ligne);
+            sections.add(section);
 
             stationDepart.addCorrespondance(section);
             //On ajoute le trajet inverse
-            stationArrivee.addCorrespondance(new Section(stationArrivee, stationDepart, duree, distance, ligne));
-
-            stationMap.put(l[Constants.STATION_DEPART_INDEX], stationDepart);
-            stationMap.put(l[Constants.STATION_ARRIVEE_INDEX], stationArrivee);
+            stationArrivee.addCorrespondance(new SectionTransport(stationArrivee, stationDepart, duree, distance, ligne));
         });
     }
 
@@ -168,7 +171,7 @@ public class Parser {
      */
     private void addSchedulesToLines(Map<String, Map<String, List<LocalTime>>> map) {
         map.forEach((variant, timesByTerminal) ->
-            timesByTerminal.values().forEach(times -> times.forEach(time -> carte.get(variant).addHoraireDepart(time)))
+            timesByTerminal.values().forEach(times -> times.forEach(time -> lignes.get(variant).addHoraireDepart(time)))
         );
     }
 
@@ -181,13 +184,28 @@ public class Parser {
     private void calculate_schedules(Map<String, Map<String, List<LocalTime>>> map) {
         map.forEach((variant, timesByTerminal) ->
             timesByTerminal.forEach((terminal, times) -> {
-                Section sectionDepart = findSectionDepart(sectionsSet, terminal, variant);
-                if (sectionDepart == null)
+                SectionTransport sectionDepart = findSectionDepart(terminal, variant);
+                if(sectionDepart == null)
                     throw new IllegalArgumentException("Station départ introuvable dans le réseau");
                 sectionDepart.addHorairesDepart(times);
                 propagateSchedules(sectionDepart);
             })
         );
+    }
+
+    /**
+     * Récupère la section de départ correspondant à une station de départ et une variante de ligne donnée.
+     *
+     * @param nameStation le nom de la station de départ recherchée.
+     * @param lineVariant le variant de ligne de la section de départ recherchée.
+     * @return la section de départ ayant pour station de départ et variant de ligne ceux donnés, ou null si aucune section n'a été trouvée.
+     */
+    private SectionTransport findSectionDepart(String nameStation, String lineVariant) {
+        Station stationDepart = new Station(nameStation, null);
+        for (SectionTransport section: sections)
+            if (section.isStationDepart(stationDepart) && section.getLigne().getNomLigne().equals(lineVariant))
+                return section;
+        return null;
     }
 
     /**
@@ -197,19 +215,19 @@ public class Parser {
      *
      * @param sectionDepart la section de départ à partir de laquelle propager les horaires de départ.
      */
-    private void propagateSchedules(Section sectionDepart) {
-        Section currentSection = sectionDepart;
-        Section nextSectionInTheSameLine = currentSection.moveToNextSectionInTheSameLine(sectionsSet);
+    private void propagateSchedules(SectionTransport sectionDepart) {
+        SectionTransport currentSection = sectionDepart;
+        SectionTransport nextSectionInTheSameLine = currentSection.moveToNextSectionInTheSameLine(sections);
 
         while (nextSectionInTheSameLine != null) {
-            Section finalCurrentSection = currentSection;
-            Section finalNextSectionInTheSameLine = nextSectionInTheSameLine;
+            SectionTransport finalCurrentSection = currentSection;
+            SectionTransport finalNextSectionInTheSameLine = nextSectionInTheSameLine;
             currentSection.getHorairesDepart().forEach(time ->
-                    finalNextSectionInTheSameLine.addHoraireDepart(time.plus(finalCurrentSection.getDuree())
-                                                                       .plus(Duration.ofSeconds(40)))); //40 secondes d'arrêt
+                finalNextSectionInTheSameLine.addHoraireDepart(time.plus(finalCurrentSection.getDuree())
+                                                                   .plus(Duration.ofSeconds(40)))); //40 secondes d'arrêt
 
             currentSection = nextSectionInTheSameLine;
-            nextSectionInTheSameLine = currentSection.moveToNextSectionInTheSameLine(sectionsSet);
+            nextSectionInTheSameLine = currentSection.moveToNextSectionInTheSameLine(sections);
         }
     }
 }

@@ -1,32 +1,26 @@
 package fr.uparis.backapp.utils;
 
 import fr.uparis.backapp.model.Coordonnee;
-import fr.uparis.backapp.model.Ligne;
-import fr.uparis.backapp.model.Section;
-import fr.uparis.backapp.model.Station;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.HashSet;
-import java.util.Set;
 
 import static fr.uparis.backapp.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Testeur de la classe Utils.
+ */
 public class TestUtils {
     /**
-     * Teste la conversion de durée en dizaine de secondes vers Duration.
+     * Teste l'arrondi à une précision de 3 chiffres après la virgule.
      */
     @Test
-    public void testCorrectDuration() {
-        String duration1 = "10:02";
-        assertEquals("PT1M41S", correctDuration(duration1).toString());
-
-        String duration2 = "02:35";
-        assertEquals("PT24S", correctDuration(duration2).toString());
-
-        String duration3 = "12:45";
-        assertEquals("PT2M5S", correctDuration(duration3).toString());
+    public void tests3Precision() {
+        assertEquals(3.333, truncateDoubleTo3Precision(3.333));
+        assertEquals(3.333, truncateDoubleTo3Precision(3.33333));
+        assertEquals(3.333, truncateDoubleTo3Precision(3.3334));
+        assertEquals(3.334, truncateDoubleTo3Precision(3.33351));
     }
 
     /**
@@ -45,28 +39,18 @@ public class TestUtils {
     }
 
     /**
-     * Teste la recherche de sections avec la station de début et le nom de la ligne, dans un ensemble de sections donné.
+     * Teste la conversion de durée en dizaine de secondes vers Duration.
      */
     @Test
-    public void testFindSectionDepart() {
-        Station station1 = new Station("station1", new Coordonnee("1,0"));
-        Station station2 = new Station("station2", new Coordonnee("1,0"));
-        Station station3 = new Station("station3", new Coordonnee("1,0"));
+    public void testCorrectDuration() {
+        String duration1 = "10:02";
+        assertEquals("PT1M41S", correctDuration(duration1).toString());
 
-        Duration duree = Duration.ofMinutes(2).plusSeconds(5);
-        double distance = 5.054;
-        Ligne ligne = new Ligne("ligne");
+        String duration2 = "02:35";
+        assertEquals("PT24S", correctDuration(duration2).toString());
 
-        Section section1 = new Section(station1, station2, duree, distance, ligne);
-        Section section2 = new Section(station2, station3, duree, distance, ligne);
-
-        Set<Section> sectionSet = new HashSet<>();
-        sectionSet.add(section1);
-        sectionSet.add(section2);
-
-        assertEquals(section1, findSectionDepart(sectionSet, station1.getNomStation(), ligne.getNomLigne()));
-        assertEquals(section2, findSectionDepart(sectionSet, station2.getNomStation(), ligne.getNomLigne()));
-        assertEquals(null, findSectionDepart(sectionSet, station3.getNomStation(), ligne.getNomLigne()));
+        String duration3 = "12:45";
+        assertEquals("PT2M5S", correctDuration(duration3).toString());
     }
 
     /**

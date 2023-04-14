@@ -107,15 +107,15 @@ these conditions:
     not required to print an announcement.)
 
 These requirements apply to the modified work as a whole.  If identifiable
-sections of that work are not derived from the Program, and can be reasonably
+sectionTransports of that work are not derived from the Program, and can be reasonably
 considered independent and separate works in themselves, then this License, and
-its terms, do not apply to those sections when you distribute them as separate
-works.  But when you distribute the same sections as part of a whole which is a
+its terms, do not apply to those sectionTransports when you distribute them as separate
+works.  But when you distribute the same sectionTransports as part of a whole which is a
 work based on the Program, the distribution of the whole must be on the terms
 of this License, whose permissions for other licensees extend to the entire
 whole, and thus to each and every part regardless of who wrote it.
 
-Thus, it is not the intent of this section to claim rights or contest your
+Thus, it is not the intent of this sectionTransport to claim rights or contest your
 rights to work written entirely by you; rather, the intent is to exercise the
 right to control the distribution of derivative or collective works based on
 the Program.
@@ -194,13 +194,13 @@ of the Program by all those who receive copies directly or indirectly through
 you, then the only way you could satisfy both it and this License would be to
 refrain entirely from distribution of the Program.
 
-If any portion of this section is held invalid or unenforceable under any
-particular circumstance, the balance of the section is intended to apply and
-the section as a whole is intended to apply in other circumstances.
+If any portion of this sectionTransport is held invalid or unenforceable under any
+particular circumstance, the balance of the sectionTransport is intended to apply and
+the sectionTransport as a whole is intended to apply in other circumstances.
 
-It is not the purpose of this section to induce you to infringe any patents or
+It is not the purpose of this sectionTransport to induce you to infringe any patents or
 other property right claims or to contest validity of any such claims; this
-section has the sole purpose of protecting the integrity of the free software
+sectionTransport has the sole purpose of protecting the integrity of the free software
 distribution system, which is implemented by public license practices.  Many
 people have made generous contributions to the wide range of software
 distributed through that system in reliance on consistent application of that
@@ -208,7 +208,7 @@ system; it is up to the author/donor to decide if he or she is willing to
 distribute software through any other system and a licensee cannot impose that
 choice.
 
-This section is intended to make thoroughly clear what is believed to be a
+This sectionTransport is intended to make thoroughly clear what is believed to be a
 consequence of the rest of this License.
 
 8. If the distribution and/or use of the Program is restricted in certain

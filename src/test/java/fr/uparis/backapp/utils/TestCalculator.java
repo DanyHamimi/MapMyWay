@@ -1,79 +1,82 @@
 package fr.uparis.backapp.utils;
 
-import fr.uparis.backapp.model.Coordonnee;
 import fr.uparis.backapp.model.Reseau;
-import fr.uparis.backapp.model.Station;
+import fr.uparis.backapp.model.lieu.Station;
+import fr.uparis.backapp.model.section.Section;
+import fr.uparis.backapp.utils.constants.Constants;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Testeur des calculs d'itinéraires
+ * Testeur des calculs d'itinéraires.
  */
 public class TestCalculator {
     Reseau reseau = Reseau.getInstance();
 
     /**
-     * Teste du calcul d'itinéraire.
+     * Teste le calcul d'itinéraire, qui donne des trajets autres qu'à pied.
      */
     @Test
-    public void testIteneraire() {
-        Coordonnee coordonnee = new Coordonnee(2.289435418542214, 48.87566737659971);
-        Calculator.itineraire(coordonnee, coordonnee);
+    public void testsItineraireMultipleResultat() {
+        LocalTime horaireDepart = LocalTime.of(12, 28, 59, 0);
+        Station origine = reseau.getStation("Lourmel");
+        Station destination1 = reseau.getStation("Boucicaut");
+        Station destination2 = reseau.getStation("Félix Faure");
+        Station destination3 = reseau.getStation("Bir-Hakeim");
+
+        List<Section[]> trajetsTrouves0 = Calculator.itineraire(origine, destination1, horaireDepart, 0, 0);
+        assertNotNull(trajetsTrouves0);
+        assertTrue(trajetsTrouves0.size() <= Constants.MAX_TRAJETS_NUMBER);
+        assertEquals(3, trajetsTrouves0.get(0).length); //Pied ; Lourmel ; Boucicaut ; Pied
+
+        List<Section[]> trajetsTrouves1 = Calculator.itineraire(origine, destination1, horaireDepart);
+        assertNotNull(trajetsTrouves1);
+        assertTrue(trajetsTrouves1.size() <= Constants.MAX_TRAJETS_NUMBER);
+        assertEquals(3, trajetsTrouves1.get(0).length); //Pied ; Lourmel ; Boucicaut ; Pied
+
+        List<Section[]> trajetsTrouves2 = Calculator.itineraire(origine, destination2, horaireDepart);
+        assertNotNull(trajetsTrouves2);
+        assertTrue(trajetsTrouves2.size() <= Constants.MAX_TRAJETS_NUMBER);
+        assertEquals(4, trajetsTrouves2.get(0).length); //Pied ; Lourmel ; Boucicaut ; Félix Faure ; Pied
+
+        List<Section[]> trajetsTrouves3 = Calculator.itineraire(origine, destination3, horaireDepart);
+        assertNotNull(trajetsTrouves3);
+        assertTrue(trajetsTrouves3.size() <= Constants.MAX_TRAJETS_NUMBER);
+        assertEquals(8, trajetsTrouves3.get(0).length); //Pied ; Lourmel ; Boucicaut ; Félix Faure ; Commerce ; La Motte-Picquet ; Dupleix ; Bir-Hakeim ; Pied
     }
 
     /**
-     *
+     * Teste le calcul d'itinéraire, qui ne donne qu'un trajet, celui à pied, qui est celui par défaut.
      */
     @Test
-    public void testPlan0() {
-    }
+    void testsItineraireSingleResultat() {
+        LocalTime horaireDepart = LocalTime.of(23, 58, 59, 0);
+        Station origine = reseau.getStation("Danube");
+        Station destination = reseau.getStation("Botzaris");
+        Station destination2 = reseau.getStation("Buttes Chaumont");
+        Station destination3 = reseau.getStation("Stalingrad");
 
-    /**
-     *
-     */
-    @Test
-    public void testPlan1() {
-    }
+        Section trajetAPied1 = Calculator.walkingItineraire(origine, destination, horaireDepart);
+        List<Section[]> trajetsTrouves1 = Calculator.itineraire(origine, destination, horaireDepart);
+        assertNotNull(trajetsTrouves1);
+        assertEquals(1, trajetsTrouves1.size());
+        assertEquals(1, trajetsTrouves1.get(0).length);
+        assertEquals(trajetAPied1.getDuree(), trajetsTrouves1.get(0)[0].getDuree());
 
-    /**
-     *
-     */
-    @Test
-    public void testPlan2() {
-    }
+        Section trajetAPied2 = Calculator.walkingItineraire(origine, destination, horaireDepart);
+        List<Section[]> trajetsTrouves2 = Calculator.itineraire(origine, destination2, horaireDepart);
+        assertEquals(1, trajetsTrouves2.size());
+        assertEquals(1, trajetsTrouves2.get(0).length);
+        assertEquals(trajetAPied2.getDuree(), trajetsTrouves1.get(0)[0].getDuree());
 
-    /**
-     *
-     */
-    @Test
-    public void testPlan3() {
-    }
-
-    /**
-     * Teste si les stations proches obtenues sont celles attendues.
-     */
-    @Test
-    public void testGetNearStations() {
-        Coordonnee coordonnee = new Coordonnee(2.289435418542214, 48.87566737659971); //coordonnée d'une station
-        double maxDistance = 0.1; //100 m
-        double minDistance = 0.0; //0 m
-        List<Station> near1 = Calculator.getNearStations(coordonnee, maxDistance, minDistance);
-        assertEquals(1, near1.size()); //la station elle-même
-
-        Station station = new Station("station test", coordonnee);
-        reseau.addStation(station);
-        List<Station> near2 = Calculator.getNearStations(coordonnee, maxDistance, minDistance);
-        assertEquals(2, near2.size());
-
-        reseau.removeStation(station);
-        List<Station> near3 = Calculator.getNearStations(coordonnee, maxDistance, minDistance);
-        assertEquals(1, near3.size());
-
-        List<Station> near4 = Calculator.getNearStations(coordonnee, -1.0, -1.0);
-        assertTrue(near4.size()>1);
+        Section trajetAPied3 = Calculator.walkingItineraire(origine, destination, horaireDepart);
+        List<Section[]> trajetsTrouves3 = Calculator.itineraire(origine, destination3, horaireDepart);
+        assertEquals(1, trajetsTrouves3.size());
+        assertEquals(1, trajetsTrouves3.get(0).length);
+        assertEquals(trajetAPied3.getDuree(), trajetsTrouves1.get(0)[0].getDuree());
     }
 }

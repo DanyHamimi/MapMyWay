@@ -1,10 +1,14 @@
 package fr.uparis.backapp.utils.constants;
 
+/**
+ * Classe qui rassemble les constantes du projet.
+ */
 public class Constants {
     /**
      * Constantes générales pour les fichiers CSV.
      */
-    public static final String MAP_DATA_FILE_PATH_PROPERTY= "map.data.file.path";
+    public static final String APPLICATION_PROPERTIES = "application.properties";
+    public static final String MAP_DATA_FILE_PATH_PROPERTY = "map.data.file.path";
     public static final String SCHEDULES_FILE_PATH_PROPERTY = "schedules.file.path";
     public static final String DELIMITER = ";";
 
@@ -30,11 +34,16 @@ public class Constants {
     /**
      * Valeurs par défaut, en km, pour trouver les stations proches d'une coordonnée.
      */
-    public static final double DEFAULT_MAX_DISTANCE = 10.0; //distance maximale par défaut entre une coordonnée et une station, en km
-    public static final double DEFAULT_MIN_DISTANCE = 0.0; //distance minimale par défaut à marcher pendant le trajet, en km
+    public static final double DEFAULT_MAX_DISTANCE = 0.85;
+    public static final double DEFAULT_MIN_DISTANCE = 0.0;
 
     /**
      * Vitesse moyenne de marche en km/h.
      */
     public static final double AVERAGE_WALKING_SPEED = 5.0;
+
+    /**
+     * Nombre maximal de trajets à renvoyer à l'utilisateur.
+     */
+    public static final int MAX_TRAJETS_NUMBER = 5;
 }

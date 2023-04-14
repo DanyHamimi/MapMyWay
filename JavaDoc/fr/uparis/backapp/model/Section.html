@@ -73,25 +73,25 @@ loadScripts(document, 'script');</script>
 <h1 title="Class Section" class="title">Class Section</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">fr.uparis.backapp.model.Section</div>
+<div class="inheritance">fr.uparis.backapp.model.sectionTransport.SectionTransport</div>
 </div>
-<section class="class-description" id="class-description">
+<sectionTransport class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Section</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Represente une Section du Reseau de transport</div>
-</section>
-<section class="summary">
+</sectionTransport>
+<sectionTransport class="summary">
 <ul class="summary-list">
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
-<section class="constructor-summary" id="constructor-summary">
+<sectionTransport class="constructor-summary" id="constructor-summary">
 <h2>Constructor Summary</h2>
 <div class="caption"><span>Constructors</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(fr.uparis.backapp.model.Station,fr.uparis.backapp.model.Station,java.time.LocalTime,double,fr.uparis.backapp.model.Ligne)" class="member-name-link">Section</a><wbr>(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationDepart,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(fr.uparis.backapp.model.lieu.Station,fr.uparis.backapp.model.lieu.Station,java.time.LocalTime,double,fr.uparis.backapp.model.Ligne)" class="member-name-link">Section</a><wbr>(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationDepart,
  <a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationArrivee,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/LocalTime.html" title="class or interface in java.time" class="external-link">LocalTime</a>&nbsp;duree,
  double&nbsp;distance,
@@ -99,7 +99,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Constructeur de la Section</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(fr.uparis.backapp.model.Station,fr.uparis.backapp.model.Station,java.time.LocalTime,fr.uparis.backapp.model.Ligne)" class="member-name-link">Section</a><wbr>(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationDepart,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(fr.uparis.backapp.model.lieu.Station,fr.uparis.backapp.model.lieu.Station,java.time.LocalTime,fr.uparis.backapp.model.Ligne)" class="member-name-link">Section</a><wbr>(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationDepart,
  <a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationArrivee,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/LocalTime.html" title="class or interface in java.time" class="external-link">LocalTime</a>&nbsp;duree,
  <a href="Ligne.html" title="class in fr.uparis.backapp.model">Ligne</a>&nbsp;ligne)</code></div>
@@ -107,11 +107,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Constructeur de la Section</div>
 </div>
 </div>
-</section>
+</sectionTransport>
 </li>
 <!-- ========== METHOD SUMMARY =========== -->
 <li>
-<section class="method-summary" id="method-summary">
+<sectionTransport class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
 <div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
@@ -123,7 +123,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Comparaison de deux sections.</div>
+<div class="block">Comparaison de deux sectionTransports.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDistance()" class="member-name-link">getDistance</a>()</code></div>
@@ -156,10 +156,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Renvoie la Station de depart de la Section</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#goFromTo(fr.uparis.backapp.model.Station,fr.uparis.backapp.model.Station)" class="member-name-link">goFromTo</a><wbr>(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;currentStation,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#goFromTo(fr.uparis.backapp.model.lieu.Station,fr.uparis.backapp.model.Station)" class="member-name-link">goFromTo</a><wbr>(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;currentStation,
  <a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;futureStation)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Renvoie true si la section vas d'une station a l'autre.</div>
+<div class="block">Renvoie true si la sectionTransport vas d'une station a l'autre.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDistance(double)" class="member-name-link">setDistance</a><wbr>(double&nbsp;distance)</code></div>
@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHeuresDeparts(java.util.List)" class="member-name-link">setHeuresDeparts</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/LocalTime.html" title="class or interface in java.time" class="external-link">LocalTime</a>&gt;&nbsp;heuresDeparts)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Met a jour les heures de départs pour la section</div>
+<div class="block">Met a jour les heures de départs pour la sectionTransport</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLigne(fr.uparis.backapp.model.Ligne)" class="member-name-link">setLigne</a><wbr>(<a href="Ligne.html" title="class in fr.uparis.backapp.model">Ligne</a>&nbsp;ligne)</code></div>
@@ -197,19 +197,19 @@ loadScripts(document, 'script');</script>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
-</section>
+</sectionTransport>
 </li>
 </ul>
-</section>
-<section class="details">
+</sectionTransport>
+<sectionTransport class="details">
 <ul class="details-list">
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
-<section class="constructor-details" id="constructor-detail">
+<sectionTransport class="constructor-details" id="constructor-detail">
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(fr.uparis.backapp.model.Station,fr.uparis.backapp.model.Station,java.time.LocalTime,double,fr.uparis.backapp.model.Ligne)">
+<sectionTransport class="detail" id="&lt;init&gt;(fr.uparis.backapp.model.lieu.Station,fr.uparis.backapp.model.lieu.Station,java.time.LocalTime,double,fr.uparis.backapp.model.Ligne)">
 <h3>Section</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Section</span><wbr><span class="parameters">(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationDepart,
  <a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationArrivee,
@@ -225,10 +225,10 @@ loadScripts(document, 'script');</script>
 <dd><code>distance</code> - distance de la Section</dd>
 <dd><code>ligne</code> - Ligne de la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(fr.uparis.backapp.model.Station,fr.uparis.backapp.model.Station,java.time.LocalTime,fr.uparis.backapp.model.Ligne)">
+<sectionTransport class="detail" id="&lt;init&gt;(fr.uparis.backapp.model.lieu.Station,fr.uparis.backapp.model.lieu.Station,java.time.LocalTime,fr.uparis.backapp.model.Ligne)">
 <h3>Section</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Section</span><wbr><span class="parameters">(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationDepart,
  <a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationArrivee,
@@ -242,18 +242,18 @@ loadScripts(document, 'script');</script>
 <dd><code>duree</code> - duree estimee de la Section</dd>
 <dd><code>ligne</code> - Ligne de la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 </ul>
-</section>
+</sectionTransport>
 </li>
 <!-- ============ METHOD DETAIL ========== -->
 <li>
-<section class="method-details" id="method-detail">
+<sectionTransport class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="getStationDepart()">
+<sectionTransport class="detail" id="getStationDepart()">
 <h3>getStationDepart</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Station.html" title="class in fr.uparis.backapp.model">Station</a></span>&nbsp;<span class="element-name">getStationDepart</span>()</div>
 <div class="block">Renvoie la Station de depart de la Section</div>
@@ -261,10 +261,10 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>la Station de depart de la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="setStationDepart(fr.uparis.backapp.model.Station)">
+<sectionTransport class="detail" id="setStationDepart(fr.uparis.backapp.model.Station)">
 <h3>setStationDepart</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setStationDepart</span><wbr><span class="parameters">(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationDepart)</span></div>
 <div class="block">Met a jout la Station de depart de la Section</div>
@@ -272,10 +272,10 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>stationDepart</code> - Station de depart de la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="getStationArrivee()">
+<sectionTransport class="detail" id="getStationArrivee()">
 <h3>getStationArrivee</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Station.html" title="class in fr.uparis.backapp.model">Station</a></span>&nbsp;<span class="element-name">getStationArrivee</span>()</div>
 <div class="block">Renvoie la Station d'arrivee de la Section</div>
@@ -283,10 +283,10 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>la Station d'arrivee de la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="setStationArrivee(fr.uparis.backapp.model.Station)">
+<sectionTransport class="detail" id="setStationArrivee(fr.uparis.backapp.model.Station)">
 <h3>setStationArrivee</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setStationArrivee</span><wbr><span class="parameters">(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;stationArrivee)</span></div>
 <div class="block">Met a jour la Station d'arrivee de la Section</div>
@@ -294,10 +294,10 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>stationArrivee</code> - Station d'arrivee de la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="getDuree()">
+<sectionTransport class="detail" id="getDuree()">
 <h3>getDuree</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/LocalTime.html" title="class or interface in java.time" class="external-link">LocalTime</a></span>&nbsp;<span class="element-name">getDuree</span>()</div>
 <div class="block">Renvoie la duree de la Section</div>
@@ -305,10 +305,10 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>la duree de la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="setDuree(java.time.LocalTime)">
+<sectionTransport class="detail" id="setDuree(java.time.LocalTime)">
 <h3>setDuree</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setDuree</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/LocalTime.html" title="class or interface in java.time" class="external-link">LocalTime</a>&nbsp;duree)</span></div>
 <div class="block">Met a jour la duree de la Section</div>
@@ -316,10 +316,10 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>duree</code> - duree de la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="getDistance()">
+<sectionTransport class="detail" id="getDistance()">
 <h3>getDistance</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getDistance</span>()</div>
 <div class="block">Renvoie la distance de la Section</div>
@@ -327,10 +327,10 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>la distance de la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="setDistance(double)">
+<sectionTransport class="detail" id="setDistance(double)">
 <h3>setDistance</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setDistance</span><wbr><span class="parameters">(double&nbsp;distance)</span></div>
 <div class="block">Met a jour la distance de la Section</div>
@@ -338,10 +338,10 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>distance</code> - distance de la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="getLigne()">
+<sectionTransport class="detail" id="getLigne()">
 <h3>getLigne</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Ligne.html" title="class in fr.uparis.backapp.model">Ligne</a></span>&nbsp;<span class="element-name">getLigne</span>()</div>
 <div class="block">Renvoie la Ligne utiliser par la Section</div>
@@ -349,10 +349,10 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>la Ligne utiliser par la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="setLigne(fr.uparis.backapp.model.Ligne)">
+<sectionTransport class="detail" id="setLigne(fr.uparis.backapp.model.Ligne)">
 <h3>setLigne</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setLigne</span><wbr><span class="parameters">(<a href="Ligne.html" title="class in fr.uparis.backapp.model">Ligne</a>&nbsp;ligne)</span></div>
 <div class="block">Met a jour la Ligne utiliser par la Section</div>
@@ -360,10 +360,10 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>ligne</code> - Ligne utiliser par la Section</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="getHoraire()">
+<sectionTransport class="detail" id="getHoraire()">
 <h3>getHoraire</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/LocalTime.html" title="class or interface in java.time" class="external-link">LocalTime</a>&gt;</span>&nbsp;<span class="element-name">getHoraire</span>()</div>
 <div class="block">Renvoie l'heure a laquelle le train part</div>
@@ -371,24 +371,24 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>l'heure a laquelle le train part</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="setHeuresDeparts(java.util.List)">
+<sectionTransport class="detail" id="setHeuresDeparts(java.util.List)">
 <h3>setHeuresDeparts</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setHeuresDeparts</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/LocalTime.html" title="class or interface in java.time" class="external-link">LocalTime</a>&gt;&nbsp;heuresDeparts)</span></div>
-<div class="block">Met a jour les heures de départs pour la section</div>
+<div class="block">Met a jour les heures de départs pour la sectionTransport</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>heuresDeparts</code> - l'ensemble d'heures de départs de la sections</dd>
+<dd><code>heuresDeparts</code> - l'ensemble d'heures de départs de la sectionTransports</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="equals(java.lang.Object)">
+<sectionTransport class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Comparaison de deux sections.</div>
+<div class="block">Comparaison de deux sectionTransports.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -397,26 +397,26 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>true si o et this ont les mêmes stations</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 <li>
-<section class="detail" id="goFromTo(fr.uparis.backapp.model.Station,fr.uparis.backapp.model.Station)">
+<sectionTransport class="detail" id="goFromTo(fr.uparis.backapp.model.lieu.Station,fr.uparis.backapp.model.Station)">
 <h3>goFromTo</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">goFromTo</span><wbr><span class="parameters">(<a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;currentStation,
  <a href="Station.html" title="class in fr.uparis.backapp.model">Station</a>&nbsp;futureStation)</span></div>
-<div class="block">Renvoie true si la section vas d'une station a l'autre.</div>
+<div class="block">Renvoie true si la sectionTransport vas d'une station a l'autre.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>currentStation</code> - Station de départ</dd>
 <dd><code>futureStation</code> - Station d'arrivée</dd>
 </dl>
-</section>
+</sectionTransport>
 </li>
 </ul>
-</section>
+</sectionTransport>
 </li>
 </ul>
-</section>
+</sectionTransport>
 <!-- ========= END OF CLASS DATA ========= -->
 </main>
 </div>

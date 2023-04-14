@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Testeur de la classe Coordonnee
+ * Testeur de la classe Coordonnee.
  */
-public class TestCoordonnee{
+public class TestCoordonnee {
     /**
      * Teste la construction de la classe à partir de deux doubles.
      * Teste les getters de latitude et longitude, en degrés et en radians.
