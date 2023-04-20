@@ -1,5 +1,7 @@
 package fr.uparis.backapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.uparis.backapp.model.lieu.Station;
 
 import java.time.LocalTime;
@@ -10,14 +12,15 @@ import java.util.*;
  */
 public class Ligne {
     final private String nomLigne; //nom de la ligne, unique
+    @JsonIgnore
     final private Set<Station> stations; //stations de la ligne
     final private Set<LocalTime> horairesDepart;//TODO it will maybe deleted, to be discussed
 
     /**
      * Constructeur de la classe Ligne à partir de tous les attributs.
      *
-     * @param nomLigne nom de la Ligne.
-     * @param stations liste des Station desservies par la Ligne.
+     * @param nomLigne       nom de la Ligne.
+     * @param stations       liste des Station desservies par la Ligne.
      * @param horairesDepart liste des horaires de departs de cette Ligne.
      */
     public Ligne(String nomLigne, Set<Station> stations, Set<LocalTime> horairesDepart) {
@@ -106,8 +109,8 @@ public class Ligne {
      */
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Ligne ligne = (Ligne) o;
         return Objects.equals(nomLigne, ligne.nomLigne);

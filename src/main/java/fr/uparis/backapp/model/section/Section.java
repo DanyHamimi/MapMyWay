@@ -1,7 +1,10 @@
 package fr.uparis.backapp.model.section;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.uparis.backapp.model.lieu.Lieu;
 
+import java.io.Serializable;
 import java.time.Duration;
 
 /**
