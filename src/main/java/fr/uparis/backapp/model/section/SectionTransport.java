@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Représente une Section de transport dans le Reseau.
+ * Représente une Section de transport, avec deux stations, dans le Reseau.
  */
 public class SectionTransport extends Section {
     final protected Ligne ligne;
@@ -19,11 +19,11 @@ public class SectionTransport extends Section {
     /**
      * Constructeur de la SectionTransport.
      *
-     * @param stationDepart Station de depart de la Section.
+     * @param stationDepart  Station de depart de la Section.
      * @param stationArrivee Station d'arrivée de la Section.
-     * @param duree durée estimée de la Section.
-     * @param distance distance de la Section.
-     * @param ligne Ligne empruntée par la Section.
+     * @param duree          durée estimée de la Section.
+     * @param distance       distance de la Section.
+     * @param ligne          Ligne empruntée par la Section.
      */
     public SectionTransport(Station stationDepart, Station stationArrivee, Duration duree, double distance, Ligne ligne) {
         super(stationDepart, stationArrivee, duree, distance);
@@ -38,7 +38,7 @@ public class SectionTransport extends Section {
      */
     @Override
     public Station getDepart() {
-        return (Station)depart;
+        return (Station) depart;
     }
 
     /**
@@ -48,7 +48,7 @@ public class SectionTransport extends Section {
      */
     @Override
     public Station getArrivee() {
-        return (Station)arrivee;
+        return (Station) arrivee;
     }
 
     /**
@@ -78,13 +78,13 @@ public class SectionTransport extends Section {
     public LocalTime getHoraireProchainDepart(LocalTime depart) {
         LocalTime prochainDepart = LocalTime.MAX;
         boolean hasProchainDepart = false;
-        for (LocalTime localTime: horairesDepart) {
+        for (LocalTime localTime : horairesDepart) {
             if (localTime.isAfter(depart)) {
                 hasProchainDepart = true;
-                if(localTime.isBefore(prochainDepart)) prochainDepart = localTime;
+                if (localTime.isBefore(prochainDepart)) prochainDepart = localTime;
             }
         }
-        return (hasProchainDepart)? prochainDepart : null;
+        return (hasProchainDepart) ? prochainDepart : null;
     }
 
     /**
@@ -122,8 +122,8 @@ public class SectionTransport extends Section {
      */
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         SectionTransport sectionTransport = (SectionTransport) o;
         return sectionTransport.getDepart().equals(this.getDepart()) && sectionTransport.getArrivee().equals(this.getArrivee());
     }
@@ -151,9 +151,17 @@ public class SectionTransport extends Section {
         String s = this.getLigne().getNomLigne() + " : ";
         s += this.depart.getNomLieu() + " -> " + this.arrivee.getNomLieu();
         s += " (durée = " + this.duree.toString() + ", distance = " + this.distance + " km";
-        if(!this.horairesDepart.isEmpty()) s += ", à";
-        for(LocalTime time: this.horairesDepart) s += " " + time;
+        if (!this.horairesDepart.isEmpty()) s += ", à";
+        for (LocalTime time : this.horairesDepart) s += " " + time;
         return s + ")";
+    }
+
+    /**
+     * Fournit une copie de la Section courante.
+     */
+    @Override
+    public Section copy() {
+        return new SectionTransport(getDepart(), getArrivee(), duree, distance, ligne);
     }
 
     /**
@@ -180,7 +188,7 @@ public class SectionTransport extends Section {
      * Regarde si la Section va d'une certaine station à une autre.
      *
      * @param currentStation station de départ.
-     * @param nextStation station d'arrivée.
+     * @param nextStation    station d'arrivée.
      * @return l'égalité entre les stations données et celles de la Section.
      */
     public boolean areStations(Station currentStation, Station nextStation) {
@@ -194,9 +202,10 @@ public class SectionTransport extends Section {
      * @return la prochaine section dans la même ligne, ou null si aucune section n'est trouvée.
      */
     public SectionTransport moveToNextSectionInTheSameLine(Set<SectionTransport> sections) {
-        for(SectionTransport section: sections)
-            if(section.isStationDepart((Station)arrivee) && section.getLigne().equals(this.ligne))
+        for (SectionTransport section : sections)
+            if (section.isStationDepart((Station) arrivee) && section.getLigne().equals(this.ligne))
                 return section;
         return null;
     }
+
 }

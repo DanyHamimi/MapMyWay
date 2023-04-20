@@ -5,7 +5,7 @@ import fr.uparis.backapp.model.lieu.Lieu;
 import java.time.Duration;
 
 /**
- * Représente une Section.
+ * Représente une Section de deux lieux.
  */
 public class Section {
     final protected Lieu depart;
