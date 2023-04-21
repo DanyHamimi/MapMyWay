@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>Acceuil</title>
     <link rel="stylesheet" href="/css/map.css">
-    <link rel="stylesheet" href="/webjars/leaflet/1.7.1/dist/leaflet.css" />
-    <script src="/webjars/leaflet/1.7.1/dist/leaflet.js"></script>
-    <script src="/webjars/leaflet/1.7.1/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="jquery/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="leaflet/leaflet.css" />
+    <script src="leaflet/leaflet.js"></script>
 </head>
 <body style=" background-color: rgb(96 235 232);
     margin: 0;
@@ -79,7 +79,7 @@
 
             <button onclick="AfficheDetails(1)" class="resultat">Trajet1
 
-                <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
+                <img class="marcher" src="css/image/marche.png"
                      alt="">
                 <div class="ligne1"></div>
                 <div class="ligne12"></div>
@@ -91,7 +91,7 @@
                 </div>
             </button>
             <button onclick="AfficheDetails(2)" class="resultat">Trajet2
-                <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
+                <img class="marcher" src="css/image/marche.png"
                      alt="">
                 <div class="ligneA"></div>
                 <div class="ligne8"></div>
@@ -104,7 +104,7 @@
                 </div>
             </button>            <button onclick="AfficheDetails(3)" class="resultat">Trajet3
 
-            <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
+            <img class="marcher" src="css/image/marche.png"
                  alt="">
             <div class="ligne1"></div>
             <div class="ligne2"></div>
@@ -118,7 +118,7 @@
                 <p>Voici les détails que vous avez demandés...</p>
             </div>
         </button>            <button onclick="AfficheDetails(4)" class="resultat">Trajet4
-            <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
+            <img class="marcher" src="css/image/marche.png"
                  alt="">
             <div class="ligneF"></div>
             <div class="dureeTrajet">16min</div>
@@ -128,7 +128,7 @@
                 <p>Voici les détails que vous avez demandés...</p>
             </div>
         </button>            <button onclick="AfficheDetails(5)" class="resultat">Trajet5
-            <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
+            <img class="marcher" src="css/image/marche.png"
                  alt="">
             <div class="ligneA"></div>
             <div class="dureeTrajet">30min</div>
@@ -138,7 +138,7 @@
                 <p>Voici les détails que vous avez demandés...</p>
             </div>
         </button>            <button onclick="AfficheDetails(6)" class="resultat">Trajet6
-            <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
+            <img class="marcher" src="css/image/marche.png"
                  alt="">
             <div class="ligne1"></div>
             <div class="dureeTrajet">1h</div>
@@ -149,7 +149,7 @@
             </div>
         </button>
             </button>            <button onclick="AfficheDetails(7)" class="resultat">Trajet7
-            <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
+            <img class="marcher" src="css/image/marche.png"
                  alt="">
             <div class="ligne12"></div>
             <div class="dureeTrajet">23min</div>
@@ -198,23 +198,6 @@
 
 
     </div>
-    <script>
-
-        // Créer une instance de la carte avec des coordonnées et un niveau de zoom
-        /*var map = L.map('map').setView([48.858093, 2.294694], 15);
-
-        // Ajouter une couche de tuiles OpenStreetMap à la carte
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-            maxZoom: 18,
-        }).addTo(map);
-
-        // Ajouter un marqueur à l'emplacement spécifié
-        var longitude = 48.858093, latitude = 2.294694;
-        var marker = L.marker([longitude, latitude]).addTo(map);
-        marker.bindPopup("<b>Vous êtes ici !</b>").openPopup();*/
-        //marker.removeFrom(map);
-    </script>
 
 
     <script>
@@ -349,13 +332,7 @@
             }
         });
     });
-</script>
 
-
-
-</body>
-
-<script>
 
     console.clear();
 
@@ -419,14 +396,27 @@
 
     });
 
+    var map = L.map('map').setView([48.858093, 2.294694], 15);
+
+    L.tileLayer('tiles/{z}/{x}/{y}.png', {
+        minZoom: 12,
+        maxZoom: 16,
+        attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    /*L.marker([48.85, 2.35]).addTo(map)
+        .bindPopup('Paris')
+        .openPopup();*/
+
     // Créer une instance de la carte avec des coordonnées et un niveau de zoom
+    /*Offline
     var map = L.map('map').setView([48.858093, 2.294694], 15);
 
     // Ajouter une couche de tuiles OpenStreetMap à la carte
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
         maxZoom: 18,
-    }).addTo(map);
+    }).addTo(map);*/
 
     //Afficher les details
     function AfficheDetails(num) {
@@ -478,5 +468,5 @@
     addStationMarkersAndLinesByList(listeTrajet);
 
 </script>
-
+</body>
 </html>
