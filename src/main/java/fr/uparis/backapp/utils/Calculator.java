@@ -11,15 +11,14 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.*;
 
-import static fr.uparis.backapp.utils.Utils.distanceBetween;
-import static fr.uparis.backapp.utils.Utils.walkingDurationOf;
+import static fr.uparis.backapp.utils.Utils.*;
 
 /**
  * Classe static pour calculer des itinéraires en fonction de différents paramètres.
  */
 public class Calculator {
     /**
-     * Calcule un itinéraire totalement à pied.
+     * Calcule un itinéraire totalement à pied, à partir de coordonnées.
      *
      * @param origine point de départ du trajet.
      * @param destination point d'arrivée du trajet.
@@ -29,14 +28,14 @@ public class Calculator {
     public static Section walkingItineraire(Coordonnee origine, Coordonnee destination, LocalTime horaireDepart) {
         double distance = distanceBetween(origine, destination);
         Duration duree = walkingDurationOf(distance);
-        return new Section(new Lieu("Début", origine, horaireDepart),
+        return new Section(new Lieu("Départ", origine, horaireDepart),
                            new Lieu("Arrivée", destination, horaireDepart.plus(duree)),
                            duree,
                            distance);
     }
 
     /**
-     * Calcule un itinéraire totalement à pied.
+     * Calcule un itinéraire totalement à pied, à partir de Lieux.
      *
      * @param origine la station de départ du trajet.
      * @param destination la station d'arrivée du trajet.
@@ -48,7 +47,8 @@ public class Calculator {
     }
 
     /**
-     * Calcule un itinéraire, avec correspondances et horaires, depuis une Coordonnee à une autre.
+     * Calcule un itinéraire, avec correspondances et horaires, depuis une Coordonnee à une autre,
+     * en donnant la possibilité de fixer un périmètre manuellement de recherche pour les stations en termes de distance.
      *
      * @param origine point de départ.
      * @param destination point d'arrivée.
@@ -58,58 +58,56 @@ public class Calculator {
      * @return les 5 trajets les plus courts sous forme de liste de Section.
      */
     public static List<Section[]> itineraire(Coordonnee origine, Coordonnee destination, LocalTime horaireDepart, double minDistance, double maxDistance) {
+        if(minDistance > maxDistance) maxDistance = minDistance + Constants.DEFAULT_ECART_DISTANCE;
+
         //Les 5 trajets les plus optimaux à retourner, avec celui à pied en termes de comparatif/pire trajet
         List<Section[]> trajetsSaved = new ArrayList<>();
         trajetsSaved.add(new Section[]{walkingItineraire(origine, destination, horaireDepart)});
+        LocalTime maxTime = trajetsSaved.get(0)[0].getArrivee().getHoraireDePassage();
 
-        //Trouve les stations les plus proches de l'origine et de la destination
-        List<Station> procheOrigine = getNearStations(origine, minDistance, maxDistance);
-        List<Station> procheDestination = getNearStations(destination, minDistance, maxDistance);
+        //Les stations les plus proches de l'origine et de la destination, avec un minimum de marche au début
+        List<Station> procheOrigineDeb = getNearStations(origine, minDistance, maxDistance);
+        List<Station> procheDestinationDeb = getNearStations(destination, -1, maxDistance);
+
+        //Les stations les plus proches de l'origine et de la destination, avec un minimum de marche au début et à la fin
+        List<Station> procheOrigineMid = getNearStations(origine, minDistance / 2, maxDistance);
+        List<Station> procheDestinationMid = getNearStations(destination, minDistance / 2, maxDistance);
+
+        //Les stations les plus proches de l'origine et de la destination, avec un minimum de marche à la fin
+        List<Station> procheOrigineFin = getNearStations(origine, -1, maxDistance);
+        List<Station> procheDestinationFin = getNearStations(destination, minDistance, maxDistance);
+
+        //Initialise les couples de stations déjà traités par dijkstra
+        HashMap<Station, List<Station>> coupleStations = new HashMap<>();
+        addStationsAndListToMap(coupleStations, procheOrigineDeb);
+        addStationsAndListToMap(coupleStations, procheOrigineMid);
+        addStationsAndListToMap(coupleStations, procheOrigineFin);
 
         //Trouve le plus court chemin pour chaque couple procheOrigine-procheDestination
-        LocalTime maxTime = trajetsSaved.get(0)[0].getArrivee().getHoraireDePassage(), horaireArrivee;
-        for(Station origineCandidat: procheOrigine) {
-            for(Station destinationCandidat: procheDestination) {
-                if(origineCandidat != destinationCandidat) {
-                    //Calcul de la durée de marche avant d'arriver à la station candidate, puis récupère l'itinéraire avec dijkstra
-                    double distanceDebut = distanceBetween(origine, origineCandidat.getLocalisation());
-                    Duration dureeDebut = walkingDurationOf(distanceDebut);
-                    List<SectionTransport> trajet = djikstra(origineCandidat, destinationCandidat, horaireDepart.plus(dureeDebut));
-
-                    if(trajet != null){
-                        //Horaire auquel on finit le trajet
-                        double distanceFin = distanceBetween(destination, destinationCandidat.getLocalisation());
-                        Duration dureeFin = walkingDurationOf(distanceFin);
-                        horaireArrivee = trajet.get(trajet.size()-1).getArrivee().getHoraireDePassage().plus(dureeFin);
-
-                        //Vérifie si le trajet est actuellement parmi les 5 trajets les plus optimaux
-                        if(horaireArrivee.isBefore(maxTime)) {
-                            //Si c'est le cas, faire une copie du trajet à ajouter
-                            Section sectionDebut = new Section(new Lieu("Début", origine, horaireDepart), origineCandidat, dureeDebut, distanceDebut);
-                            Section sectionFin = new Section(destinationCandidat, new Lieu("Fin", destination, horaireArrivee), dureeFin, distanceFin);
-                            Section[] sectionToSave = createNewTrajet(trajet, sectionDebut, sectionFin);
-
-                            //Et l'ajouter dans les trajets, dans l'ordre chronologique d'horaire d'arrivée
-                            int index = getInsertIndex(trajetsSaved, horaireArrivee);
-                            trajetsSaved.add(index, sectionToSave);
-
-                            //Gérer la liste des trajets, pour que le nombre de résultats ne dépasse pas Constants.MAX_TRAJETS_NUMBER
-                            if(trajetsSaved.size() > Constants.MAX_TRAJETS_NUMBER) {
-                                trajetsSaved.remove(trajetsSaved.size() - 1);
-                                Section[] dernierTrajet = trajetsSaved.get(trajetsSaved.size() - 1);
-                                maxTime = dernierTrajet[dernierTrajet.length - 1].getArrivee().getHoraireDePassage();
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        addTrajetsOptimaux(origine, destination, horaireDepart, trajetsSaved, coupleStations, procheOrigineDeb, procheDestinationDeb, maxTime);
+        addTrajetsOptimaux(origine, destination, horaireDepart, trajetsSaved, coupleStations, procheOrigineMid, procheDestinationMid, maxTime);
+        addTrajetsOptimaux(origine, destination, horaireDepart, trajetsSaved, coupleStations, procheOrigineFin, procheDestinationFin, maxTime);
 
         return trajetsSaved;
     }
 
     /**
-     * Calcule un itinéraire, avec correspondances et horaires, depuis une Coordonnee à une autre.
+     * Calcule un itinéraire, avec correspondances et horaires, depuis une Coordonnee à une autre,
+     * en donnant la possibilité de fixer manuellement un périmètre de recherche pour les stations en termes de durée.
+     *
+     * @param origine point de départ.
+     * @param destination point d'arrivée.
+     * @param horaireDepart l'horaire de départ.
+     * @param minTemps durée de marche minimale du périmètre de recherche pour les stations proches.
+     * @return les 5 trajets les plus courts sous forme de liste de Section.
+     */
+    public static List<Section[]> itineraire(Coordonnee origine, Coordonnee destination, LocalTime horaireDepart, Duration minTemps) {
+        return itineraire(origine, destination, horaireDepart, distanceOfWalkingDuration(minTemps), -1);
+    }
+
+    /**
+     * Calcule un itinéraire, avec correspondances et horaires, depuis une Coordonnee à une autre,
+     * en fixant un périmètre de recherche des stations par défaut.
      *
      * @param origine point de départ.
      * @param destination point d'arrivée.
@@ -117,11 +115,28 @@ public class Calculator {
      * @return les 5 trajets les plus courts sous forme de liste de Section.
      */
     public static List<Section[]> itineraire(Coordonnee origine, Coordonnee destination, LocalTime horaireDepart) {
-        return itineraire(origine, destination, horaireDepart, -1, -1);
+        //Les 5 trajets les plus optimaux à retourner, avec celui à pied en termes de comparatif/pire trajet
+        List<Section[]> trajetsSaved = new ArrayList<>();
+        trajetsSaved.add(new Section[]{walkingItineraire(origine, destination, horaireDepart)});
+        LocalTime maxTime = trajetsSaved.get(0)[0].getArrivee().getHoraireDePassage();
+
+        //Trouve les stations les plus proches de l'origine et de la destination
+        List<Station> procheOrigine = getNearStations(origine, -1, -1);
+        List<Station> procheDestination = getNearStations(destination, -1, -1);
+
+        //Initialise les couples de stations déjà traités par dijkstra
+        HashMap<Station, List<Station>> coupleStations = new HashMap<>();
+        addStationsAndListToMap(coupleStations, procheOrigine);
+
+        //Trouve le plus court chemin pour chaque couple procheOrigine-procheDestination
+        addTrajetsOptimaux(origine, destination, horaireDepart, trajetsSaved, coupleStations, procheOrigine, procheDestination, maxTime);
+
+        return trajetsSaved;
     }
 
     /**
-     * Calcule un itinéraire, avec correspondances et horaires, depuis une Station à une autre.
+     * Calcule un itinéraire, avec correspondances et horaires, depuis une Station à une autre,
+     * en donnant la possibilité de fixer un périmètre de recherche pour les stations manuellement.
      *
      * @param origine point de départ.
      * @param destination point d'arrivée.
@@ -135,7 +150,22 @@ public class Calculator {
     }
 
     /**
-     * Calcule un itinéraire, avec correspondances et horaires, depuis une Station à une autre.
+     * Calcule un itinéraire, avec correspondances et horaires, depuis une Station à une autre,
+     * en donnant la possibilité de fixer manuellement un périmètre de recherche pour les stations en termes de durée.
+     *
+     * @param origine point de départ.
+     * @param destination point d'arrivée.
+     * @param horaireDepart l'horaire de départ.
+     * @param minTemps durée de marche minimale du périmètre de recherche pour les stations proches.
+     * @return les 5 trajets les plus courts sous forme de liste de Section.
+     */
+    public static List<Section[]> itineraire(Station origine, Station destination, LocalTime horaireDepart, Duration minTemps) {
+        return itineraire(origine.getLocalisation(), destination.getLocalisation(), horaireDepart, minTemps);
+    }
+
+    /**
+     * Calcule un itinéraire, avec correspondances et horaires, depuis une Station à une autre,
+     * en fixant un périmètre de recherche des stations par défaut.
      *
      * @param origine point de départ.
      * @param destination point d'arrivée.
@@ -159,12 +189,84 @@ public class Calculator {
         if(maxDistance < 0) maxDistance = Constants.DEFAULT_MAX_DISTANCE;
         List<Station> nearStations = new ArrayList<>();
         double distance;
-        for(Station s: Reseau.getInstance().getStations()){
+        for(Station s: Reseau.getInstance().getStations()) {
             distance = distanceBetween(coordonnee, s.getLocalisation());
             if(distance >= minDistance && distance <= maxDistance) nearStations.add(s);
         }
 
         return nearStations;
+    }
+
+    /**
+     * Ajoute les couples (Station, List<Station>) pour chaque station, avec la liste initialisée à la station en entrée.
+     * Le but étant d'y ajouter les couples de stations déjà traités par dijkstra.
+     *
+     * @param coupleStations la HashMap dans laquelle on ajoute les couples.
+     * @param procheOrigine les stations à ajouter dans la HashMap dans le format désiré.
+     */
+    private static void addStationsAndListToMap(HashMap<Station, List<Station>> coupleStations, List<Station> procheOrigine) {
+        for(Station station: procheOrigine) {
+            List<Station> list = new LinkedList<>();
+            list.add(station);
+            coupleStations.put(station, list);
+        }
+    }
+
+    /**
+     * Trouve le plus court chemin pour chaque couple procheOrigine-procheDestination, et l'ajoute dans les trajets sauvegardés.
+     *
+     * @param origine point de départ.
+     * @param destination point d'arrivée.
+     * @param horaireDepart l'horaire de départ.
+     * @param trajetsSaved les trajets déjà sauvegardés par rapport à une précédente recherche.
+     * @param coupleStations les couples de stations déjà traités par dijkstra.
+     * @param procheOrigine les stations proches de l'origine.
+     * @param procheDestination les stations proches de la destination.
+     * @param maxTime le temps à ne pas dépasser pour être ajouté aux trajets sauvegardés.
+     */
+    private static void addTrajetsOptimaux(Coordonnee origine, Coordonnee destination, LocalTime horaireDepart, List<Section[]> trajetsSaved,
+            HashMap<Station, List<Station>> coupleStations, List<Station> procheOrigine, List<Station> procheDestination, LocalTime maxTime) {
+        for(Station origineCandidat: procheOrigine) {
+            for(Station destinationCandidat: procheDestination) {
+                List<Station> listStationsTraitees = coupleStations.get(origineCandidat);
+
+                //Si la combinaison de stations n'est pas encore traitée
+                if(!listStationsTraitees.contains(destinationCandidat)) {
+                    //Calcul de la durée de marche avant d'arriver à la station candidate, puis récupère l'itinéraire avec dijkstra
+                    double distanceDebut = distanceBetween(origine, origineCandidat.getLocalisation());
+                    Duration dureeDebut = walkingDurationOf(distanceDebut);
+                    List<SectionTransport> trajet = djikstra(origineCandidat, destinationCandidat, horaireDepart.plus(dureeDebut));
+
+                    if(trajet != null){
+                        //Horaire auquel on finit le trajet
+                        double distanceFin = distanceBetween(destination, destinationCandidat.getLocalisation());
+                        Duration dureeFin = walkingDurationOf(distanceFin);
+                        LocalTime horaireArrivee = trajet.get(trajet.size()-1).getArrivee().getHoraireDePassage().plus(dureeFin);
+
+                        //Vérifie si le trajet est actuellement parmi les 5 trajets les plus optimaux
+                        if(horaireArrivee.isBefore(maxTime)) {
+                            //Si c'est le cas, faire une copie du trajet à ajouter
+                            Section sectionDebut = new Section(new Lieu("Départ", origine, horaireDepart), origineCandidat, dureeDebut, distanceDebut);
+                            Section sectionFin = new Section(destinationCandidat, new Lieu("Arrivée", destination, horaireArrivee), dureeFin, distanceFin);
+                            Section[] sectionToSave = createNewTrajet(trajet, sectionDebut, sectionFin);
+
+                            //Et l'ajouter dans les trajets, dans l'ordre chronologique d'horaire d'arrivée
+                            trajetsSaved.add(getInsertIndex(trajetsSaved, horaireArrivee), sectionToSave);
+
+                            //Gérer la liste des trajets, pour que le nombre de résultats ne dépasse pas Constants.MAX_TRAJETS_NUMBER
+                            if(trajetsSaved.size() > Constants.MAX_TRAJETS_NUMBER) {
+                                trajetsSaved.remove(trajetsSaved.size() - 1);
+                                Section[] dernierTrajet = trajetsSaved.get(trajetsSaved.size() - 1);
+                                maxTime = dernierTrajet[dernierTrajet.length - 1].getArrivee().getHoraireDePassage();
+                            }
+                        }
+                    }
+
+                    //Ajoute la station aux couples de stations déjà traités
+                    listStationsTraitees.add(destinationCandidat);
+                }
+            }
+        }
     }
 
     /**
