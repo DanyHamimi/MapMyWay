@@ -11,8 +11,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.*;
 
-import static fr.uparis.backapp.utils.Utils.distanceBetween;
-import static fr.uparis.backapp.utils.Utils.walkingDurationOf;
+import static fr.uparis.backapp.utils.Utils.*;
 
 /**
  * Classe static pour calculer des itinéraires en fonction de différents paramètres.
@@ -49,7 +48,7 @@ public class Calculator {
 
     /**
      * Calcule un itinéraire, avec correspondances et horaires, depuis une Coordonnee à une autre,
-     * en donnant la possibilité de fixer un périmètre de recherche pour les stations manuellement.
+     * en donnant la possibilité de fixer un périmètre manuellement de recherche pour les stations en termes de distance.
      *
      * @param origine point de départ.
      * @param destination point d'arrivée.
@@ -94,6 +93,20 @@ public class Calculator {
 
     /**
      * Calcule un itinéraire, avec correspondances et horaires, depuis une Coordonnee à une autre,
+     * en donnant la possibilité de fixer manuellement un périmètre de recherche pour les stations en termes de durée.
+     *
+     * @param origine point de départ.
+     * @param destination point d'arrivée.
+     * @param horaireDepart l'horaire de départ.
+     * @param minTemps durée de marche minimale du périmètre de recherche pour les stations proches.
+     * @return les 5 trajets les plus courts sous forme de liste de Section.
+     */
+    public static List<Section[]> itineraire(Coordonnee origine, Coordonnee destination, LocalTime horaireDepart, Duration minTemps) {
+        return itineraire(origine, destination, horaireDepart, distanceOfWalkingDuration(minTemps), -1);
+    }
+
+    /**
+     * Calcule un itinéraire, avec correspondances et horaires, depuis une Coordonnee à une autre,
      * en fixant un périmètre de recherche des stations par défaut.
      *
      * @param origine point de départ.
@@ -134,6 +147,20 @@ public class Calculator {
      */
     public static List<Section[]> itineraire(Station origine, Station destination, LocalTime horaireDepart, double minDistance, double maxDistance) {
         return itineraire(origine.getLocalisation(), destination.getLocalisation(), horaireDepart, minDistance, maxDistance);
+    }
+
+    /**
+     * Calcule un itinéraire, avec correspondances et horaires, depuis une Station à une autre,
+     * en donnant la possibilité de fixer manuellement un périmètre de recherche pour les stations en termes de durée.
+     *
+     * @param origine point de départ.
+     * @param destination point d'arrivée.
+     * @param horaireDepart l'horaire de départ.
+     * @param minTemps durée de marche minimale du périmètre de recherche pour les stations proches.
+     * @return les 5 trajets les plus courts sous forme de liste de Section.
+     */
+    public static List<Section[]> itineraire(Station origine, Station destination, LocalTime horaireDepart, Duration minTemps) {
+        return itineraire(origine.getLocalisation(), destination.getLocalisation(), horaireDepart, minTemps);
     }
 
     /**

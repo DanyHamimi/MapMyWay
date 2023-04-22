@@ -94,6 +94,7 @@ public class Utils {
      * @return la distance moyenne de marche, en km, avec une précision de 3 chiffres après la virgule.
      */
     public static double distanceOfWalkingDuration(Duration duration) {
+        if(duration.isNegative()) return 0;
         return truncateDoubleTo3Precision(((double)duration.getSeconds()) / 3600 * Constants.AVERAGE_WALKING_SPEED);
     }
 }

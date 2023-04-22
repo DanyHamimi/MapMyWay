@@ -6,9 +6,11 @@ import fr.uparis.backapp.model.section.Section;
 import fr.uparis.backapp.utils.constants.Constants;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
 
+import static fr.uparis.backapp.utils.Utils.distanceOfWalkingDuration;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -54,6 +56,7 @@ public class TestCalculator {
         Station destination = reseau.getStation("Botzaris");
         Station destination2 = reseau.getStation("Buttes Chaumont");
         Station destination3 = reseau.getStation("Stalingrad");
+
 
         Section trajetAPied1 = Calculator.walkingItineraire(origine, destination, horaireDepart);
 
@@ -116,7 +119,6 @@ public class TestCalculator {
         Station origine = reseau.getStation("Lourmel");
         Station destination1 = reseau.getStation("Boucicaut");
         Station destination2 = reseau.getStation("Mairie d'Issy");
-        Station destination3 = reseau.getStation("Corentin Celton");
 
         List<Section[]> trajetsTrouves0 = Calculator.itineraire(origine, destination1, horaireDepart, 0.475, 0);
         assertNotNull(trajetsTrouves0);
@@ -134,9 +136,22 @@ public class TestCalculator {
         assertTrue(trajetsTrouves2.size() <= Constants.MAX_TRAJETS_NUMBER);
         assertEquals(4, trajetsTrouves2.get(0).length); //Pied ; Porte de Versailles ; Corentin Celton ; Mairie d'Issy ; Pied
 
-        List<Section[]> trajetsTrouves3 = Calculator.itineraire(origine, destination2, horaireDepart, 0.92, 0);
+        List<Section[]> trajetsTrouves3 = Calculator.itineraire(origine, destination2, horaireDepart, Duration.ofSeconds(655));
         assertNotNull(trajetsTrouves3);
-        assertTrue(trajetsTrouves3.size() <= Constants.MAX_TRAJETS_NUMBER);
-        assertEquals(3, trajetsTrouves3.get(0).length); //Pied ; Corentin Celton ; Mairie d'Issy ; Pied
+        assertEquals(trajetsTrouves2.size(), trajetsTrouves3.size());
+        for(int i = 0; i < trajetsTrouves3.size(); i++)
+            assertEquals(trajetsTrouves2.get(i).length, trajetsTrouves3.get(i).length);
+
+
+        List<Section[]> trajetsTrouves4 = Calculator.itineraire(origine, destination2, horaireDepart, 0.919, 0);
+        assertNotNull(trajetsTrouves4);
+        assertTrue(trajetsTrouves4.size() <= Constants.MAX_TRAJETS_NUMBER);
+        assertEquals(3, trajetsTrouves4.get(0).length); //Pied ; Corentin Celton ; Mairie d'Issy ; Pied
+
+        List<Section[]> trajetsTrouves5 = Calculator.itineraire(origine, destination2, horaireDepart, Duration.ofSeconds(662));
+        assertNotNull(trajetsTrouves5);
+        assertEquals(trajetsTrouves4.size(), trajetsTrouves5.size());
+        for(int i = 0; i < trajetsTrouves5.size(); i++)
+            assertEquals(trajetsTrouves4.get(i).length, trajetsTrouves5.get(i).length);
     }
 }

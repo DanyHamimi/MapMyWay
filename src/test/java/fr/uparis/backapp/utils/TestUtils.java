@@ -27,7 +27,7 @@ public class TestUtils {
      * Teste la conversion d'une distance en dizaine de km vers km.
      */
     @Test
-    public void testCorrectDistance() {
+    public void testsCorrectDistance() {
         String distance1 = "9.552567634725916";
         assertEquals(Double.parseDouble("0.955"), correctDistance(distance1));
 
@@ -42,7 +42,7 @@ public class TestUtils {
      * Teste la conversion de durée en dizaine de secondes vers Duration.
      */
     @Test
-    public void testCorrectDuration() {
+    public void testsCorrectDuration() {
         String duration1 = "10:02";
         assertEquals("PT1M41S", correctDuration(duration1).toString());
 
@@ -57,7 +57,7 @@ public class TestUtils {
      * Teste la conversion d'un horaire vers le format "hh:mm".
      */
     @Test
-    public void testCorrectTime() {
+    public void testsCorrectTime() {
         String time1 = "5:8";
         String expected1 = "05:08";
         assertEquals(expected1, correctTime(time1));
@@ -75,7 +75,7 @@ public class TestUtils {
      * Teste le calcul de distance entre deux coordonnées.
      */
     @Test
-    void testDistanceBetween() {
+    void testsDistanceBetween() {
         Coordonnee origine1 = new Coordonnee(52.2296756, 21.0122287);
         Coordonnee destination1 = new Coordonnee(52.2296756, 21.0122287);
         assertEquals(0.000, distanceBetween(origine1, destination1));
@@ -93,12 +93,22 @@ public class TestUtils {
      * Teste la durée de marche d'une certaine distance en km.
      */
     @Test
-    void testWalkingDuration() {
+    void testsWalkingDuration() {
         assertEquals(Duration.ofSeconds(0), walkingDurationOf(0));
         assertEquals(Duration.ofHours(1), walkingDurationOf(5.0));
         assertEquals(Duration.ofMinutes(30), walkingDurationOf(2.5));
         assertEquals(Duration.ofMinutes(6), walkingDurationOf(0.5));
         assertEquals(Duration.ofMinutes(3), walkingDurationOf(0.25));
         assertEquals(Duration.ofMinutes(1).plusSeconds(12), walkingDurationOf(0.1));
+    }
+
+    /**
+     * Teste la distance de marche d'une certaine durée.
+     */
+    @Test
+    void testsDistanceOfWalkingDuration() {
+        assertEquals(0, distanceOfWalkingDuration(Duration.ofSeconds(-5)));
+        assertEquals(0.91, distanceOfWalkingDuration(Duration.ofSeconds(655)));
+        assertEquals(0.919, distanceOfWalkingDuration(Duration.ofSeconds(662)));
     }
 }
