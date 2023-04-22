@@ -86,4 +86,14 @@ public class Utils {
         long dureeEnSecondes = (long)(3600 * distance / Constants.AVERAGE_WALKING_SPEED);
         return Duration.ofSeconds(dureeEnSecondes);
     }
+
+    /**
+     * Convertit une durée en une distance moyenne de marche en km.
+     *
+     * @param duration la durée à convertir en distance moyenne de marche.
+     * @return la distance moyenne de marche, en km, avec une précision de 3 chiffres après la virgule.
+     */
+    public static double distanceOfWalkingDuration(Duration duration) {
+        return truncateDoubleTo3Precision(((double)duration.getSeconds()) / 3600 * Constants.AVERAGE_WALKING_SPEED);
+    }
 }
