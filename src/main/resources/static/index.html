@@ -276,10 +276,14 @@
                         term: request.term
                     },
                     success: function(data) {
-                        console.log( data.forEach((fruit) => {
-                            console.log(fruit.split(";")[0]); //affiche les noms autocomplete dans la console
-                        }))
-                        response(data);
+                        var res = data.map(function(item) {
+                            var parts = item.split(';');
+                            return {
+                                label: parts[0],
+                                value: item
+                            };
+                        });
+                        response(res);
                     }
                 });
             },
