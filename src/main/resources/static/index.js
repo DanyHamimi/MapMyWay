@@ -192,6 +192,12 @@ $(function() {
 });
 
 var map = L.map('map').setView([48.858093, 2.294694], 15);
+// Définir les limites de la carte
+var bounds = L.latLngBounds(
+    L.latLng(48.8156, 2.2242), // Coin inférieur gauche
+    L.latLng(48.9022, 2.4699)  // Coin supérieur droit
+);
+map.setMaxBounds(bounds);
 
 L.tileLayer('tiles/{z}/{x}/{y}.png', {
     minZoom: 12,
