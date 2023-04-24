@@ -2,7 +2,7 @@ var itenaries;
 const DEPART = "Début";
 const FIN = "Fin";
 const LIGNE = "ligne";
-const WALK_CLASS_HTML = '<img class="marcher" src="css/image/marche.png" alt="">'
+const WALK_CLASS_HTML = '<img class="marcher" style="height: 30px;" src="../css/image/marche.png" alt="">'
 
 var stationsByLocalisation = new Map();
 var itineraryLayer = L.layerGroup();
@@ -56,16 +56,19 @@ $(document).ready(function () {
     }
 
     function buildTraject(index) {
-        // recuperer la indexième classe resultat
+        // récupérer la indexième classe resultat
         var trajectResult = document.querySelectorAll('.resultat')[index - 1];
-        // declarer un set de noom de ligne
+        // déclarer un set de noom de ligne
         var linesNames = new Set();
         var itenerary = itenaries[index - 1];
-        var htmlContent = ''
-        itenerary.forEach(section => {
+        var htmlContent = '<div class="ligne-container">';
+        itenerary.forEach((section, i) => {
             if (section.depart.nomLieu !== DEPART && section.arrivee.nomLieu !== FIN) {
-                if(section.ligne != null){
+                if (section.ligne != null) {
                     linesNames.add(section.ligne.nomLigne.split(' ')[0]);
+                }
+                else {
+                    linesNames.add('sectionMarche');
                 }
             } else if (section.distance !== 0) {
                 linesNames.add('sectionMarche');
@@ -73,17 +76,18 @@ $(document).ready(function () {
         });
         linesNames.forEach(line => {
             if (line === 'sectionMarche') {
-                htmlContent += WALK_CLASS_HTML
+                htmlContent += WALK_CLASS_HTML;
             } else {
-                htmlContent += '<div class="ligne' + line + '"></div>'
+                htmlContent += '<img src="../css/image/M' + line + '.png" alt="ligne ' + line + '" class="ligne" style="height: 30px;">';
             }
         })
         console.log("traject duration ===> " + buildDuration(index))
-        htmlContent += '</div class = "dureeTrajet">' + buildDuration(index) + '</div>'
+        htmlContent += '</div><div class="dureeTrajet">' + buildDuration(index) + '</div>'
         htmlContent += '<div class="details" id="details' + index + '"style="display: none">'
         trajectResult.innerHTML = (htmlContent)
         addTrajectDetails(index);
     }
+
 
     function buildDuration(index) {
         var itenerary = itenaries[index - 1];

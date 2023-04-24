@@ -43,17 +43,6 @@ searchBtn.addEventListener('click', (e) => {
 
 // ... code d'initialisation de la carte et ajout du marqueur ...
 
-// Gestionnaire d'événements pour supprimer le marqueur lors du clic sur le bouton
-document.getElementById("remove-marker").addEventListener("click", function () {
-    if (originMarker) {
-        originMarker.remove();
-        originMarker = null;
-    }
-    if (destinationMarker) {
-        destinationMarker.remove();
-        destinationMarker = null;
-    }
-});
 
 // Gerer erreur saisie
 const showValueButton = document.getElementById('search-btn');
