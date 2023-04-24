@@ -51,7 +51,14 @@ $(document).ready(function () {
         var detailsHtml = '<div class="detailsTrajet">'
         console.log(itenerary)
         itenerary.forEach(section => {
-            stationsNames.push(section.depart.nomLieu + " "+ section.ligne.nomLigne);
+            if (section.ligne != null) {
+                stationsNames.push(section.depart.nomLieu + " "+ section.ligne.nomLigne.split(' ')[0]);
+            }
+            else {
+                if(section.arrivee.nomLieu == FIN){
+                    stationsNames.push(section.depart.nomLieu + " "+ section.ligne.nomLigne.split(' ')[0]);
+                }
+            }
         })
         stationsNames.forEach(station => {
             detailsHtml += '<div>'+station+ '</div>'
