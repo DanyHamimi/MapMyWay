@@ -85,7 +85,7 @@ $(function () {
                 url: "/autocomplete",
                 dataType: "json",
                 data: {
-                    term: request.term
+                    term: request.term.toLowerCase()
                 },
                 success: function (data) {
                     var res = data.map(function (item) {
