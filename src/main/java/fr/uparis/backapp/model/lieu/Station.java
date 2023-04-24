@@ -1,5 +1,7 @@
 package fr.uparis.backapp.model.lieu;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.uparis.backapp.model.Coordonnee;
 import fr.uparis.backapp.model.section.SectionTransport;
 
@@ -8,17 +10,19 @@ import java.util.*;
 /**
  * Représente une Station du Reseau de transport.
  */
+
 public class Station extends Lieu {
     final private Map<String, Coordonnee> autresLocalisations;
+    @JsonIgnore
     final private Set<SectionTransport> correspondances;
 
     /**
      * Constructeur de la classe Station à partir de tous les attributs.
      *
-     * @param nomStation nom de la Station.
+     * @param nomStation             nom de la Station.
      * @param localisationPrincipale Coordonnee principale de la Station.
-     * @param autresLocalisations Coordonne différentes de localisation de la Station.
-     * @param correspondances liste des correspondances avec d'autres Ligne du Reseau.
+     * @param autresLocalisations    Coordonne différentes de localisation de la Station.
+     * @param correspondances        liste des correspondances avec d'autres Ligne du Reseau.
      */
     public Station(String nomStation, Coordonnee localisationPrincipale, Map<String, Coordonnee> autresLocalisations, Set<SectionTransport> correspondances) {
         super(nomStation, localisationPrincipale);
@@ -29,7 +33,7 @@ public class Station extends Lieu {
     /**
      * Constructeur de la classe Station à partir du nom de la station et de sa localisation principale.
      *
-     * @param nomStation nom de la Station.
+     * @param nomStation             nom de la Station.
      * @param localisationPrincipale Coordonnee principale de la Station.
      */
     public Station(String nomStation, Coordonnee localisationPrincipale) {
@@ -49,11 +53,11 @@ public class Station extends Lieu {
     /**
      * Ajoute une localisation de la station, si elle est différente de la localisation principale.
      *
-     * @param nomLigne le nom de la ligne concernée par cette localisation.
+     * @param nomLigne     le nom de la ligne concernée par cette localisation.
      * @param localisation la localisation de la Station pour la ligne donnée.
      */
     public void addLocalisation(String nomLigne, Coordonnee localisation) {
-        if(!this.localisation.equals(localisation))
+        if (!this.localisation.equals(localisation))
             autresLocalisations.put(nomLigne, localisation);
     }
 
@@ -81,7 +85,7 @@ public class Station extends Lieu {
      * @param sectionTransport une nouvelle correspondance possible à la station courante.
      */
     public void addCorrespondance(SectionTransport sectionTransport) {
-        if(sectionTransport.getDepart().equals(this))
+        if (sectionTransport.getDepart().equals(this))
             this.correspondances.add(sectionTransport);
     }
 
@@ -102,8 +106,8 @@ public class Station extends Lieu {
      */
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Station station = (Station) o;
         return station.getNomLieu().equals(this.nomLieu); //unicité des noms de station
     }
@@ -126,9 +130,9 @@ public class Station extends Lieu {
     @Override
     public String toString() {
         String s = nomLieu + " -> ";
-        for(SectionTransport sectionTransport: correspondances) {
+        for (SectionTransport sectionTransport : correspondances) {
             String nomLigne = sectionTransport.getLigne().getNomLigne();
-            s += nomLigne + " (" + autresLocalisations.getOrDefault(nomLigne, localisation)+ ") ";
+            s += nomLigne + " (" + autresLocalisations.getOrDefault(nomLigne, localisation) + ") ";
         }
         return s;
     }

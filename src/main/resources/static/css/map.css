@@ -1,4 +1,46 @@
-#errorSig{
+:root {
+  --ligne1: #FFCE00;
+  --ligne2: #0064B0;
+  --ligne3: #9F9825;
+  --ligne3bis : #98D4E2;
+  --ligne4: #C04191;
+  --ligne5: #F28E42;
+  --ligne6: #83C491;
+  --ligne7: #F3A4BA;
+  --ligne7bis: #83C491;
+  --ligne8: #CEADD2;
+  --ligne9: #D5C900;
+  --ligne10: #E3B32A;
+  --ligne11: #8D5E2A;
+  --ligne12: #00814F;
+  --ligne13: #98D4E2;
+  --ligne14: #662483;
+}
+
+.station{
+  margin-bottom: 2%;
+  padding-left: 2%;
+}
+
+.groupe{  border-top-left-radius: 2%; border-bottom-left-radius: 2%; margin-left: 35%}
+.nomStationundefined{ border-left : 6px solid black;}
+.groupe1{ border-left: 6px solid var(--ligne1);}
+.groupe2{ border-left: 6px solid var(--ligne2);}
+.groupe3{ border-left: 6px solid var(--ligne3);}
+.groupe4{ border-left: 6px solid var(--ligne4);}
+.groupe5{ border-left: 6px solid var(--ligne5);}
+.groupe6{ border-left: 6px solid var(--ligne6);}
+.groupe7{ border-left: 6px solid var(--ligne7);}
+.groupe8{ border-left: 6px solid var(--ligne8);}
+.groupe9{ border-left: 6px solid var(--ligne9);}
+.groupe10{ border-left: 6px solid var(--ligne10);}
+.groupe11{ border-left: 6px solid var(--ligne11);}
+.groupe12{ border-left: 6px solid var(--ligne12);}
+.groupe13{ border-left: 6px solid var(--ligne13);}
+.groupe14{ border-left: 6px solid var(--ligne14);}
+
+
+errorSig{
   font-size: 70%;
   position: fixed;
   top: 0;
@@ -7,6 +49,36 @@
   text-align: center;
   margin: 16% 0%;
   width: 100%;
+}
+
+.nomStation{
+  margin-bottom: 2%;
+}
+
+.detailsTrajet{
+  margin-top: 8%;
+  text-align: left;
+}
+
+.testAffichage{
+  display: flex;
+  flex-wrap: wrap; /* pour gérer le débordement en cas de manque d'espace */
+  align-items: center; /* pour aligner verticalement les éléments */
+  justify-content: center;
+}
+
+.ligne-container{
+  display: flex; /* pour afficher les éléments sur une ligne */
+  align-items: center; /* pour aligner verticalement les éléments */
+}
+
+.trajets {
+  border: 2px solid rgb(145 134 134 / 70%);
+  height: 44%;
+  border-radius: 10px;
+  text-align: center;
+  background-color: rgb(96 235 232);
+  overflow: auto;
 }
 
 .chercherTop{
@@ -21,8 +93,8 @@
   color: black !important;
 }
 .marcher{
-  width: 3% !important;
-  height: 15px;
+  width: 20px !important;
+  height: 30px;
 }
 
 .ligne5:before{ content: "5";}
@@ -41,7 +113,7 @@
 .ligne7{ background-color: lightcoral;}
 .ligne7:before{ content: "7";}
 
-.dureeTrajet, .marcher, .ligne5, .ligne2, .ligneA, .ligne12, .ligne1, .ligne8, .ligne7{
+.marcher, .ligne5, .ligne2, .ligneA, .ligne12, .ligne1, .ligne8, .ligne7{
   display: inline-block;
   padding-top: 2px;
   width: 5%;

@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Acceuil</title>
     <link rel="stylesheet" href="/css/map.css">
-    <script src="jquery/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="/jquery/jquery-ui.css">
-    <script src="/jquery/jquery-ui.min.js"></script>
-
-    <link rel="stylesheet" href="leaflet/leaflet.css" />
-    <script src="leaflet/leaflet.js"></script>
+    <link rel="stylesheet" href="/webjars/leaflet/1.7.1/dist/leaflet.css"/>
+    <script src="/webjars/leaflet/1.7.1/dist/leaflet.js"></script>
+    <script src="/webjars/leaflet/1.7.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
 <body style=" background-color: rgb(96 235 232);
     margin: 0;
@@ -28,11 +27,10 @@
 
                 <div class="form-holder">
                     <input type="text" class="input" placeholder="De" id="origine" required/>
-                    <input type="text" class="input" placeholder="A" id="destination" required />
-                    <button id="remove-marker">Supprimer les marqueur</button>
+                    <input type="text" class="input" placeholder="A" id="destination" required/>
                     <div class="label-horaire">
                         Horaire de depart
-                        <input type="time" class="horaire" min="09:00" max="18:00" required />
+                        <input type="time" id = 'hour' class="horaire" required/>
                     </div>
 
 
@@ -69,126 +67,24 @@
             </div>
         </div>
 
-        <div id="liste" style="
-        border: 2px solid rgb(145 134 134 / 70%);
-        height: 44%;
-        border-radius: 10px;
-        text-align: center;
-        background-color: rgb(96 235 232);
-        overflow: auto;">
+        <div id="liste" class="trajets" style="display: none;">
 
-            <button onclick="AfficheDetails(1)" class="resultat">Trajet1
+            <button onclick="AfficheDetails(1)" class="resultat">
 
-                <img class="marcher" src="css/image/marche.png"
-                     alt="">
-                <div class="ligne1"></div>
-                <div class="ligne12"></div>
-                <div class="dureeTrajet">43min</div>
-
-                <div class="details" id="details1" style="display: none">
-                    <h2>Trajet 1</h2>
-                    <p>Voici les détails que vous avez demandés...</p>
-                </div>
             </button>
-            <button onclick="AfficheDetails(2)" class="resultat">Trajet2
-                <img class="marcher" src="css/image/marche.png"
-                     alt="">
-                <div class="ligneA"></div>
-                <div class="ligne8"></div>
+            <button onclick="AfficheDetails(2)" class="resultat">
 
-                <div class="dureeTrajet">11min</div>
+            </button>
+            <button onclick="AfficheDetails(3)" class="resultat">
 
-                <div class="details" id="details2" style="display: none">
-                    <h2>Détails</h2>
-                    <p>Voici les détails que vous avez demandés...</p>
-                </div>
-            </button>            <button onclick="AfficheDetails(3)" class="resultat">Trajet3
+            </button>
+            <button onclick="AfficheDetails(4)" class="resultat">
 
-            <img class="marcher" src="css/image/marche.png"
-                 alt="">
-            <div class="ligne1"></div>
-            <div class="ligne2"></div>
-            <div class="ligne12"></div>
-            <div class="ligne7"></div>
+            </button>
+            <button onclick="AfficheDetails(5)" class="resultat">
 
-            <div class="dureeTrajet">1min</div>
-
-            <div class="details" id="details3" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>            <button onclick="AfficheDetails(4)" class="resultat">Trajet4
-            <img class="marcher" src="css/image/marche.png"
-                 alt="">
-            <div class="ligneF"></div>
-            <div class="dureeTrajet">16min</div>
-
-            <div class="details" id="details4" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>            <button onclick="AfficheDetails(5)" class="resultat">Trajet5
-            <img class="marcher" src="css/image/marche.png"
-                 alt="">
-            <div class="ligneA"></div>
-            <div class="dureeTrajet">30min</div>
-
-            <div class="details" id="details5" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>            <button onclick="AfficheDetails(6)" class="resultat">Trajet6
-            <img class="marcher" src="css/image/marche.png"
-                 alt="">
-            <div class="ligne1"></div>
-            <div class="dureeTrajet">1h</div>
-
-            <div class="details" id="details6" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>
-            </button>            <button onclick="AfficheDetails(7)" class="resultat">Trajet7
-            <img class="marcher" src="css/image/marche.png"
-                 alt="">
-            <div class="ligne12"></div>
-            <div class="dureeTrajet">23min</div>
-
-            <div class="details" id="details7" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>        </button>            <button onclick="AfficheDetails(8)" class="resultat">Trajet8
-
-            <div class="details" id="details8" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>        </button>            <button onclick="AfficheDetails(9)" class="resultat">Trajet9
-
-            <div class="details" id="details9" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>        </button>            <button onclick="AfficheDetails(10)" class="resultat">Trajet10
-
-            <div class="details" id="details10" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>        </button>            <button onclick="AfficheDetails(11)" class="resultat">Trajet11
-
-            <div class="details" id="details11" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>        </button>            <button onclick="AfficheDetails(12)" class="resultat">Trajet12
-
-            <div class="details" id="details12" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>
+            </button>
+            </button>
         </div>
 
 
@@ -200,9 +96,8 @@
     </div>
 
 
-
 </div>
-
-<script src="index.js"></script>
+<script src="JS/search-itenerary.js"></script>
+<script src="JS/index.js"></script>
 </body>
 </html>

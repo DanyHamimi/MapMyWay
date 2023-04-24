@@ -1,5 +1,6 @@
 package fr.uparis.backapp.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.uparis.backapp.model.lieu.Station;
 import fr.uparis.backapp.model.section.SectionTransport;
 import fr.uparis.backapp.utils.Parser;

@@ -1,5 +1,7 @@
 package fr.uparis.backapp.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * Représente une coordonnée gps.
  */
