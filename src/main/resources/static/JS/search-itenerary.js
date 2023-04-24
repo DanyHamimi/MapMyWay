@@ -1,6 +1,6 @@
 var itenaries;
 const DEPART = "Début";
-const FIN = "Fin";
+const FIN = "Arrivée";
 const LIGNE = "ligne";
 const WALK_CLASS_HTML = '<img class="marcher" src="../css/image/marche.png" alt="">'
 
@@ -56,7 +56,7 @@ $(document).ready(function () {
             }
             else {
                 if(section.arrivee.nomLieu == FIN){
-                    stationsNames.push(section.depart.nomLieu + " "+ section.ligne.nomLigne.split(' ')[0]);
+                    stationsNames.push(section.depart.nomLieu + " Arrivée");
                 }
             }
         })
