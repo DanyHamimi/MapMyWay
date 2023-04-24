@@ -47,8 +47,13 @@ searchBtn.addEventListener('click', (e) => {
 // Gerer erreur saisie
 const showValueButton = document.getElementById('search-btn');
 const errorSig = document.getElementById('errorSig');
+const div = document.getElementById('liste');
 
 showValueButton.addEventListener('click', function () {
+
+    if (div.style.display === 'none') {
+        div.style.display = 'block';
+    }
 
     var origine = document.getElementById('origine');
     var destination = document.getElementById('destination');

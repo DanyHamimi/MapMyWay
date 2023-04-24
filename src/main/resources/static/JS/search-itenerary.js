@@ -2,7 +2,7 @@ var itenaries;
 const DEPART = "Début";
 const FIN = "Fin";
 const LIGNE = "ligne";
-const WALK_CLASS_HTML = '<img class="marcher" style="height: 30px;" src="../css/image/marche.png" alt="">'
+const WALK_CLASS_HTML = '<img class="marcher" src="../css/image/marche.png" alt="">'
 
 var stationsByLocalisation = new Map();
 var itineraryLayer = L.layerGroup();
@@ -47,12 +47,17 @@ $(document).ready(function () {
         var trajectDetails = document.getElementById("details" + index);
         var itenerary = itenaries[index - 1];
         var stationsNames = [];
+        var numLigne = null;
+        var detailsHtml = '<div class="detailsTrajet">'
+        console.log(itenerary)
         itenerary.forEach(section => {
-            stationsNames.push(section.depart.nomLieu);
+            stationsNames.push(section.depart.nomLieu + " "+ section.ligne.nomLigne);
         })
         stationsNames.forEach(station => {
-            trajectDetails.innerHTML += station + " -> ";
+            detailsHtml += '<div>'+station+ '</div>'
         });
+        detailsHtml += '</div>'
+        trajectDetails.innerHTML = (detailsHtml)
     }
 
     function buildTraject(index) {
@@ -61,7 +66,7 @@ $(document).ready(function () {
         // déclarer un set de noom de ligne
         var linesNames = new Set();
         var itenerary = itenaries[index - 1];
-        var htmlContent = '<div class="ligne-container">';
+        var htmlContent = '<div class="testAffichage"><div class="ligne-container">';
         itenerary.forEach((section, i) => {
             if (section.depart.nomLieu !== DEPART && section.arrivee.nomLieu !== FIN) {
                 if (section.ligne != null) {
@@ -82,8 +87,9 @@ $(document).ready(function () {
             }
         })
         console.log("traject duration ===> " + buildDuration(index))
-        htmlContent += '</div><div class="dureeTrajet">' + buildDuration(index) + '</div>'
-        htmlContent += '<div class="details" id="details' + index + '"style="display: none">'
+        htmlContent += '</div><div class="dureeTrajet">' + buildDuration(index) + '</div></div>'
+
+        htmlContent += '<div class="details" id="details' + index + '"style="display: none"></div>'
         trajectResult.innerHTML = (htmlContent)
         addTrajectDetails(index);
     }
