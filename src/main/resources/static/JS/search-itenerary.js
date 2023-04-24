@@ -64,8 +64,9 @@ $(document).ready(function () {
         var htmlContent = ''
         itenerary.forEach(section => {
             if (section.depart.nomLieu !== DEPART && section.arrivee.nomLieu !== FIN) {
-
-                linesNames.add(section.ligne.nomLigne.split(' ')[0]);
+                if(section.ligne != null){
+                    linesNames.add(section.ligne.nomLigne.split(' ')[0]);
+                }
             } else if (section.distance !== 0) {
                 linesNames.add('sectionMarche');
             }
