@@ -35,10 +35,6 @@ const div = document.getElementById('liste');
 
 showValueButton.addEventListener('click', function () {
 
-    if (div.style.display === 'none') {
-        div.style.display = 'block';
-    }
-
     var origine = document.getElementById('origine');
     var destination = document.getElementById('destination');
     var orig = origine.value;
@@ -46,6 +42,9 @@ showValueButton.addEventListener('click', function () {
 
     if (orig != "" && dest != "") {
         // console.log("origine : " + orig + " destination : " + dest);
+        if (div.style.display === 'none') {
+            div.style.display = 'block';
+        }
 
     } else {
         var afficher_message = document.getElementById('chercher')
