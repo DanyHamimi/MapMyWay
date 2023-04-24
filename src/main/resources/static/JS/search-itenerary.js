@@ -21,7 +21,6 @@ function fillCurrentHour() {
     }
     time = hours + ":" + minutes;
     document.getElementById('hour').value = time;
-    console.log(time);
 }
 
 $(document).ready(function () {
@@ -29,11 +28,11 @@ $(document).ready(function () {
     $('#search-btn').click(function () {
         var origine = $('#origine').val();
         var destination = $('#destination').val();
-
+        var timeValue = $('#hour').val();
         var data = {
             origin: origine,
             destination: destination,
-            time: time,
+            time: timeValue
         };
 
 
@@ -49,7 +48,7 @@ $(document).ready(function () {
                 for (let index = 0; index < itenaries.length; index++) {
                     buildTraject(index + 1);
                 }
-                pingLocalizations(2);
+                pingLocalizations(1);
             },
             error: function (xhr, status, error) {
                 // Traitement de la réponse du backend en cas d'erreur
@@ -68,17 +67,16 @@ $(document).ready(function () {
 
         itenerary.forEach(section => {
             if (section.ligne != null) {
-                stationsNames.push(section.depart.nomLieu + ";"+ section.ligne.nomLigne.split(' ')[0]+ ";" + section.depart.horaireDePassage);
-            }
-            else {
-                if(section.arrivee.nomLieu == FIN){
-                    stationsNames.push(section.depart.nomLieu + " Arrivée" );
+                stationsNames.push(section.depart.nomLieu + ";" + section.ligne.nomLigne.split(' ')[0] + ";" + section.depart.horaireDePassage);
+            } else {
+                if (section.arrivee.nomLieu === FIN) {
+                    stationsNames.push(section.depart.nomLieu + " Arrivée");
                 }
             }
         })
 
         var oldNumLigne = stationsNames[0].split(';')[1];
-        var currentDiv = '<div class="groupe groupe'+oldNumLigne+'">';
+        var currentDiv = '<div class="groupe groupe' + oldNumLigne + '">';
         stationsNames.forEach(station => {
 
             var numLigne = station.split(';')[1];
@@ -90,18 +88,17 @@ $(document).ready(function () {
                     currentDiv += '</div>';
                 }
                 // Créer un nouveau div pour le nouvel oldNumLigne
-                currentDiv += '<div class="groupe groupe'+numLigne+'">';
+                currentDiv += '<div class="groupe groupe' + numLigne + '">';
             }
 
             var horaireDePassage = station.split(';')[2]
-            if(horaireDePassage != null){
+            if (horaireDePassage != null) {
                 var heure = horaireDePassage.split(":")[0]
                 var min = horaireDePassage.split(":")[1]
-                currentDiv += '<div class="station nomStation' + numLigne + '">' +heure+"h"+min +" : "+ stationName +'</div>';
+                currentDiv += '<div class="station nomStation' + numLigne + '">' + heure + "h" + min + " : " + stationName + '</div>';
 
-            }
-            else
-                currentDiv += '<div class="station nomStation' + numLigne + '">' + stationName+'</div>';
+            } else
+                currentDiv += '<div class="station nomStation' + numLigne + '">' + stationName + '</div>';
 
             oldNumLigne = numLigne;
 
@@ -125,8 +122,7 @@ $(document).ready(function () {
             if (section.depart.nomLieu !== DEPART && section.arrivee.nomLieu !== FIN) {
                 if (section.ligne != null) {
                     linesNames.add(section.ligne.nomLigne.split(' ')[0]);
-                }
-                else {
+                } else {
                     linesNames.add('sectionMarche');
                 }
             } else if (section.distance !== 0) {
@@ -207,8 +203,10 @@ function pingLocalizations(index) {
     itineraryPolylines = [];
 
     var itenerary = itenaries[index - 1];
-    var prevValues = null;
 
+    if (itenerary === undefined)
+        return;
+    var prevValues = null;
     itenerary.forEach(section => {
         let lineColor;
         let lignetmp;
