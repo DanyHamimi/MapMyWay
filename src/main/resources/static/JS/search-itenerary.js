@@ -6,7 +6,23 @@ const WALK_CLASS_HTML = '<img class="marcher" src="../css/image/marche.png" alt=
 
 var stationsByLocalisation = new Map();
 var itineraryLayer = L.layerGroup();
+var time
 
+window.addEventListener('load', function () {
+    fillCurrentHour();
+});
+
+function fillCurrentHour() {
+    var date = new Date();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    time = hours + ":" + minutes;
+    document.getElementById('hour').value = time;
+    console.log(time);
+}
 
 $(document).ready(function () {
 
@@ -16,7 +32,8 @@ $(document).ready(function () {
 
         var data = {
             origin: origine,
-            destination: destination
+            destination: destination,
+            time: time,
         };
 
 
@@ -49,7 +66,6 @@ $(document).ready(function () {
         var stationsNames = [];
         var detailsHtml = '<div class="detailsTrajet">'
 
-        console.log(itenerary)
         itenerary.forEach(section => {
             if (section.ligne != null) {
                 stationsNames.push(section.depart.nomLieu + ";"+ section.ligne.nomLigne.split(' ')[0]+ ";" + section.depart.horaireDePassage);
@@ -62,7 +78,7 @@ $(document).ready(function () {
         })
 
         var oldNumLigne = stationsNames[0].split(';')[1];
-        var currentDiv = '<div class="groupe groupe'+oldNumLigne+'">';;
+        var currentDiv = '<div class="groupe groupe'+oldNumLigne+'">';
         stationsNames.forEach(station => {
 
             var numLigne = station.split(';')[1];

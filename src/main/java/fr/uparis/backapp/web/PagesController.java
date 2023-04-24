@@ -48,8 +48,8 @@ public class PagesController {
 
     @ResponseBody
     @GetMapping("/iteneray")
-    public List<Section[]> searchItenerary(@RequestParam("origin") String origin, @RequestParam("destination") String destination) {
-        return iteneraryService.searchItenerary(origin, destination);
+    public List<Section[]> searchItenerary(@RequestParam("origin") String origin, @RequestParam("destination") String destination, @RequestParam("time") String time) {
+        return iteneraryService.searchItenerary(origin, destination, time);
     }
 
 

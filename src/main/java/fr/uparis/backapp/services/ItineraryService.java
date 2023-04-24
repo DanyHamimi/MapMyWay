@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static fr.uparis.backapp.utils.Calculator.itineraire;
+import static java.lang.Integer.parseInt;
 
 @Service
 public class ItineraryService {
@@ -22,10 +23,11 @@ public class ItineraryService {
         this.reseau = Reseau.getInstance();
     }
 
-    public List<Section[]> searchItenerary(String origin, String destination) {
+    public List<Section[]> searchItenerary(String origin, String destination, String time) {
         Station originStation = reseau.getStation(origin);
         Station destinationStation = reseau.getStation(destination);
-        List<Section[]> l = itineraire(originStation, destinationStation, LocalTime.of(14, 45));
+        System.out.println( parseInt(time.split(":")[0]) +" "+  parseInt(time.split(":")[1]) );
+        List<Section[]> l = itineraire(originStation, destinationStation, LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
         return l;
     }
 

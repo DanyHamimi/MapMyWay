@@ -1,22 +1,6 @@
 const optionsBtn = document.getElementById('options');
 const searchBtn = document.getElementById('chercher');
 
-window.addEventListener('load', function () {
-    fillCurrentHour();
-});
-
-function fillCurrentHour() {
-    var date = new Date();
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
-    var time = hours + ":" + minutes;
-    document.getElementById('hour').value = time;
-    console.log(time);
-}
-
 optionsBtn.addEventListener('click', (e) => {
     let parent = e.target.parentNode.parentNode;
     Array.from(e.target.parentNode.parentNode.classList).find((element) => {
