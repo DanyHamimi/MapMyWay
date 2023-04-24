@@ -47,23 +47,54 @@ $(document).ready(function () {
         var trajectDetails = document.getElementById("details" + index);
         var itenerary = itenaries[index - 1];
         var stationsNames = [];
-        var numLigne = null;
         var detailsHtml = '<div class="detailsTrajet">'
+
         console.log(itenerary)
         itenerary.forEach(section => {
             if (section.ligne != null) {
-                stationsNames.push(section.depart.nomLieu + " "+ section.ligne.nomLigne.split(' ')[0]);
+                stationsNames.push(section.depart.nomLieu + ";"+ section.ligne.nomLigne.split(' ')[0]+ ";" + section.depart.horaireDePassage);
             }
             else {
                 if(section.arrivee.nomLieu == FIN){
-                    stationsNames.push(section.depart.nomLieu + " Arrivée");
+                    stationsNames.push(section.depart.nomLieu + " Arrivée" );
                 }
             }
         })
+
+        var oldNumLigne = stationsNames[0].split(';')[1];
+        var currentDiv = '<div class="groupe groupe'+oldNumLigne+'">';;
         stationsNames.forEach(station => {
-            detailsHtml += '<div>'+station+ '</div>'
+
+            var numLigne = station.split(';')[1];
+            var stationName = station.split(';')[0];
+
+            if (numLigne !== oldNumLigne) {
+                // Fermer le div précédent s'il existe
+                if (currentDiv !== '') {
+                    currentDiv += '</div>';
+                }
+                // Créer un nouveau div pour le nouvel oldNumLigne
+                currentDiv += '<div class="groupe groupe'+numLigne+'">';
+            }
+
+            var horaireDePassage = station.split(';')[2]
+            if(horaireDePassage != null){
+                var heure = horaireDePassage.split(":")[0]
+                var min = horaireDePassage.split(":")[1]
+                currentDiv += '<div class="station nomStation' + numLigne + '">' +heure+"h"+min +" : "+ stationName +'</div>';
+
+            }
+            else
+                currentDiv += '<div class="station nomStation' + numLigne + '">' + stationName+'</div>';
+
+            oldNumLigne = numLigne;
+
         });
-        detailsHtml += '</div>'
+
+        if (currentDiv !== '') {
+            currentDiv += '</div>';
+        }
+        detailsHtml += currentDiv;
         trajectDetails.innerHTML = (detailsHtml)
     }
 

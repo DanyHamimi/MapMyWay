@@ -16,6 +16,30 @@
   --ligne13: #98D4E2;
   --ligne14: #662483;
 }
+
+.station{
+  margin-bottom: 2%;
+  padding-left: 2%;
+}
+
+.groupe{  border-top-left-radius: 2%; border-bottom-left-radius: 2%; margin-left: 35%}
+.nomStationundefined{ border-left : 6px solid black;}
+.groupe1{ border-left: 6px solid var(--ligne1);}
+.groupe2{ border-left: 6px solid var(--ligne2);}
+.groupe3{ border-left: 6px solid var(--ligne3);}
+.groupe4{ border-left: 6px solid var(--ligne4);}
+.groupe5{ border-left: 6px solid var(--ligne5);}
+.groupe6{ border-left: 6px solid var(--ligne6);}
+.groupe7{ border-left: 6px solid var(--ligne7);}
+.groupe8{ border-left: 6px solid var(--ligne8);}
+.groupe9{ border-left: 6px solid var(--ligne9);}
+.groupe10{ border-left: 6px solid var(--ligne10);}
+.groupe11{ border-left: 6px solid var(--ligne11);}
+.groupe12{ border-left: 6px solid var(--ligne12);}
+.groupe13{ border-left: 6px solid var(--ligne13);}
+.groupe14{ border-left: 6px solid var(--ligne14);}
+
+
 errorSig{
   font-size: 70%;
   position: fixed;
@@ -27,9 +51,13 @@ errorSig{
   width: 100%;
 }
 
+.nomStation{
+  margin-bottom: 2%;
+}
+
 .detailsTrajet{
-  border-left: 6px solid;
-  border-color: #662483;
+  margin-top: 8%;
+  text-align: left;
 }
 
 .testAffichage{
