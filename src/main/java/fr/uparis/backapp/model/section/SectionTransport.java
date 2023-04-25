@@ -56,6 +56,7 @@ public class SectionTransport extends Section {
      *
      * @return la Ligne empruntée par la Section.
      */
+    @Override
     public Ligne getLigne() {
         return ligne;
     }
@@ -75,6 +76,7 @@ public class SectionTransport extends Section {
      * @param depart l'heure actuelle.
      * @return l'heure du prochain départ.
      */
+    @Override
     public LocalTime getHoraireProchainDepart(LocalTime depart) {
         LocalTime prochainDepart = LocalTime.MAX;
         boolean hasProchainDepart = false;

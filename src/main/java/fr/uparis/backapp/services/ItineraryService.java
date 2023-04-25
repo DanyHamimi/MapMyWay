@@ -10,7 +10,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fr.uparis.backapp.utils.Calculator.itineraire;
+import static fr.uparis.backapp.utils.Calculator.itineraireFactory;
 import static java.lang.Integer.parseInt;
 
 @Service
@@ -27,7 +27,7 @@ public class ItineraryService {
         Station originStation = reseau.getStation(origin);
         Station destinationStation = reseau.getStation(destination);
         System.out.println( parseInt(time.split(":")[0]) +" "+  parseInt(time.split(":")[1]) );
-        List<Section[]> l = itineraire(originStation, destinationStation, LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
+        List<Section[]> l = itineraireFactory(originStation.getLocalisation(), destinationStation.getLocalisation(), LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
         return l;
     }
 

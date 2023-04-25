@@ -1,11 +1,10 @@
 package fr.uparis.backapp.model.section;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import fr.uparis.backapp.model.Ligne;
 import fr.uparis.backapp.model.lieu.Lieu;
 
-import java.io.Serializable;
 import java.time.Duration;
+import java.time.LocalTime;
 
 /**
  * Représente une Section de deux lieux.
@@ -48,6 +47,25 @@ public class Section {
      */
     public Lieu getArrivee() {
         return arrivee;
+    }
+
+    /**
+     * Renvoie l'heure du prochain départ.
+     *
+     * @param depart l'heure actuelle.
+     * @return l'heure du prochain départ.
+     */
+    public LocalTime getHoraireProchainDepart(LocalTime depart) {
+        return depart;
+    }
+
+    /**
+     * Renvoie la Ligne empruntée par la Section.
+     *
+     * @return la Ligne empruntée par la Section.
+     */
+    public Ligne getLigne() {
+        return null;
     }
 
     /**

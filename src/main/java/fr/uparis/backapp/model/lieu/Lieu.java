@@ -1,7 +1,5 @@
 package fr.uparis.backapp.model.lieu;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.uparis.backapp.model.Coordonnee;
 
 import java.time.LocalTime;

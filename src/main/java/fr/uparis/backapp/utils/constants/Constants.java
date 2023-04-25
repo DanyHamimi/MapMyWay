@@ -83,11 +83,6 @@ public class Constants {
 
 
     /**
-     * Valeur par défaut de la distance maximale pour trouver les stations proches d'une coordonnée, en km.
-     */
-    public static final double DEFAULT_MAX_DISTANCE = 5.0 / 6.0; //10 minutes de marche
-
-    /**
      * Valeur par défaut de la distance minimale pour trouver les stations proches d'une coordonnée, en km.
      */
     public static final double DEFAULT_MIN_DISTANCE = 0.0;
@@ -95,7 +90,7 @@ public class Constants {
     /**
      * Valeur par défaut de l'écart de distance entre la distance minimale et la distance maximale pour trouver les stations proches d'une coordonnée, en km.
      */
-    public static final double DEFAULT_ECART_DISTANCE = 1.0;
+    public static final double DEFAULT_ECART_DISTANCE = 5.0 / 6.0; //10 minutes de marche
 
 
     /**
