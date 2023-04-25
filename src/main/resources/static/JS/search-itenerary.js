@@ -22,27 +22,17 @@ function fillCurrentHour() {
     time = hours + ":" + minutes;
     document.getElementById('hour').value = time;
 }
-function isCoordinate(input) {
-    const coordinateRegex = /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/;
-    return coordinateRegex.test(input);
-}
 $(document).ready(function () {
 
     $('#search-btn').click(function () {
         var origine = $('#origine').val();
         var destination = $('#destination').val();
         var timeValue = $('#hour').val();
-        var isOrigineCoordinate = isCoordinate(origine);
-        var isDestinationCoordinate = isCoordinate(destination);
-        if(isOrigineCoordinate || isDestinationCoordinate){
-            console.log("origine et destination sont des coordonnées")
-            //TODO AGIR DIFFEREMMENT POUR LES COORDONNEES
-            return;
-        }
+
         var data = {
             origin: origine,
             destination: destination,
-            time: timeValue
+            time: timeValue,
         };
 
 
