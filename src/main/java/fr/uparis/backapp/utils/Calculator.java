@@ -34,14 +34,16 @@ public class Calculator {
     private static HashMap<Station, List<Station>> coupleStations = null;
 
     /**
-     *
+     * Change l'état du boolean pour avoir des trajets à pied.
      */
     public static void changeAPied() {
         A_PIED = !A_PIED;
     }
 
     /**
+     * Change l'état du boolean pour avoir des trajets en mode sportif avec la distance en paramètre.
      *
+     * @param distance la distance minimale à parcourir dans le trajet.
      */
     public static void changeMarcherAuMoinsDistance(double distance) {
         MARCHER_AU_MOINS_DISTANCE = !MARCHER_AU_MOINS_DISTANCE;
@@ -49,7 +51,9 @@ public class Calculator {
     }
 
     /**
+     * Change l'état du boolean pour avoir des trajets en mode sportif avec la durée en paramètre.
      *
+     * @param temps la durée minimale à parcourir dans le trajet.
      */
     public static void changeMarcherAuMoinsTemps(Duration temps) {
         MARCHER_AU_MOINS_TEMPS = !MARCHER_AU_MOINS_TEMPS;
@@ -58,7 +62,9 @@ public class Calculator {
     }
 
     /**
+     * Change l'état du boolean pour avoir des trajets en mode paresseux.
      *
+     * @param distance la distance maximale à parcourir entre les stations, pour avoir des trajets plus courts.
      */
     public static void changeMarcherAuPlus(double distance) {
         MARCHER_AU_PLUS = !MARCHER_AU_PLUS;
@@ -66,11 +72,12 @@ public class Calculator {
     }
 
     /**
+     * Fabrique d'itinéraires qui va retourner les itinéraires avec les bons paramètres.
      *
      * @param depart point de départ du trajet.
      * @param arrivee point d'arrivée du trajet.
      * @param horaireDepart horaire de départ.
-     * @return
+     * @return les 5 trajets les plus rapides, sous forme de liste de Sections.
      */
     public static List<Section[]> itineraireFactory(Coordonnee depart, Coordonnee arrivee, LocalTime horaireDepart) {
         Calculator.depart = depart;
@@ -84,7 +91,7 @@ public class Calculator {
             return res;
         }
         else {
-            List<Section[]> res = null;
+            List<Section[]> res;
             coupleStations = new HashMap<>();
 
             if(MARCHER_AU_MOINS_DISTANCE) {
@@ -109,9 +116,9 @@ public class Calculator {
     /**
      * Calcule un itinéraire totalement à pied, à partir de coordonnées.
      *
-     * @param depart
-     * @param arrivee
-     * @param horaireDepart
+     * @param depart point de départ du trajet.
+     * @param arrivee point d'arrivée du trajet.
+     * @param horaireDepart horaire de départ.
      * @return une section contenant toutes les informations du trajet à pied.
      */
     private static Section walkingItineraire(Coordonnee depart, Coordonnee arrivee, LocalTime horaireDepart) {
@@ -124,11 +131,10 @@ public class Calculator {
     }
 
     /**
-     * Calcule un itinéraire, avec correspondances et horaires, depuis une Coordonnee à une autre,
-     * en donnant la possibilité de fixer un périmètre manuellement de recherche pour les stations en termes de distance.
+     * Calcule un itinéraire, avec correspondances et horaires, en imposant une distance de marche minimale dans le trajet.
      *
-     * @param minDistance distance minimale du périmètre de recherche pour les stations proches, ou -1 par défaut.
-     * @return les 5 trajets les plus courts sous forme de liste de Section.
+     * @param minDistance distance de marche minimale durant le trajet, en km.
+     * @return les 5 trajets les plus rapides, sous forme de liste de Sections.
      */
     private static List<Section[]> sportifItineraire(double minDistance) {
         //Les 5 trajets les plus optimaux à retourner, avec celui à pied en termes de comparatif/pire trajet
@@ -164,11 +170,10 @@ public class Calculator {
     }
 
     /**
-     * Calcule un itinéraire, avec correspondances et horaires, depuis une Coordonnee à une autre,
-     * en fixant un périmètre de recherche des stations par défaut.
+     * Calcule un itinéraire, avec correspondances et horaires, en fixant un périmètre maximal de recherche des stations.
      *
-     * @param volonte La distance que l'utilisateur accepte de marcher, si jamais le chemin est plus rapide à pied qu'en transport.
-     * @return les 5 trajets les plus courts sous forme de liste de Section.
+     * @param volonte La distance que l'utilisateur accepte de parcourir, si jamais le chemin est plus rapide à pied qu'en transport.
+     * @return les 5 trajets les plus rapides, sous forme de liste de Sections.
      */
     private static List<Section[]> lazyItineraire(double volonte) {
         //Les 5 trajets les plus optimaux à retourner, avec celui à pied en termes de comparatif/pire trajet
@@ -194,8 +199,8 @@ public class Calculator {
      * Cherche les stations proches d'une coordonnée.
      *
      * @param coordonnee coordonnée du point de départ.
-     * @param maxDistance distance maximale acceptable entre deux points, en km.
      * @param minDistance distance minimale acceptable entre deux points, en km.
+     * @param maxDistance distance maximale acceptable entre deux points, en km.
      * @return la liste des stations dont la distance est majorée par maxDistance et minorée par minDistance.
      */
     private static List<Station> getNearStations(Coordonnee coordonnee, double minDistance, double maxDistance) {
@@ -230,7 +235,7 @@ public class Calculator {
      * @param procheDepart les stations proches du départ.
      * @param procheArrivee les stations proches de l'arrivée.
      * @param maxTime le temps à ne pas dépasser pour être ajouté aux trajets sauvegardés.
-     * @param volonte
+     * @param volonte La distance que l'utilisateur accepte de parcourir, si jamais le chemin est plus rapide à pied qu'en transport.
      */
     private static void addTrajetsOptimaux(List<Section[]> trajetsSaved, List<Station> procheDepart, List<Station> procheArrivee, LocalTime maxTime, double volonte) {
         for(Station departCandidat: procheDepart) {
@@ -282,8 +287,8 @@ public class Calculator {
      *
      * @param stationDepart la station de départ.
      * @param stationArrivee la station d'arrivée.
-     * @param horaireDepart
-     * @param volonte
+     * @param horaireDepart horaire de départ.
+     * @param volonte La distance que l'utilisateur accepte de parcourir, si jamais le chemin est plus rapide à pied qu'en transport.
      * @return le plus court chemin sous forme d'une liste de section, ou null si aucun chemin n'a été trouvé.
      */
     private static List<Section> djikstra(Station stationDepart, Station stationArrivee, LocalTime horaireDepart, double volonte) {
@@ -326,14 +331,14 @@ public class Calculator {
     }
 
     /**
+     * Fonction annexe utilisée dans dijkstra, permettant d'examiner le trajet pour aller chez les voisins.
      *
-     *
-     * @param myMap
-     * @param currentStation
-     * @param nextStation
-     * @param section
-     * @param currentHoraire
-     * @param trace
+     * @param myMap la map qui contient toutes les stations avec leur poids.
+     * @param currentStation la station départ pour cette boucle de dijkstra.
+     * @param nextStation la station suivant pour cette boucle de dijkstra.
+     * @param section la section de la station courante, sur laquelle on se trouve.
+     * @param currentHoraire l'horaire actuelle.
+     * @param trace les bouts de trajets déjà tracés jusque-là.
      */
     private static void boucleDjikstra(Map<Station, LocalTime> myMap, Station currentStation, Station nextStation,
             Section section, LocalTime currentHoraire, Map<Station, List<Section>> trace) {

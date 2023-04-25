@@ -181,5 +181,4 @@ public class TestCalculator {
         assertNotNull(trajetsTrouves2);
         assertEquals(1, trajetsTrouves2.size());
     }
-
 }

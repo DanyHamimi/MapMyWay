@@ -1,7 +1,6 @@
 package fr.uparis.backapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fr.uparis.backapp.model.lieu.Station;
 
 import java.time.LocalTime;
