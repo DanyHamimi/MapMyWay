@@ -22,17 +22,17 @@ function fillCurrentHour() {
     time = hours + ":" + minutes;
     document.getElementById('hour').value = time;
 }
-
 $(document).ready(function () {
 
     $('#search-btn').click(function () {
         var origine = $('#origine').val();
         var destination = $('#destination').val();
         var timeValue = $('#hour').val();
+
         var data = {
             origin: origine,
             destination: destination,
-            time: timeValue
+            time: timeValue,
         };
 
 
