@@ -1,5 +1,6 @@
 const optionsBtn = document.getElementById('options');
 const searchBtn = document.getElementById('chercher');
+let lastClickedValue = 'origine';
 
 optionsBtn.addEventListener('click', (e) => {
     let parent = e.target.parentNode.parentNode;
@@ -145,6 +146,43 @@ var bounds = L.latLngBounds(
 );
 map.setMaxBounds(bounds);
 
+// Variable pour stocker la dernière valeur cliquée ("origine" ou "destination")
+
+// Fonction pour mettre à jour la variable "lastClickedValue" en fonction de l'ID du champ de saisie cliqué
+function updateLastClickedValue(inputId) {
+    lastClickedValue = (inputId === 'origine') ? 'origine' : 'destination';
+}
+
+// Ajouter un listener au champ de saisie "origine" pour mettre à jour "lastClickedValue"
+document.getElementById('origine').addEventListener('click', () => {
+    updateLastClickedValue('origine');
+});
+
+// Ajouter un listener au champ de saisie "destination" pour mettre à jour "lastClickedValue"
+document.getElementById('destination').addEventListener('click', () => {
+    updateLastClickedValue('destination');
+});
+
+// Fonction pour ajouter un marqueur sur la carte Leaflet lorsque l'utilisateur clique
+function onMapClick(e) {
+    // Ajouter un marqueur à l'emplacement cliqué en fonction de la dernière valeur cliquée ("origine" ou "destination")
+    if (lastClickedValue === 'origine') {
+        if (originMarker) {
+            originMarker.remove();
+        }
+        originMarker = L.marker(e.latlng).addTo(map);
+        originMarker.bindPopup(`<b>Origine</b>`).openPopup();
+        document.getElementById('origine').value = `${e.latlng.lat}, ${e.latlng.lng}`;
+    } else if (lastClickedValue === 'destination') {
+        if (destinationMarker) {
+            destinationMarker.remove();
+        }
+        destinationMarker = L.marker(e.latlng).addTo(map);
+        destinationMarker.bindPopup(`<b>Destination</b>`).openPopup();
+        document.getElementById('destination').value = `${e.latlng.lat}, ${e.latlng.lng}`;
+    }
+}
+map.on('click', onMapClick);
 L.tileLayer('tiles/{z}/{x}/{y}.png', {
     minZoom: 12,
     maxZoom: 16,
