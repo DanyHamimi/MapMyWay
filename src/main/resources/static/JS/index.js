@@ -34,33 +34,21 @@ const showValueButton = document.getElementById('search-btn');
 const errorSig = document.getElementById('errorSig');
 const div = document.getElementById('liste');
 
-showValueButton.addEventListener('click', function () {
-
-    var origine = document.getElementById('origine');
-    var destination = document.getElementById('destination');
-    var orig = origine.value;
-    var dest = destination.value;
-
-    if (orig != "" && dest != "") {
-        // console.log("origine : " + orig + " destination : " + dest);
-        if (div.style.display === 'none') {
-            div.style.display = 'block';
-        }
-
-    } else {
-        var afficher_message = document.getElementById('chercher')
-        var messageDiv = document.createElement("div");
-        messageDiv.setAttribute("id", "errorSig");
-        messageDiv.innerHTML = "Veuillez remplir les champs";
-        afficher_message.appendChild(messageDiv);
-
-        setTimeout(function () {
-            afficher_message.removeChild(messageDiv);
-        }, 3000);
-    }
-
-
-});
+// showValueButton.addEventListener('click', function () {
+//
+//     var origine = document.getElementById('origine');
+//     var destination = document.getElementById('destination');
+//     var orig = origine.value;
+//     var dest = destination.value;
+//
+//     if (orig != "" && dest != "") {
+//         // console.log("origine : " + orig + " destination : " + dest);
+//         if (div.style.display === 'none') {
+//             div.style.display = 'block';
+//         }
+//
+//     }
+// });
 
 
 let originMarker = null;
@@ -182,6 +170,7 @@ function onMapClick(e) {
         document.getElementById('destination').value = `${e.latlng.lat}, ${e.latlng.lng}`;
     }
 }
+
 map.on('click', onMapClick);
 L.tileLayer('tiles/{z}/{x}/{y}.png', {
     minZoom: 12,

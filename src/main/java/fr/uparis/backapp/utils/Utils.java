@@ -1,11 +1,18 @@
 package fr.uparis.backapp.utils;
 
 import fr.uparis.backapp.model.Coordonnee;
+import fr.uparis.backapp.model.Ligne;
+import fr.uparis.backapp.model.section.SectionTransport;
 import fr.uparis.backapp.utils.constants.Constants;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Classe outils, rassemblant les fonctions génériques du projet.
@@ -59,7 +66,7 @@ public class Utils {
     /**
      * Calcule la distance entre deux coordonnées, avec une précision au mètre.
      *
-     * @param origine coordonnée du point de départ.
+     * @param origine     coordonnée du point de départ.
      * @param destination coordonnée du point d'arrivée.
      * @return la distance entre origine et destination en km, avec une précision de 3 chiffres après la virgule.
      */
@@ -83,7 +90,7 @@ public class Utils {
      * @return la durée de marche moyenne pour parcourir une certaine distance.
      */
     public static Duration walkingDurationOf(double distance) {
-        long dureeEnSecondes = (long)(3600 * distance / Constants.AVERAGE_WALKING_SPEED);
+        long dureeEnSecondes = (long) (3600 * distance / Constants.AVERAGE_WALKING_SPEED);
         return Duration.ofSeconds(dureeEnSecondes);
     }
 
@@ -94,7 +101,29 @@ public class Utils {
      * @return la distance moyenne de marche, en km, avec une précision de 3 chiffres après la virgule.
      */
     public static double distanceOfWalkingDuration(Duration duration) {
-        if(duration.isNegative()) return 0;
-        return truncateDoubleTo3Precision(((double)duration.getSeconds()) / 3600 * Constants.AVERAGE_WALKING_SPEED);
+        if (duration.isNegative()) return 0;
+        return truncateDoubleTo3Precision(((double) duration.getSeconds()) / 3600 * Constants.AVERAGE_WALKING_SPEED);
+    }
+
+    /**
+     * Renvoie les horaires de passages des lignes de transport en commun.
+     *
+     * @param sectionsTransports la durée à convertir en distance moyenne de marche.
+     * @return les horaires de passages des lignes de transport en commun .
+     */
+    public static Map<String, List<LocalTime>> getSchedulesByLine(List<SectionTransport> sectionsTransports) {
+        Map<String, List<LocalTime>> horairesByLine = new HashMap<>();
+        for (SectionTransport sectionTransport : sectionsTransports) {
+            String lineName = getLineNameWithDirection(sectionTransport.getLigne());
+            List<LocalTime> horaires = horairesByLine.getOrDefault(lineName, new ArrayList<>());
+            horaires.addAll(sectionTransport.getHorairesDepart());
+            horaires.sort(LocalTime::compareTo);
+            horairesByLine.put(lineName, horaires);
+        }
+        return horairesByLine;
+    }
+
+    private static String getLineNameWithDirection(Ligne line) {
+        return line.getNomLigne().split(" ")[0] + ";" + line.getDirection().getNomLieu();
     }
 }
