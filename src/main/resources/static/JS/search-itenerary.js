@@ -288,8 +288,18 @@ function displayTraject(idTraject) {
 
 function isEmpty(field) {
     if (field === '' || field === null || field === undefined) {
-        alert("Veuillez remplir tous les champs");
-        return true;
+
+            var afficher_message = document.getElementById('chercher')
+            var messageDiv = document.createElement("div");
+            messageDiv.setAttribute("id", "errorSig");
+            messageDiv.innerHTML = "Veuillez remplir les champs";
+            afficher_message.appendChild(messageDiv);
+
+            setTimeout(function () {
+                afficher_message.removeChild(messageDiv);
+            }, 3000);
+
+            return true;
     }
     return false;
 }
