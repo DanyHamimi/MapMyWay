@@ -18,9 +18,7 @@
 
 <div style="display: flex; flexDirection: row; width: 100vw; height: 100vh;">
 
-    <div style=" margin-left: 2% ; width: 33vw !important; height: 68vh;
-
-    ">
+    <div style=" margin-left: 2% ; width: 33vw !important; height: 68vh;">
         <div class="form-structor">
             <div class="chercher ">
                 <h2 class="form-title" id="chercher">Chercher un trajet</h2>
@@ -68,36 +66,31 @@
         </div>
 
         <div id="liste" class="trajets" style="display: none;">
+            <button onclick="AfficheDetails(1)" class="resultat"></button>
+            <button onclick="AfficheDetails(2)" class="resultat"></button>
+            <button onclick="AfficheDetails(3)" class="resultat"></button>
+            <button onclick="AfficheDetails(4)" class="resultat"></button>
+            <button onclick="AfficheDetails(5)" class="resultat"></button>
+        </div>
+        <button id="rechercher-btn">Voir les horaires des trains</button>
 
-            <button onclick="AfficheDetails(1)" class="resultat">
-
-            </button>
-            <button onclick="AfficheDetails(2)" class="resultat">
-
-            </button>
-            <button onclick="AfficheDetails(3)" class="resultat">
-
-            </button>
-            <button onclick="AfficheDetails(4)" class="resultat">
-
-            </button>
-            <button onclick="AfficheDetails(5)" class="resultat">
-
-            </button>
-            </button>
+        <div id="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; background-color: white; border: 1px solid black; border-radius: 5px; padding: 10px; box-sizing: border-box;">
+            <h3>Rechercher des horaires</h3>
+            <input type="text" id="rechercher-input-horaires">
+            <button id="rechercher-submit">Rechercher</button>
+            <button id="rechercher-annuler">Annuler</button>
+            <div id="modal-content" style="max-height: calc(100% - 100px); overflow-y: auto; margin-top: 10px;">
+            </div>
         </div>
 
-
     </div>
 
-    <div class="map" id="map" style=" width: 60vw; height: 99vh; margin: 5px 10px 5px 60px; border-radius: 5%;">
-
-
-    </div>
-
-
+    <div class="map" id="map" style=" width: 60vw; height: 99vh; margin: 5px 10px 5px 60px; border-radius: 5%; z-index: 1"></div>
 </div>
 <script src="JS/search-itenerary.js"></script>
 <script src="JS/index.js"></script>
+<script>
+
+</script>
 </body>
 </html>
