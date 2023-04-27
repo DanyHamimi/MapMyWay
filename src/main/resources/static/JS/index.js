@@ -192,7 +192,6 @@ submit.onclick = function() {
             station: document.getElementById('rechercher-input-horaires').value,
         },
     }).done(function (data) {
-        console.log(data);
         let keys = Object.keys(data);
 
         // Clear existing radio buttons and list items
@@ -253,7 +252,6 @@ submit.onclick = function() {
 }
 btn.onclick = function() {
     modal.style.display = "block";
-    console.log("test");
 }
 
 span.onclick = function() {
