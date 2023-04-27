@@ -56,7 +56,7 @@ let destinationMarker = null;
 
 
 $(function () {
-    $("#origine, #destination").autocomplete({
+    $("#origine, #destination, #rechercher-input-horaires").autocomplete({
         source: function (request, response) {
             $.ajax({
                 url: "/autocomplete",
@@ -178,42 +178,90 @@ L.tileLayer('tiles/{z}/{x}/{y}.png', {
     attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+// Code JavaScript pour gérer l'ouverture et la fermeture de la fenêtre modale
+const modal = document.getElementById('modal');
+const btn = document.getElementById('rechercher-btn');
+const span = document.getElementById('rechercher-annuler');
+const submit = document.getElementById('rechercher-submit');
 
-// Créer une fonction pour ajouter des marqueurs et des lignes rouges
-function addStationMarkersAndLinesByList(trajets) {
-    trajets.forEach(trajet => {
-        let lineColor;
-        switch (trajet[0]) {
-            case "1":
-                const div = document.getElementsByClassName("ligne1");
+submit.onclick = function() {
+    $.ajax({
+        url: "/schedules",
+        dataType: "json",
+        data: {
+            station: document.getElementById('rechercher-input-horaires').value,
+        },
+    }).done(function (data) {
+        console.log(data);
+        let keys = Object.keys(data);
 
-                const style = window.getComputedStyle(div[0]);
-                const backgroundColor = style.backgroundColor;
-                lineColor = backgroundColor;
-                break;
-            case "2":
-                lineColor = "blue";
-                break;
-            // Ajouter d'autres couleurs pour les autres numéros de ligne
-            default:
-                lineColor = "black";
+        // Clear existing dropdown and list items
+        $("#modal-content").html('');
+
+        // Create a dropdown select element
+        let dropdown = $("<select>").attr("id", "station-select");
+        $("#modal-content").append(dropdown);
+
+        for(let i = 0; i < keys.length; i++) {
+            let station = keys[i];
+            let schedules = data[station];
+
+            // Create an option for each station
+            let option = $("<option>").attr({
+                value: station
+            }).text("Ligne " + station.split(";")[0] + " direction " + station.split(";")[1]);
+
+            // Append the option to the dropdown
+            dropdown.append(option);
         }
 
-        trajet[1].forEach(sectionTransport => {
-            let lineCoordinates = [];
-            for (let i = 0; i < sectionTransport.length; i++) {
-                let station = sectionTransport[i];
+        // Event listener for the dropdown change
+        dropdown.on("change", function() {
+            let selectedStation = $(this).val();
+            let schedules = data[selectedStation];
 
-                let marker = L.marker([station.latitude, station.longitude]).addTo(map);
-                marker.bindPopup(`<b>${station.nom}</b>`).openPopup();
-                lineCoordinates.push([station.latitude, station.longitude]);
+            // Clear existing list items
+            $("#modal-content ul").html('');
+
+            // Create an unordered list for schedules
+            let ul = $("<ul>");
+
+            let imageUrl = "../css/image/M" + selectedStation.split(";")[0] + ".png";
+            for (let j = 0; j < schedules.length; j++) {
+                let schedule = schedules[j];
+                let li = $("<li>").html(schedule).css({
+                    "list-style-type": "none",
+                    "background-image": "url(" + imageUrl + ")",
+                    "background-size": "16px 16px",
+                    "padding-left": "25px",
+                    "background-repeat": "no-repeat",
+                    "background-position": "left center"
+                });
+                ul.append(li);
             }
 
-            // Ajouter une ligne de la couleur spécifiée reliant les marqueurs
-            let coloredLine = L.polyline(lineCoordinates, {color: lineColor}).addTo(map);
+            // Append the unordered list to the modal content
+            $("#modal-content").append(ul);
         });
     });
 }
+
+btn.onclick = function() {
+    modal.style.display = "block";
+    console.log("test");
+}
+
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        //modal.style.display = "none";
+    }
+}
+// Créer une fonction pour ajouter des marqueurs et des lignes rouges
+
 
 // Appeler la fonction pour ajouter des marqueurs et des lignes aux trajets
 // addStationMarkersAndLinesByList(listeTrajet);
