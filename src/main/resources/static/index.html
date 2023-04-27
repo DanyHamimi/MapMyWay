@@ -26,9 +26,12 @@
                 <div class="form-holder">
                     <input type="text" class="input" placeholder="De" id="origine" required/>
                     <input type="text" class="input" placeholder="A" id="destination" required/>
-                    <div class="label-horaire">
-                        Horaire de depart
-                        <input type="time" id = 'hour' class="horaire" required/>
+                    <div class="aligner">
+                        <div class="label-horaire">
+                            Horaire de depart
+                            <input type="time" id = 'hour' class="horaire" required/>
+                        </div>
+                        <button class="voirHoraire" id="rechercher-btn">Voir les horaires des trains</button>
                     </div>
 
 
@@ -65,22 +68,25 @@
             </div>
         </div>
 
-        <div id="liste" class="trajets">
+        <div id="liste" class="trajets" style="display: none">
             <button onclick="AfficheDetails(1)" class="resultat" style="display: none;" id="det1"></button>
             <button onclick="AfficheDetails(2)" class="resultat" style="display: none;" id="det2"></button>
             <button onclick="AfficheDetails(3)" class="resultat" style="display: none;" id="det3"></button>
             <button onclick="AfficheDetails(4)" class="resultat" style="display: none;" id="det4"></button>
             <button onclick="AfficheDetails(5)" class="resultat" style="display: none;" id="det5"></button>
         </div>
-        <button id="rechercher-btn">Voir les horaires des trains</button>
 
         <div id="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; background-color: white; border: 1px solid black; border-radius: 5px; padding: 10px; box-sizing: border-box;">
             <h3>Rechercher des horaires</h3>
             <input type="text" id="rechercher-input-horaires">
             <button id="rechercher-submit">Rechercher</button>
-            <button id="rechercher-annuler">Annuler</button>
-            <div id="modal-content" style="max-height: calc(100% - 100px); overflow-y: auto; margin-top: 10px;">
+            <button id="rechercher-annuler">Fermer</button>
+            <div class="aligner">
+                <div id="vers" ></div>
+                <div id="modal-content" style=" border-radius: 10px; padding: 5px; width: 88%; display: flex; max-height: calc(100% - 100px); overflow-y: auto; margin-top: 10px;">
+                </div>
             </div>
+            <div id="ul_lignes"></div>
         </div>
 
     </div>

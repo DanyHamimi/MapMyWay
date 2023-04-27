@@ -34,6 +34,9 @@ $(document).ready(function () {
             console.log("origine ou destination vide")
             return;
         }
+
+        document.getElementById('liste').style.display="block"
+
         var data = {
             origin: origine,
             destination: destination,
@@ -58,7 +61,7 @@ $(document).ready(function () {
                     buildTraject(index + 1);
                     displayTraject(index + 1);
                 }
-                displayTrajects();
+
                 pingLocalizations(1);
             },
             error: function (xhr, status, error) {
@@ -288,8 +291,18 @@ function displayTraject(idTraject) {
 
 function isEmpty(field) {
     if (field === '' || field === null || field === undefined) {
-        alert("Veuillez remplir tous les champs");
-        return true;
+
+            var afficher_message = document.getElementById('chercher')
+            var messageDiv = document.createElement("div");
+            messageDiv.setAttribute("id", "errorSig");
+            messageDiv.innerHTML = "Veuillez remplir les champs";
+            afficher_message.appendChild(messageDiv);
+
+            setTimeout(function () {
+                afficher_message.removeChild(messageDiv);
+            }, 3000);
+
+            return true;
     }
     return false;
 }
