@@ -195,57 +195,62 @@ submit.onclick = function() {
         console.log(data);
         let keys = Object.keys(data);
 
-        // Clear existing dropdown and list items
+        // Clear existing radio buttons and list items
         $("#modal-content").html('');
-
-        // Create a dropdown select element
-        let dropdown = $("<select>").attr("id", "station-select");
-        $("#modal-content").append(dropdown);
 
         for(let i = 0; i < keys.length; i++) {
             let station = keys[i];
             let schedules = data[station];
 
-            // Create an option for each station
-            let option = $("<option>").attr({
+            // Create a radio button for each station
+            let radioButton = $("<input>").attr({
+                type: "radio",
+                name: "station",
+                id: "station-" + i,
                 value: station
-            }).text("Ligne " + station.split(";")[0] + " direction " + station.split(";")[1]);
+            });
 
-            // Append the option to the dropdown
-            dropdown.append(option);
+            // Add a label for the radio button
+            let label = $("<label>").attr("for", "station-" + i).text(station.split(";")[1]);
+            //set the radio button image
+            let imageUrl = "../css/image/M"+station.split(";")[0]+".png";
+            label.css({
+                "background-image": "url(" + imageUrl + ")",
+                "background-size": "16px 16px", // Modifiez ces valeurs pour ajuster la taille de l'image
+                "padding-left": "25px", // Ajustez la valeur pour positionner correctement le texte
+                "background-repeat": "no-repeat"
+            });
+            // Append the radio button and label to the modal content
+            $("#modal-content").append(radioButton, label);
+
+            // Event listener for the radio button click
+            radioButton.on("click", function() {
+                // Clear existing list items
+                $("#modal-content ul").html('');
+
+                // Create an unordered list for schedules
+                let ul = $("<ul>");
+
+                let imageUrl = "../css/image/M"+station.split(";")[0]+".png";
+                for (let j = 0; j < schedules.length; j++) {
+                    let schedule = schedules[j];
+                    let li = $("<li>").html(schedule).css({
+                        "list-style-type": "none",
+                        "background-image": "url(" + imageUrl + ")",
+                        "background-size": "16px 16px", // Modifiez ces valeurs pour ajuster la taille de l'image
+                        "padding-left": "25px", // Ajustez la valeur pour positionner correctement le texte
+                        "background-repeat": "no-repeat",
+                        "background-position": "left center"
+                    });
+                    ul.append(li);
+                }
+
+                // Append the unordered list to the modal content
+                $("#modal-content").append(ul);
+            });
         }
-
-        // Event listener for the dropdown change
-        dropdown.on("change", function() {
-            let selectedStation = $(this).val();
-            let schedules = data[selectedStation];
-
-            // Clear existing list items
-            $("#modal-content ul").html('');
-
-            // Create an unordered list for schedules
-            let ul = $("<ul>");
-
-            let imageUrl = "../css/image/M" + selectedStation.split(";")[0] + ".png";
-            for (let j = 0; j < schedules.length; j++) {
-                let schedule = schedules[j];
-                let li = $("<li>").html(schedule).css({
-                    "list-style-type": "none",
-                    "background-image": "url(" + imageUrl + ")",
-                    "background-size": "16px 16px",
-                    "padding-left": "25px",
-                    "background-repeat": "no-repeat",
-                    "background-position": "left center"
-                });
-                ul.append(li);
-            }
-
-            // Append the unordered list to the modal content
-            $("#modal-content").append(ul);
-        });
     });
 }
-
 btn.onclick = function() {
     modal.style.display = "block";
     console.log("test");
