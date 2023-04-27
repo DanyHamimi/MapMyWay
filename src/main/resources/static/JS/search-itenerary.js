@@ -50,8 +50,13 @@ $(document).ready(function () {
                 // Traitement de la réponse du backend en cas de succès
                 console.log(response)
                 itenaries = response
+                //hide all det from previous search
+                for(var i=1; i<=5; i++){
+                    document.getElementById("det" + i).style.display = "none";
+                }
                 for (let index = 0; index < itenaries.length; index++) {
                     buildTraject(index + 1);
+                    displayTraject(index + 1);
                 }
                 displayTrajects();
                 pingLocalizations(1);
@@ -276,9 +281,9 @@ function AfficheDetails(num) {
     }
 }
 
-function displayTrajects() {
-    let list = document.getElementById('liste');
-    list.style.display = 'block';
+function displayTraject(idTraject) {
+    let name = "det" + idTraject.toString();
+    document.getElementById(name).style.display = "block";
 }
 
 function isEmpty(field) {
