@@ -196,6 +196,7 @@ submit.onclick = function() {
 
         // Clear existing radio buttons and list items
         $("#modal-content").html('');
+        $('#vers').html("<div class='vers'>Vers : </div>")
 
         for(let i = 0; i < keys.length; i++) {
             let station = keys[i];
@@ -217,19 +218,24 @@ submit.onclick = function() {
                 "background-image": "url(" + imageUrl + ")",
                 "background-size": "16px 16px", // Modifiez ces valeurs pour ajuster la taille de l'image
                 "padding-left": "25px", // Ajustez la valeur pour positionner correctement le texte
-                "background-repeat": "no-repeat"
+                "background-repeat": "no-repeat",
+                "min-width": "max-content"
             });
             // Append the radio button and label to the modal content
+            //$("#modal-content").html().css({'border' : '1px solid rgb(145 134 134 / 70%)'})
+            $("#modal-content").css("border","1px solid rgb(145 134 134 / 70%)")
+
             $("#modal-content").append(radioButton, label);
 
             // Event listener for the radio button click
             radioButton.on("click", function() {
                 // Clear existing list items
-                $("#modal-content ul").html('');
+                $("#modal ul").html('');
+
 
                 // Create an unordered list for schedules
-                let ul = $("<ul>");
-
+                //let ul = $("<ul class='ul_lignes'>");
+                $('#ul_lignes').html('')
                 let imageUrl = "../css/image/M"+station.split(";")[0]+".png";
                 for (let j = 0; j < schedules.length; j++) {
                     let schedule = schedules[j];
@@ -241,11 +247,11 @@ submit.onclick = function() {
                         "background-repeat": "no-repeat",
                         "background-position": "left center"
                     });
-                    ul.append(li);
+                    $('#ul_lignes').append(li);
                 }
 
                 // Append the unordered list to the modal content
-                $("#modal-content").append(ul);
+                //$("#modal").append(ul)
             });
         }
     });
