@@ -22,6 +22,7 @@ function fillCurrentHour() {
     time = hours + ":" + minutes;
     document.getElementById('hour').value = time;
 }
+
 $(document).ready(function () {
 
     $('#search-btn').click(function () {
@@ -29,10 +30,14 @@ $(document).ready(function () {
         var destination = $('#destination').val();
         var timeValue = $('#hour').val();
 
+        if (isEmpty(origine) || isEmpty(destination) || isEmpty(timeValue)) {
+            console.log("origine ou destination vide")
+            return;
+        }
         var data = {
             origin: origine,
             destination: destination,
-            time: timeValue,
+            time: timeValue
         };
 
 
@@ -48,6 +53,7 @@ $(document).ready(function () {
                 for (let index = 0; index < itenaries.length; index++) {
                     buildTraject(index + 1);
                 }
+                displayTrajects();
                 pingLocalizations(1);
             },
             error: function (xhr, status, error) {
@@ -149,8 +155,9 @@ $(document).ready(function () {
         var itenerary = itenaries[index - 1];
         var horaire_depart = parseISO8601Time(itenerary[0].depart.horaireDePassage);
         var horaire_arrivee = parseISO8601Time(itenerary[itenerary.length - 1].arrivee.horaireDePassage);
-        var traject_duration = new Date(Math.abs(horaire_arrivee - horaire_depart));
-        return traject_duration.getUTCHours() != 0 ? traject_duration.getUTCHours() + " h " + traject_duration.getUTCMinutes() + ' min' : traject_duration.getUTCMinutes() + ' min';
+        // si l'horaire d'arrivée est inférieur à l'horaire de départ, on ajoute 1 jour à l'horaire d'arrivée (on arrive le lendemain)
+        var traject_duration = horaire_arrivee > horaire_depart ? new Date(Math.abs(horaire_arrivee - horaire_depart)) : new Date(Math.abs(horaire_arrivee.setDate(horaire_arrivee.getDate() + 1) - horaire_depart));
+        return traject_duration.getUTCHours() !== 0 ? traject_duration.getUTCHours() + " h " + traject_duration.getUTCMinutes() + ' min' : traject_duration.getUTCMinutes() + ' min';
     }
 
     let markersAndLinesGroup = L.layerGroup().addTo(map);
@@ -267,4 +274,17 @@ function AfficheDetails(num) {
     } else {
         message.style.display = "none"; // Hide the message
     }
+}
+
+function displayTrajects() {
+    let list = document.getElementById('liste');
+    list.style.display = 'block';
+}
+
+function isEmpty(field) {
+    if (field === '' || field === null || field === undefined) {
+        alert("Veuillez remplir tous les champs");
+        return true;
+    }
+    return false;
 }
