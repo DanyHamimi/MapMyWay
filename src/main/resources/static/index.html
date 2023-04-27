@@ -26,9 +26,12 @@
                 <div class="form-holder">
                     <input type="text" class="input" placeholder="De" id="origine" required/>
                     <input type="text" class="input" placeholder="A" id="destination" required/>
-                    <div class="label-horaire">
-                        Horaire de depart
-                        <input type="time" id = 'hour' class="horaire" required/>
+                    <div class="aligner">
+                        <div class="label-horaire">
+                            Horaire de depart
+                            <input type="time" id = 'hour' class="horaire" required/>
+                        </div>
+                        <button class="voirHoraire" id="rechercher-btn">Voir les horaires des trains</button>
                     </div>
 
 
@@ -72,7 +75,6 @@
             <button onclick="AfficheDetails(4)" class="resultat" style="display: none;" id="det4"></button>
             <button onclick="AfficheDetails(5)" class="resultat" style="display: none;" id="det5"></button>
         </div>
-        <button id="rechercher-btn">Voir les horaires des trains</button>
 
         <div id="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; background-color: white; border: 1px solid black; border-radius: 5px; padding: 10px; box-sizing: border-box;">
             <h3>Rechercher des horaires</h3>

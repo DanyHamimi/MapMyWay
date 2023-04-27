@@ -22,6 +22,14 @@
   height: 400px;
 }
 
+.aligner{
+  justify-content: space-between;
+  display: flex;
+}
+.voirHoraire{
+  width: 100%;
+}
+
 #modal .modal-content {
   width: 100%;
   height: 100%;
