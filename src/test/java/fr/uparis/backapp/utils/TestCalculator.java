@@ -5,11 +5,13 @@ import fr.uparis.backapp.model.Reseau;
 import fr.uparis.backapp.model.lieu.Station;
 import fr.uparis.backapp.model.section.Section;
 import fr.uparis.backapp.utils.constants.Constants;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,6 +20,21 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TestCalculator {
     Reseau reseau = Reseau.getInstance();
+
+    /**
+     * S'assure qu'il n'y a pas de concurrence pour les différents tests.
+     */
+    @BeforeEach
+    public void waitFinish() {
+        while(Calculator.getIsCalculating()) {
+            try {
+                Thread.sleep(1000);
+            }
+            catch(InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     /**
      * Teste le calcul d'itinéraire à pied.
@@ -51,7 +68,7 @@ public class TestCalculator {
      * Teste l'égalité des trajets en mode sportif.
      */
     @Test
-    public void testsSameSportifItineraire(){
+    public void testsSameSportifItineraire() {
         LocalTime horaireDepart = LocalTime.of(12, 28, 59, 0);
         Coordonnee depart = reseau.getStation("Nation").getLocalisation();
         Coordonnee arrivee = reseau.getStation("Boucicaut").getLocalisation();
@@ -159,7 +176,7 @@ public class TestCalculator {
      * Teste des trajets qui ne renvoient pas d'itinéraire avec dijkstra à cause de l'horaire des trains.
      */
     @Test
-    public void testsNoItineraire(){
+    public void testsNoItineraire() {
         LocalTime horaireDepart = LocalTime.of(23, 58, 59, 0);
         Coordonnee depart = reseau.getStation("Lourmel").getLocalisation();
         Coordonnee arrivee = reseau.getStation("Boucicaut").getLocalisation();
@@ -180,5 +197,18 @@ public class TestCalculator {
         List<Section[]> trajetsTrouves2 = Calculator.itineraireFactory(depart, arrivee, horaireDepart);
         assertNotNull(trajetsTrouves2);
         assertEquals(1, trajetsTrouves2.size());
+    }
+
+    /**
+     * Teste la concurrence de la recherche d'itinéraire.
+     */
+    @Test
+    public void testsConsecutiveCall() {
+        LocalTime horaireDepart = LocalTime.of(12, 28, 59, 0);
+        Coordonnee depart = reseau.getStation("Nation").getLocalisation();
+        Coordonnee arrivee = reseau.getStation("Boucicaut").getLocalisation();
+
+        new Thread(() -> assertNotNull(Calculator.itineraireFactory(depart, arrivee, horaireDepart))).start();
+        new Thread(() -> assertNull(Calculator.itineraireFactory(depart, arrivee, horaireDepart))).start();
     }
 }

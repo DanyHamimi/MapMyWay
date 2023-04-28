@@ -17,6 +17,8 @@ import static fr.uparis.backapp.utils.Utils.*;
  * Classe static pour calculer des itinéraires en fonction de différents paramètres.
  */
 public class Calculator {
+    private static boolean isCalculating = false;
+
     private static boolean A_PIED = false;
 
     private static boolean MARCHER_AU_MOINS_DISTANCE = false;
@@ -32,6 +34,10 @@ public class Calculator {
     private static LocalTime horaireDepart = null;
 
     private static HashMap<Station, List<Station>> coupleStations = null;
+
+    public static boolean getIsCalculating() {
+        return isCalculating;
+    }
 
     /**
      * Change l'état du boolean pour avoir des trajets à pied.
@@ -80,37 +86,42 @@ public class Calculator {
      * @return les 5 trajets les plus rapides, sous forme de liste de Sections.
      */
     public static List<Section[]> itineraireFactory(Coordonnee depart, Coordonnee arrivee, LocalTime horaireDepart) {
-        Calculator.depart = depart;
-        Calculator.arrivee = arrivee;
-        Calculator.horaireDepart = horaireDepart;
-
-        if(A_PIED) {
-            changeAPied();
-            List<Section[]> res = new LinkedList<>();
-            res.add(new Section[]{walkingItineraire(depart, arrivee, horaireDepart)});
-            return res;
-        }
-        else {
+        if(!isCalculating) {
+            isCalculating = true;
+            Calculator.depart = depart;
+            Calculator.arrivee = arrivee;
+            Calculator.horaireDepart = horaireDepart;
             List<Section[]> res;
-            coupleStations = new HashMap<>();
 
-            if(MARCHER_AU_MOINS_DISTANCE) {
-                res = sportifItineraire(minDistance);
-                changeMarcherAuMoinsDistance(0.0);
+            if(A_PIED) {
+                res = new LinkedList<>();
+                res.add(new Section[]{walkingItineraire(depart, arrivee, horaireDepart)});
+                changeAPied();
             }
-            else if(MARCHER_AU_MOINS_TEMPS) {
-                res = sportifItineraire(minDistance);
-                changeMarcherAuMoinsTemps(null);
-            }
-            else if(MARCHER_AU_PLUS) {
-                res = lazyItineraire(volonte);
-                changeMarcherAuPlus(0.0);
-            }
-            else res = lazyItineraire(Constants.DEFAULT_MIN_DISTANCE);
+            else {
+                coupleStations = new HashMap<>();
 
-            coupleStations = null;
+                if(MARCHER_AU_MOINS_DISTANCE) {
+                    res = sportifItineraire(minDistance);
+                    changeMarcherAuMoinsDistance(0.0);
+                }
+                else if(MARCHER_AU_MOINS_TEMPS) {
+                    res = sportifItineraire(minDistance);
+                    changeMarcherAuMoinsTemps(null);
+                }
+                else if(MARCHER_AU_PLUS) {
+                    res = lazyItineraire(volonte);
+                    changeMarcherAuPlus(0.0);
+                }
+                else res = lazyItineraire(Constants.DEFAULT_MIN_DISTANCE);
+
+                coupleStations = null;
+            }
+
+            isCalculating = false;
             return res;
         }
+        return null;
     }
 
     /**
@@ -296,8 +307,8 @@ public class Calculator {
         Map<Station, LocalTime> myMap = new HashMap<>();
         for(Station station: Reseau.getInstance().getStations())
             myMap.put(station, null); //null représente ici un temps infini
-        myMap.put(stationDepart, horaireDepart);        
-        
+        myMap.put(stationDepart, horaireDepart);
+
         //Pour chaque Station, la meilleure liste de section pour y accéder
         Map<Station, List<Section>> trace = new Hashtable<>();
         trace.put(stationDepart, new LinkedList<>());
@@ -341,7 +352,7 @@ public class Calculator {
      * @param trace les bouts de trajets déjà tracés jusque-là.
      */
     private static void boucleDjikstra(Map<Station, LocalTime> myMap, Station currentStation, Station nextStation,
-            Section section, LocalTime currentHoraire, Map<Station, List<Section>> trace) {
+                                       Section section, LocalTime currentHoraire, Map<Station, List<Section>> trace) {
         List<Section> currentSectionTrace = trace.getOrDefault(currentStation, new LinkedList<>());
 
         //On ne veut que ceux qui sont encore dans myMap, et que le prochain train
