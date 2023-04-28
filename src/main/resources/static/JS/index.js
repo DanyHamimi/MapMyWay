@@ -248,6 +248,7 @@ window.onclick = function(event) {
     }
 }
 
+// Pour déplacer l'affichage d'horaires
 $(document).ready(function() {
     var isDragging = false;
     var modal = $('#modal');
@@ -275,5 +276,27 @@ $(document).ready(function() {
     });
 });
 
+const origine = document.getElementById('origine');
+const destination = document.getElementById('destination');
+const switchBtn = document.getElementById('switch_btn');
+
+switchBtn.addEventListener('click', function() {
+    if(origine.value != "" && destination.value != ""){
+        const temp = origine.value;
+        origine.value = destination.value;
+        destination.value = temp;
+    }else{
+        var afficher_message = document.getElementById('chercher')
+        var messageDiv = document.createElement("div");
+        messageDiv.setAttribute("id", "errorSig");
+        messageDiv.innerHTML = "Veuillez remplir les champs";
+        afficher_message.appendChild(messageDiv);
+
+        setTimeout(function () {
+            afficher_message.removeChild(messageDiv);
+        }, 3000);
+    }
+
+});
 
 
