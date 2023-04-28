@@ -300,7 +300,7 @@ function isEmpty(field) {
 
             setTimeout(function () {
                 afficher_message.removeChild(messageDiv);
-            }, 10000);
+            }, 3000);
 
             return true;
     }

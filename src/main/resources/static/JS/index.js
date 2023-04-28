@@ -186,7 +186,7 @@ submit.onclick = function() {
             });
 
             // Add a label for the radio button
-            let label = $("<label>").attr("for", "station-" + i).text(station.split(";")[1]);
+            let label = $("<label class='label_station'>").attr("for", "station-" + i).text(station.split(";")[1]);
             //set the radio button image
             let imageUrl = "../css/image/M"+station.split(";")[0]+".png";
             label.css({
@@ -195,10 +195,11 @@ submit.onclick = function() {
                 "background-size": "16px 16px", // Modifiez ces valeurs pour ajuster la taille de l'image
                 "padding-left": "25px", // Ajustez la valeur pour positionner correctement le texte
                 "background-repeat": "no-repeat",
-                "min-width": "max-content"
+                "min-width": "max-content",
+                "color": "rgba(255, 255, 255, 0.7)"
             });
             // Append the radio button and label to the modal content
-            $("#modal-content").css({"border": "1px solid rgb(145 134 134 / 70%)", "background-color":"rgb(145 134 134 / 70%)"})
+            $("#modal-content").css({"border": "1px solid rgb(145 134 134 / 70%)", "background-color":" rgba(0, 0, 0, 0.4)"})
 
 
             $("#modal-content").append(radioButton, label);
@@ -212,6 +213,7 @@ submit.onclick = function() {
                 // Create an unordered list for schedules
                 //let ul = $("<ul class='ul_lignes'>");
                 $('#ul_lignes').html('')
+                $('#ul_lignes').css({"border": "1px solid rgb(145 134 134 / 70%) "})
                 let imageUrl = "../css/image/M"+station.split(";")[0]+".png";
                 for (let j = 0; j < schedules.length; j++) {
                     let schedule = schedules[j];

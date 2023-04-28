@@ -49,13 +49,38 @@
   font-family: 'Lobster-Regular';
   font-size: 150%;
 }
-.lobster-min{
+
+.lobster-min-recherche{
+  cursor: auto !important;
+  padding-left: 2%;
+}
+
+.lobster-min, .lobster-min-recherche{
+  background-color: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.7);
+  border: 0;
+  border-radius: 15px;
+  font-size: 100%;
+  font-weight: normal;
+  cursor: pointer;
+  opacity: 1;
   font-family: 'Lobster-Regular';
-  font-size: 100% !important;
+  visibility: visible;
+  -webkit-transition: all 0.3s ease;
+}
+
+.lobster-min:hover, .label_station:hover{
+  transition: all 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.label_station:hover{
+  border-radius: 15%;
+  padding-left: 8% !important;
 }
 
 #modal {
-  z-index: 9999;
+  z-index: 100;
   width: 600px;
   height: 400px;
 }
@@ -67,11 +92,12 @@
 
 #ul_lignes{
   overflow-y: scroll;
-  max-height: calc(100% - 40%);
-  margin-top: 3%;
-  margin-left: 5%;
+  max-height: calc(100% - 45%);
   font-family: 'Lobster-Regular';
   font-size: 90%;
+  margin: 5%;
+  border-radius: 5%;
+  padding-left: 5%;
 }
 
 .aligner{
@@ -105,6 +131,7 @@
 .station{
   margin-bottom: 2%;
   padding-left: 2%;
+  font-family: 'Lobster-Regular';
 }
 
 .groupe{  border-top-left-radius: 2%; border-bottom-left-radius: 2%; margin-left: 35%}
@@ -142,7 +169,7 @@
 }
 
 .detailsTrajet{
-  margin-top: 8%;
+  margin-top: 5%;
   text-align: left;
 }
 
@@ -177,6 +204,8 @@
 
 .dureeTrajet{
   color: black !important;
+  font-family: 'Lobster-Regular';
+  margin-left: 2%;
 }
 .marcher{
   width: 20px !important;
