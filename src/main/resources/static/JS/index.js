@@ -26,31 +26,6 @@ searchBtn.addEventListener('click', (e) => {
     });
 });
 
-// ... code d'initialisation de la carte et ajout du marqueur ...
-
-
-// Gerer erreur saisie
-const showValueButton = document.getElementById('search-btn');
-const errorSig = document.getElementById('errorSig');
-const div = document.getElementById('liste');
-
-// showValueButton.addEventListener('click', function () {
-//
-//     var origine = document.getElementById('origine');
-//     var destination = document.getElementById('destination');
-//     var orig = origine.value;
-//     var dest = destination.value;
-//
-//     if (orig != "" && dest != "") {
-//         // console.log("origine : " + orig + " destination : " + dest);
-//         if (div.style.display === 'none') {
-//             div.style.display = 'block';
-//         }
-//
-//     }
-// });
-
-
 let originMarker = null;
 let destinationMarker = null;
 
@@ -216,14 +191,15 @@ submit.onclick = function() {
             let imageUrl = "../css/image/M"+station.split(";")[0]+".png";
             label.css({
                 "background-image": "url(" + imageUrl + ")",
+                "background-position-y": "bottom",
                 "background-size": "16px 16px", // Modifiez ces valeurs pour ajuster la taille de l'image
                 "padding-left": "25px", // Ajustez la valeur pour positionner correctement le texte
                 "background-repeat": "no-repeat",
                 "min-width": "max-content"
             });
             // Append the radio button and label to the modal content
-            //$("#modal-content").html().css({'border' : '1px solid rgb(145 134 134 / 70%)'})
-            $("#modal-content").css("border","1px solid rgb(145 134 134 / 70%)")
+            $("#modal-content").css({"border": "1px solid rgb(145 134 134 / 70%)", "background-color":"rgb(145 134 134 / 70%)"})
+
 
             $("#modal-content").append(radioButton, label);
 
@@ -269,8 +245,33 @@ window.onclick = function(event) {
         //modal.style.display = "none";
     }
 }
-// Créer une fonction pour ajouter des marqueurs et des lignes rouges
+
+$(document).ready(function() {
+    var isDragging = false;
+    var modal = $('#modal');
+    var offset = {x:0, y:0};
+
+    modal.mousedown(function(e) {
+        isDragging = true;
+        offset.x = e.pageX - modal.offset().left;
+        offset.y = e.pageY - modal.offset().top;
+        modal.css('cursor', 'move');
+    });
+
+    $(document).mouseup(function() {
+        isDragging = false;
+        modal.css('cursor', 'default');
+    });
+
+    $(document).mousemove(function(e) {
+        if (isDragging) {
+            modal.offset({
+                top: e.pageY - offset.y,
+                left: e.pageX - offset.x
+            });
+        }
+    });
+});
 
 
-// Appeler la fonction pour ajouter des marqueurs et des lignes aux trajets
-// addStationMarkersAndLinesByList(listeTrajet);
+

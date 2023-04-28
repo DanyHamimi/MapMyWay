@@ -16,8 +16,46 @@
   --ligne13: #98D4E2;
   --ligne14: #662483;
 }
+
+@font-face {
+  font-family: "Knewave-Regular";
+  src: url("fonts/Knewave-Regular.ttf");
+}
+@font-face {
+  font-family: "Lobster-Regular";
+  src: url("fonts/Lobster-Regular.ttf");
+}
+@font-face {
+  font-family: "FrederickatheGreat-Regular";
+  src: url("fonts/FrederickatheGreat-Regular.ttf");
+}
+
+#modal-content{
+  border-radius: 10px;
+  padding: 5px;
+  width: 88%;
+  display: flex;
+  max-height: calc(100% - 100px);
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.form-title{
+  font-family: "Knewave-Regular";
+  font-size: 170% !important;
+}
+
+.lobster{
+  font-family: 'Lobster-Regular';
+  font-size: 150%;
+}
+.lobster-min{
+  font-family: 'Lobster-Regular';
+  font-size: 100% !important;
+}
+
 #modal {
-  z-index: 2;
+  z-index: 9999;
   width: 600px;
   height: 400px;
 }
@@ -29,14 +67,17 @@
 
 #ul_lignes{
   overflow-y: scroll;
-  max-height: calc(100% - 150px);
+  max-height: calc(100% - 40%);
   margin-top: 3%;
   margin-left: 5%;
+  font-family: 'Lobster-Regular';
+  font-size: 90%;
 }
 
 .aligner{
   justify-content: space-between;
   display: flex;
+  font-family: 'Lobster-Regular';
 }
 .voirHoraire{
   width: 100%;
@@ -45,6 +86,8 @@
   background-color: rgba(0, 0, 0, 0.3) ;
   cursor: pointer;
   opacity: 1;
+  font-family: 'Lobster-Regular';
+  font-size: 110%;
 }
 .voirHoraire:hover{
   transition: all 0.3s ease;
@@ -82,15 +125,16 @@
 .groupe14{ border-left: 6px solid var(--ligne14);}
 
 
-errorSig{
+#errorSig{
   font-size: 70%;
   position: fixed;
-  top: 0;
+  bottom: 8%;
   left: 0;
   color: white;
   text-align: center;
   margin: 16% 0%;
   width: 100%;
+  font-family: Lobster-Regular !important;
 }
 
 .nomStation{
@@ -185,7 +229,7 @@ errorSig{
   line-height: 30px;
   padding: 8px 15px;
   width: 100%;
-  font-size: 14px;
+  font-size: 110%;
 }
 
 .horaire{
@@ -194,6 +238,7 @@ errorSig{
   border: 2px solid #fff;
   padding-left: 2%;
   margin-left: 4%;
+  font-family: 'Lobster-Regular';
 }
 .menu{
   top: 5% !important;
@@ -304,7 +349,8 @@ errorSig{
   line-height: 30px;
   padding: 8px 15px;
   width: 100%;
-  font-size: 12px;
+  font-size: 15px;
+  font-family: 'LOBSTER-REGULAR';
 }
 .form-structor .chercher .form-holder .input:last-child {
   border-bottom: 0;
@@ -321,10 +367,11 @@ errorSig{
   margin: 15px auto;
   padding: 15px 45px;
   width: 100%;
-  font-size: 13px;
-  font-weight: bold;
+  font-size: 130%;
+  font-weight: normal;
   cursor: pointer;
   opacity: 1;
+  font-family: 'Lobster-Regular';
   visibility: visible;
   -webkit-transition: all 0.3s ease;
 }
