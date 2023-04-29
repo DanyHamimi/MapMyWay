@@ -1,6 +1,7 @@
 const optionsBtn = document.getElementById('options');
 const searchBtn = document.getElementById('chercher');
 let lastClickedValue = 'origine';
+const applyBtn = document.getElementById('apply-btn');
 
 optionsBtn.addEventListener('click', (e) => {
     let parent = e.target.parentNode.parentNode;
