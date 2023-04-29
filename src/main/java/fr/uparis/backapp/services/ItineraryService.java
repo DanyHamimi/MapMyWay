@@ -1,5 +1,6 @@
 package fr.uparis.backapp.services;
 
+import fr.uparis.backapp.exceptions.StationNotFoundException;
 import fr.uparis.backapp.model.Coordonnee;
 import fr.uparis.backapp.model.Reseau;
 import fr.uparis.backapp.model.lieu.Station;
@@ -14,12 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static fr.uparis.backapp.model.Coordonnee.isCoordinate;
 import static fr.uparis.backapp.utils.Calculator.itineraireFactory;
-import static fr.uparis.backapp.utils.Utils.getSchedulesByLine;
+import static fr.uparis.backapp.utils.Utils.*;
 import static fr.uparis.backapp.utils.constants.Constants.DELIMITER;
-import static java.lang.Float.parseFloat;
-import static java.lang.Integer.parseInt;
 
 @Service
 public class ItineraryService {
@@ -32,29 +30,25 @@ public class ItineraryService {
     }
 
 
-    public List<Section[]> searchItenerary(String origin, String destination, String time) {
-        List<Section[]> l = new ArrayList<>();
-        if (isCoordinate(origin) || isCoordinate(destination)) {
-            if (isCoordinate(origin) && isCoordinate(destination)) {
-                Coordonnee originCoord = new Coordonnee(parseFloat(origin.split(",")[1]), parseFloat(origin.split(",")[0]));
-                Coordonnee destinationCoord = new Coordonnee(parseFloat(destination.split(",")[1]), parseFloat(destination.split(",")[0]));
-                l = itineraireFactory(originCoord, destinationCoord, LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
-            } else if (isCoordinate(origin)) {
-                Station destinationStation = reseau.getStation(destination);
-                Coordonnee originCoord = new Coordonnee(parseFloat(origin.split(",")[1]), parseFloat(origin.split(",")[0]));
-                l = itineraireFactory(originCoord, destinationStation.getLocalisation(), LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
-            } else if (isCoordinate(destination)) {
-                Station originStation = reseau.getStation(origin);
-                Coordonnee destinationCoord = new Coordonnee(parseFloat(destination.split(",")[1]), parseFloat(destination.split(",")[0]));
-                l = itineraireFactory(originStation.getLocalisation(), destinationCoord, LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
-            }
-        } else {
-            Station originStation = reseau.getStation(origin);
-            Station destinationStation = reseau.getStation(destination);
-            l = itineraireFactory(originStation.getLocalisation(), destinationStation.getLocalisation(), LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
+    /**
+     * Recherche un itinéraire entre deux lieux spécifiés à un moment donné.
+     *
+     * @param origin      la station ou les coordonnées de départ
+     * @param destination la station ou les coordonnées d'arrivée
+     * @param time        l'heure de départ
+     * @return la liste des itinéraires possibles sous forme de tableau de sections
+     */
+    public List<Section[]> searchItinerary(String origin, String destination, String time) {
+        List<Section[]> trajects;
+        LocalTime trajectTime = getTimeFromString(time);
+        try {
+            Coordonnee originCoordinates = fetchCoordinates(origin);
+            Coordonnee destinationCoordinates = fetchCoordinates(destination);
+            trajects = itineraireFactory(originCoordinates, destinationCoordinates, trajectTime);
+        } catch (StationNotFoundException e) {
+            trajects = new ArrayList<>();
         }
-        return l;
-//        return searchIteneray(origin, destination, time);
+        return trajects;
     }
 
     public List<String> autocomplete(String prefix) {

@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 public class PagesController {
-    private ItineraryService iteneraryService;
+    private final ItineraryService iteneraryService;
 
     @Autowired
     public PagesController(ItineraryService iteneraryService) {
@@ -28,7 +28,7 @@ public class PagesController {
     @ResponseBody
     @GetMapping("/iteneray")
     public List<Section[]> searchItenerary(@RequestParam("origin") String origin, @RequestParam("destination") String destination, @RequestParam("time") String time) {
-        return iteneraryService.searchItenerary(origin, destination, time);
+        return iteneraryService.searchItinerary(origin, destination, time);
     }
 
     @ResponseBody

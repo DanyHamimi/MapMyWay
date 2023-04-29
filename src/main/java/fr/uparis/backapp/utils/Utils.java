@@ -1,10 +1,10 @@
 package fr.uparis.backapp.utils;
 
+import fr.uparis.backapp.exceptions.StationNotFoundException;
 import fr.uparis.backapp.model.Coordonnee;
 import fr.uparis.backapp.model.Ligne;
 import fr.uparis.backapp.model.Reseau;
 import fr.uparis.backapp.model.lieu.Station;
-import fr.uparis.backapp.model.section.Section;
 import fr.uparis.backapp.model.section.SectionTransport;
 import fr.uparis.backapp.utils.constants.Constants;
 
@@ -18,10 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static fr.uparis.backapp.model.Coordonnee.isCoordinate;
-import static fr.uparis.backapp.utils.Calculator.itineraireFactory;
 import static fr.uparis.backapp.utils.constants.Constants.*;
-import static java.lang.Float.parseFloat;
-import static java.lang.Integer.parseInt;
 
 /**
  * Classe outils, rassemblant les fonctions génériques du projet.
@@ -147,29 +144,26 @@ public class Utils {
         return LocalTime.of(Integer.parseInt(times[0]), Integer.parseInt(times[1]));
     }
 
-    public static List<Section[]> searchIteneray(String origin, String destination, String time) {
-        Reseau reseau = Reseau.getInstance();
-        List<Section[]> l = new ArrayList<>();
-        LocalTime trajetTime = getTimeFromString(time);
-        if (isCoordinate(origin) || isCoordinate(destination)) {
-            if (isCoordinate(origin) && isCoordinate(destination)) {
-                Coordonnee originCoord = new Coordonnee(origin);
-                Coordonnee destinationCoord = new Coordonnee(destination);
-                l = itineraireFactory(originCoord, destinationCoord, trajetTime);
-            } else if (isCoordinate(origin)) {
-                Station destinationStation = reseau.getStation(destination);
-                Coordonnee originCoord = new Coordonnee(origin);
-                l = itineraireFactory(originCoord, destinationStation.getLocalisation(), trajetTime);
-            } else if (isCoordinate(destination)) {
-                Station originStation = reseau.getStation(origin);
-                Coordonnee destinationCoord = new Coordonnee(destination);
-                l = itineraireFactory(originStation.getLocalisation(), destinationCoord, trajetTime);
-            }
+
+    /**
+     * Récupère les coordonnées d'un lieu donné sous forme de chaîne de caractères.
+     * Si le lieu est déjà sous forme de coordonnées, renvoie ces coordonnées.
+     * Sinon, récupère les coordonnées de la station associée au lieu à partir de la liste des stations du réseau.
+     *
+     * @param place une chaîne de caractères représentant un lieu (peut être des coordonnées ou un nom de station)
+     * @return les coordonnées du lieu, sous forme de l'objet Coordonnee
+     * @throws StationNotFoundException si le paramètre "place" n'est ni des coordonnées valides ni le nom d'une station existante dans le réseau
+     */
+
+    public static Coordonnee fetchCoordinates(String place) throws StationNotFoundException {
+        if (isCoordinate(place)) {
+            return new Coordonnee(place);
         } else {
-            Station originStation = reseau.getStation(origin);
-            Station destinationStation = reseau.getStation(destination);
-            l = itineraireFactory(originStation.getLocalisation(), destinationStation.getLocalisation(), LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
+            Station station = Reseau.getInstance().getStation(place);
+            if (station == null) {
+                throw new StationNotFoundException("Station not found: " + place);
+            }
+            return station.getLocalisation();
         }
-        return l;
     }
 }
