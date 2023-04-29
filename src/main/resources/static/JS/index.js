@@ -26,31 +26,6 @@ searchBtn.addEventListener('click', (e) => {
     });
 });
 
-// ... code d'initialisation de la carte et ajout du marqueur ...
-
-
-// Gerer erreur saisie
-const showValueButton = document.getElementById('search-btn');
-const errorSig = document.getElementById('errorSig');
-const div = document.getElementById('liste');
-
-// showValueButton.addEventListener('click', function () {
-//
-//     var origine = document.getElementById('origine');
-//     var destination = document.getElementById('destination');
-//     var orig = origine.value;
-//     var dest = destination.value;
-//
-//     if (orig != "" && dest != "") {
-//         // console.log("origine : " + orig + " destination : " + dest);
-//         if (div.style.display === 'none') {
-//             div.style.display = 'block';
-//         }
-//
-//     }
-// });
-
-
 let originMarker = null;
 let destinationMarker = null;
 
@@ -211,19 +186,21 @@ submit.onclick = function() {
             });
 
             // Add a label for the radio button
-            let label = $("<label>").attr("for", "station-" + i).text(station.split(";")[1]);
+            let label = $("<label class='label_station'>").attr("for", "station-" + i).text(station.split(";")[1]);
             //set the radio button image
             let imageUrl = "../css/image/M"+station.split(";")[0]+".png";
             label.css({
                 "background-image": "url(" + imageUrl + ")",
+                "background-position-y": "bottom",
                 "background-size": "16px 16px", // Modifiez ces valeurs pour ajuster la taille de l'image
                 "padding-left": "25px", // Ajustez la valeur pour positionner correctement le texte
                 "background-repeat": "no-repeat",
-                "min-width": "max-content"
+                "min-width": "max-content",
+                "color": "rgba(255, 255, 255, 0.7)"
             });
             // Append the radio button and label to the modal content
-            //$("#modal-content").html().css({'border' : '1px solid rgb(145 134 134 / 70%)'})
-            $("#modal-content").css("border","1px solid rgb(145 134 134 / 70%)")
+            $("#modal-content").css({"border": "1px solid rgb(145 134 134 / 70%)", "background-color":" rgba(0, 0, 0, 0.4)"})
+
 
             $("#modal-content").append(radioButton, label);
 
@@ -236,6 +213,7 @@ submit.onclick = function() {
                 // Create an unordered list for schedules
                 //let ul = $("<ul class='ul_lignes'>");
                 $('#ul_lignes').html('')
+                $('#ul_lignes').css({"border": "1px solid rgb(145 134 134 / 70%) "})
                 let imageUrl = "../css/image/M"+station.split(";")[0]+".png";
                 for (let j = 0; j < schedules.length; j++) {
                     let schedule = schedules[j];
@@ -269,8 +247,56 @@ window.onclick = function(event) {
         //modal.style.display = "none";
     }
 }
-// Créer une fonction pour ajouter des marqueurs et des lignes rouges
+
+// Pour déplacer l'affichage d'horaires
+$(document).ready(function() {
+    var isDragging = false;
+    var modal = $('#modal');
+    var offset = {x:0, y:0};
+
+    modal.mousedown(function(e) {
+        isDragging = true;
+        offset.x = e.pageX - modal.offset().left;
+        offset.y = e.pageY - modal.offset().top;
+        modal.css('cursor', 'move');
+    });
+
+    $(document).mouseup(function() {
+        isDragging = false;
+        modal.css('cursor', 'default');
+    });
+
+    $(document).mousemove(function(e) {
+        if (isDragging) {
+            modal.offset({
+                top: e.pageY - offset.y,
+                left: e.pageX - offset.x
+            });
+        }
+    });
+});
+
+const origine = document.getElementById('origine');
+const destination = document.getElementById('destination');
+const switchBtn = document.getElementById('switch_btn');
+
+switchBtn.addEventListener('click', function() {
+    if(origine.value != "" && destination.value != ""){
+        const temp = origine.value;
+        origine.value = destination.value;
+        destination.value = temp;
+    }else{
+        var afficher_message = document.getElementById('chercher')
+        var messageDiv = document.createElement("div");
+        messageDiv.setAttribute("id", "errorSig");
+        messageDiv.innerHTML = "Veuillez remplir les champs";
+        afficher_message.appendChild(messageDiv);
+
+        setTimeout(function () {
+            afficher_message.removeChild(messageDiv);
+        }, 3000);
+    }
+
+});
 
 
-// Appeler la fonction pour ajouter des marqueurs et des lignes aux trajets
-// addStationMarkersAndLinesByList(listeTrajet);

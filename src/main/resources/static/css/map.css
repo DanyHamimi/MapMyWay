@@ -16,8 +16,91 @@
   --ligne13: #98D4E2;
   --ligne14: #662483;
 }
+
+@font-face {
+  font-family: "Knewave-Regular";
+  src: url("fonts/Knewave-Regular.ttf");
+}
+@font-face {
+  font-family: "Lobster-Regular";
+  src: url("fonts/Lobster-Regular.ttf");
+}
+@font-face {
+  font-family: "FjallaOne-Regular";
+  src: url("fonts/FjallaOne-Regular.ttf");
+}
+
+.switch{
+  border-radius: 50px;
+  background-color: white;
+  width: 42px;
+  height: 42px;
+  position: absolute;
+  top: 30%;
+  right: -5%;
+  font-size: 0;
+  padding: 0;
+  border: 0;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.switch:hover{
+  transition: all 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+#modal-content{
+  border-radius: 10px;
+  padding: 5px;
+  width: 88%;
+  display: flex;
+  max-height: calc(100% - 100px);
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.form-title{
+  font-family: "FjallaOne-Regular";
+  font-size: 170% !important;
+}
+
+.lobster{
+  font-family: 'Roboto Light';
+  font-size: 150%;
+}
+
+.lobster-min-recherche{
+  cursor: auto !important;
+  padding-left: 2%;
+}
+
+.lobster-min, .lobster-min-recherche{
+  background-color: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.7);
+  border: 0;
+  border-radius: 15px;
+  font-size: 100%;
+  font-weight: normal;
+  cursor: pointer;
+  opacity: 1;
+  font-family: 'Roboto Light';
+  visibility: visible;
+  -webkit-transition: all 0.3s ease;
+}
+
+.lobster-min:hover, .label_station:hover{
+  transition: all 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.label_station:hover{
+  border-radius: 15%;
+  padding-left: 8% !important;
+}
+
 #modal {
-  z-index: 2;
+  z-index: 100;
   width: 600px;
   height: 400px;
 }
@@ -29,14 +112,18 @@
 
 #ul_lignes{
   overflow-y: scroll;
-  max-height: calc(100% - 150px);
-  margin-top: 3%;
-  margin-left: 5%;
+  max-height: calc(100% - 45%);
+  font-family: 'Roboto Light';
+  font-size: 90%;
+  margin: 5%;
+  border-radius: 5%;
+  padding-left: 5%;
 }
 
 .aligner{
   justify-content: space-between;
   display: flex;
+  font-family: 'Roboto Light';
 }
 .voirHoraire{
   width: 100%;
@@ -45,6 +132,8 @@
   background-color: rgba(0, 0, 0, 0.3) ;
   cursor: pointer;
   opacity: 1;
+  font-family: 'Roboto Light';
+  font-size: 110%;
 }
 .voirHoraire:hover{
   transition: all 0.3s ease;
@@ -62,6 +151,7 @@
 .station{
   margin-bottom: 2%;
   padding-left: 2%;
+  font-family: 'Roboto Light';
 }
 
 .groupe{  border-top-left-radius: 2%; border-bottom-left-radius: 2%; margin-left: 35%}
@@ -82,15 +172,16 @@
 .groupe14{ border-left: 6px solid var(--ligne14);}
 
 
-errorSig{
+#errorSig{
   font-size: 70%;
   position: fixed;
-  top: 0;
+  bottom: 8%;
   left: 0;
   color: white;
   text-align: center;
   margin: 16% 0%;
   width: 100%;
+  font-family: 'Roboto Light' !important;
 }
 
 .nomStation{
@@ -98,7 +189,7 @@ errorSig{
 }
 
 .detailsTrajet{
-  margin-top: 8%;
+  margin-top: 5%;
   text-align: left;
 }
 
@@ -133,6 +224,8 @@ errorSig{
 
 .dureeTrajet{
   color: black !important;
+  font-family: 'Roboto Light';
+  margin-left: 2%;
 }
 .marcher{
   width: 20px !important;
@@ -185,7 +278,7 @@ errorSig{
   line-height: 30px;
   padding: 8px 15px;
   width: 100%;
-  font-size: 14px;
+  font-size: 110%;
 }
 
 .horaire{
@@ -194,6 +287,7 @@ errorSig{
   border: 2px solid #fff;
   padding-left: 2%;
   margin-left: 4%;
+  font-family: 'Roboto Light';
 }
 .menu{
   top: 5% !important;
@@ -304,7 +398,8 @@ errorSig{
   line-height: 30px;
   padding: 8px 15px;
   width: 100%;
-  font-size: 12px;
+  font-size: 15px;
+  font-family: 'Roboto Light';
 }
 .form-structor .chercher .form-holder .input:last-child {
   border-bottom: 0;
@@ -321,10 +416,11 @@ errorSig{
   margin: 15px auto;
   padding: 15px 45px;
   width: 100%;
-  font-size: 13px;
-  font-weight: bold;
+  font-size: 130%;
+  font-weight: normal;
   cursor: pointer;
   opacity: 1;
+  font-family: 'Roboto Light';
   visibility: visible;
   -webkit-transition: all 0.3s ease;
 }
