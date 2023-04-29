@@ -28,7 +28,7 @@ public class TestCoordonnee {
      */
     @Test
     public void testsConstructorString() {
-        Coordonnee coordonnee = new Coordonnee("48.8566,2.3522");
+        Coordonnee coordonnee = new Coordonnee("2.3522,48.8566");
         assertEquals(48.8566, coordonnee.getLatitude(), 0.0);
         assertEquals(2.3522, coordonnee.getLongitude(), 0.0);
 
