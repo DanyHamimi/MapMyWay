@@ -168,9 +168,15 @@ submit.onclick = function() {
         },
     }).done(function (data) {
         let keys = Object.keys(data);
-
         // Clear existing radio buttons and list items
         $("#modal-content").html('');
+
+        if (keys.length === 0) {
+            // No schedules found
+            alert("Station introuvable dans le réseau RATP");
+            return;
+        }
+
         $('#vers').html("<div class='vers'>Vers : </div>")
 
         for(let i = 0; i < keys.length; i++) {

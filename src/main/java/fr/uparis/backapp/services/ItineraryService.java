@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,9 @@ public class ItineraryService {
 
     public Map<String, List<LocalTime>> getStationSchedules(String stationName) {
         Station station = reseau.getStation(stationName);
+
+        if(station == null)
+            return new HashMap<>();
         // recupérer toutes les sections qui partent de cette station
         List<SectionTransport> sectionTransports = reseau.getSections().stream().filter(section -> section.isStationDepart(station)).toList();
         return getSchedulesByLine(sectionTransports);

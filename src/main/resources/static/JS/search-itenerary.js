@@ -35,15 +35,13 @@ $(document).ready(function () {
             return;
         }
 
-        document.getElementById('liste').style.display="block"
+        document.getElementById('liste').style.display = "block"
 
         var data = {
             origin: origine,
             destination: destination,
             time: timeValue
         };
-
-
         // Envoyer les données au backend via une requête AJAX
         $.ajax({
             type: 'GET',
@@ -53,8 +51,12 @@ $(document).ready(function () {
                 // Traitement de la réponse du backend en cas de succès
                 console.log(response)
                 itenaries = response
+
+                if (itenaries.length == 0) {
+                    alert("Station inexistantes dans le réseau de transport")
+                }
                 //hide all det from previous search
-                for(var i=1; i<=5; i++){
+                for (var i = 1; i <= 5; i++) {
                     document.getElementById("det" + i).style.display = "none";
                 }
                 for (let index = 0; index < itenaries.length; index++) {
@@ -292,17 +294,17 @@ function displayTraject(idTraject) {
 function isEmpty(field) {
     if (field === '' || field === null || field === undefined) {
 
-            var afficher_message = document.getElementById('chercher')
-            var messageDiv = document.createElement("div");
-            messageDiv.setAttribute("id", "errorSig");
-            messageDiv.innerHTML = "Veuillez remplir les champs";
-            afficher_message.appendChild(messageDiv);
+        var afficher_message = document.getElementById('chercher')
+        var messageDiv = document.createElement("div");
+        messageDiv.setAttribute("id", "errorSig");
+        messageDiv.innerHTML = "Veuillez remplir les champs";
+        afficher_message.appendChild(messageDiv);
 
-            setTimeout(function () {
-                afficher_message.removeChild(messageDiv);
-            }, 3000);
+        setTimeout(function () {
+            afficher_message.removeChild(messageDiv);
+        }, 3000);
 
-            return true;
+        return true;
     }
     return false;
 }
