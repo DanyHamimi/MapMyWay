@@ -1,25 +1,18 @@
 package fr.uparis.backapp.web;
 
 import fr.uparis.backapp.model.section.Section;
-import fr.uparis.backapp.model.section.SectionTransport;
 import fr.uparis.backapp.services.ItineraryService;
-import fr.uparis.backapp.utils.Parser;
-import fr.uparis.backapp.model.lieu.Station;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @RestController
 public class PagesController {
     private ItineraryService iteneraryService;
-    private List<Message> messageList = new ArrayList<>();
 
     @Autowired
     public PagesController(ItineraryService iteneraryService) {

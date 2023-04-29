@@ -17,7 +17,6 @@ import java.util.Map;
 import static fr.uparis.backapp.model.Coordonnee.isCoordinate;
 import static fr.uparis.backapp.utils.Calculator.itineraireFactory;
 import static fr.uparis.backapp.utils.Utils.getSchedulesByLine;
-import static fr.uparis.backapp.utils.Utils.searchIteneray;
 import static fr.uparis.backapp.utils.constants.Constants.DELIMITER;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
@@ -34,28 +33,28 @@ public class ItineraryService {
 
 
     public List<Section[]> searchItenerary(String origin, String destination, String time) {
-//        List<Section[]> l = new ArrayList<>();
-//        if (isCoordinate(origin) || isCoordinate(destination)) {
-//            if (isCoordinate(origin) && isCoordinate(destination)) {
-//                Coordonnee originCoord = new Coordonnee(parseFloat(origin.split(",")[1]), parseFloat(origin.split(",")[0]));
-//                Coordonnee destinationCoord = new Coordonnee(parseFloat(destination.split(",")[1]), parseFloat(destination.split(",")[0]));
-//                l = itineraireFactory(originCoord, destinationCoord, LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
-//            } else if (isCoordinate(origin)) {
-//                Station destinationStation = reseau.getStation(destination);
-//                Coordonnee originCoord = new Coordonnee(parseFloat(origin.split(",")[1]), parseFloat(origin.split(",")[0]));
-//                l = itineraireFactory(originCoord, destinationStation.getLocalisation(), LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
-//            } else if (isCoordinate(destination)) {
-//                Station originStation = reseau.getStation(origin);
-//                Coordonnee destinationCoord = new Coordonnee(parseFloat(destination.split(",")[1]), parseFloat(destination.split(",")[0]));
-//                l = itineraireFactory(originStation.getLocalisation(), destinationCoord, LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
-//            }
-//        } else {
-//            Station originStation = reseau.getStation(origin);
-//            Station destinationStation = reseau.getStation(destination);
-//            l = itineraireFactory(originStation.getLocalisation(), destinationStation.getLocalisation(), LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
-//        }
-//        return l;
-        return searchIteneray(origin, destination, time);
+        List<Section[]> l = new ArrayList<>();
+        if (isCoordinate(origin) || isCoordinate(destination)) {
+            if (isCoordinate(origin) && isCoordinate(destination)) {
+                Coordonnee originCoord = new Coordonnee(parseFloat(origin.split(",")[1]), parseFloat(origin.split(",")[0]));
+                Coordonnee destinationCoord = new Coordonnee(parseFloat(destination.split(",")[1]), parseFloat(destination.split(",")[0]));
+                l = itineraireFactory(originCoord, destinationCoord, LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
+            } else if (isCoordinate(origin)) {
+                Station destinationStation = reseau.getStation(destination);
+                Coordonnee originCoord = new Coordonnee(parseFloat(origin.split(",")[1]), parseFloat(origin.split(",")[0]));
+                l = itineraireFactory(originCoord, destinationStation.getLocalisation(), LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
+            } else if (isCoordinate(destination)) {
+                Station originStation = reseau.getStation(origin);
+                Coordonnee destinationCoord = new Coordonnee(parseFloat(destination.split(",")[1]), parseFloat(destination.split(",")[0]));
+                l = itineraireFactory(originStation.getLocalisation(), destinationCoord, LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
+            }
+        } else {
+            Station originStation = reseau.getStation(origin);
+            Station destinationStation = reseau.getStation(destination);
+            l = itineraireFactory(originStation.getLocalisation(), destinationStation.getLocalisation(), LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
+        }
+        return l;
+//        return searchIteneray(origin, destination, time);
     }
 
     public List<String> autocomplete(String prefix) {
