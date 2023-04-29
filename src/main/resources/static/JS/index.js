@@ -135,14 +135,14 @@ function onMapClick(e) {
         }
         originMarker = L.marker(e.latlng).addTo(map);
         originMarker.bindPopup(`<b>Origine</b>`).openPopup();
-        document.getElementById('origine').value = `${e.latlng.lat}, ${e.latlng.lng}`;
+        document.getElementById('origine').value = `${e.latlng.lng}, ${e.latlng.lat}`;
     } else if (lastClickedValue === 'destination') {
         if (destinationMarker) {
             destinationMarker.remove();
         }
         destinationMarker = L.marker(e.latlng).addTo(map);
         destinationMarker.bindPopup(`<b>Destination</b>`).openPopup();
-        document.getElementById('destination').value = `${e.latlng.lat}, ${e.latlng.lng}`;
+        document.getElementById('destination').value = `${e.latlng.lng}, ${e.latlng.lat}`;
     }
 }
 

@@ -1,6 +1,8 @@
 package fr.uparis.backapp.model;
 
 
+import static fr.uparis.backapp.utils.constants.Constants.COORDINATE_REGEX;
+
 /**
  * Représente une coordonnée gps.
  */
@@ -11,7 +13,7 @@ public class Coordonnee {
     /**
      * Constructeur de la classe Coordonnee à partir de deux doubles.
      *
-     * @param latitude latitude de la coordonnée en degré.
+     * @param latitude  latitude de la coordonnée en degré.
      * @param longitude longitude de la coordonnée en degré.
      */
     public Coordonnee(double latitude, double longitude) {
@@ -26,8 +28,8 @@ public class Coordonnee {
      */
     public Coordonnee(String coordonnee) {
         Double[] splitCoordonnee = splitCoordonnee(coordonnee);
-        this.latitude = splitCoordonnee[0];
-        this.longitude = splitCoordonnee[1];
+        this.latitude = splitCoordonnee[1];
+        this.longitude = splitCoordonnee[0];
     }
 
     /**
@@ -39,7 +41,7 @@ public class Coordonnee {
      */
     private Double[] splitCoordonnee(String coordonnee) {
         String[] splitCoordonnee = coordonnee.split(",");
-        if(splitCoordonnee.length != 2)
+        if (splitCoordonnee.length != 2)
             throw new IllegalArgumentException("Arguments invalides pour la construction de coordonnée" + coordonnee);
         return new Double[]{Double.parseDouble(splitCoordonnee[0]), Double.parseDouble(splitCoordonnee[1])};
     }
@@ -81,6 +83,17 @@ public class Coordonnee {
     }
 
     /**
+     * Vérifie si une chaîne donnée correspond à une coordonnée géographique valide au format décimal
+     * (latitudine, longitude).
+     *
+     * @param input La chaîne à vérifier.
+     * @return true si la chaîne est une coordonnée valide, false sinon.
+     */
+    public static boolean isCoordinate(String input) {
+        return input.matches(COORDINATE_REGEX);
+    }
+
+    /**
      * Comparaison de deux coordonnées.
      *
      * @param o objet avec lequel comparer.
@@ -88,12 +101,12 @@ public class Coordonnee {
      */
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Coordonnee coordonnee = (Coordonnee) o;
         return Double.compare(coordonnee.latitude, latitude) == 0
-            && Double.compare(coordonnee.longitude, longitude) == 0;
+                && Double.compare(coordonnee.longitude, longitude) == 0;
     }
 
     /**

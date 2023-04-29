@@ -234,8 +234,8 @@ function pingLocalizations(index) {
             lignetmp = section.ligne.nomLigne.split(' ')[0];
         }
 
-        let longitude = section.depart.localisation.latitude;
-        let latitude = section.depart.localisation.longitude;
+        let latitude = section.depart.localisation.latitude;
+        let longitude = section.depart.localisation.longitude;
         let nom_station = section.depart.nomLieu;
         const marker = L.marker([latitude, longitude]).addTo(map)
             .bindPopup(`<b>${nom_station}</b>`).openPopup();

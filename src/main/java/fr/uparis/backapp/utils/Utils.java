@@ -2,6 +2,9 @@ package fr.uparis.backapp.utils;
 
 import fr.uparis.backapp.model.Coordonnee;
 import fr.uparis.backapp.model.Ligne;
+import fr.uparis.backapp.model.Reseau;
+import fr.uparis.backapp.model.lieu.Station;
+import fr.uparis.backapp.model.section.Section;
 import fr.uparis.backapp.model.section.SectionTransport;
 import fr.uparis.backapp.utils.constants.Constants;
 
@@ -13,6 +16,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static fr.uparis.backapp.model.Coordonnee.isCoordinate;
+import static fr.uparis.backapp.utils.Calculator.itineraireFactory;
+import static fr.uparis.backapp.utils.constants.Constants.*;
+import static java.lang.Float.parseFloat;
+import static java.lang.Integer.parseInt;
 
 /**
  * Classe outils, rassemblant les fonctions génériques du projet.
@@ -124,6 +133,43 @@ public class Utils {
     }
 
     private static String getLineNameWithDirection(Ligne line) {
-        return line.getNomLigne().split(" ")[0] + ";" + line.getDirection().getNomLieu();
+        return line.getNomLigne().split(SPACE)[0] + DELIMITER + line.getDirection().getNomLieu();
+    }
+
+    /**
+     * Convertit une chaîne de temps dans le format "heures:minutes" en objet LocalTime.
+     *
+     * @param time La chaîne de temps à convertir.
+     * @return L'objet LocalTime correspondant à la chaîne de temps donnée.
+     */
+    public static LocalTime getTimeFromString(String time) {
+        String[] times = time.split(COLON);
+        return LocalTime.of(Integer.parseInt(times[0]), Integer.parseInt(times[1]));
+    }
+
+    public static List<Section[]> searchIteneray(String origin, String destination, String time) {
+        Reseau reseau = Reseau.getInstance();
+        List<Section[]> l = new ArrayList<>();
+        LocalTime trajetTime = getTimeFromString(time);
+        if (isCoordinate(origin) || isCoordinate(destination)) {
+            if (isCoordinate(origin) && isCoordinate(destination)) {
+                Coordonnee originCoord = new Coordonnee(origin);
+                Coordonnee destinationCoord = new Coordonnee(destination);
+                l = itineraireFactory(originCoord, destinationCoord, trajetTime);
+            } else if (isCoordinate(origin)) {
+                Station destinationStation = reseau.getStation(destination);
+                Coordonnee originCoord = new Coordonnee(origin);
+                l = itineraireFactory(originCoord, destinationStation.getLocalisation(), trajetTime);
+            } else if (isCoordinate(destination)) {
+                Station originStation = reseau.getStation(origin);
+                Coordonnee destinationCoord = new Coordonnee(destination);
+                l = itineraireFactory(originStation.getLocalisation(), destinationCoord, trajetTime);
+            }
+        } else {
+            Station originStation = reseau.getStation(origin);
+            Station destinationStation = reseau.getStation(destination);
+            l = itineraireFactory(originStation.getLocalisation(), destinationStation.getLocalisation(), LocalTime.of(parseInt(time.split(":")[0]), parseInt(time.split(":")[1])));
+        }
+        return l;
     }
 }
