@@ -33,10 +33,10 @@ public class ItineraryService {
     /**
      * Recherche un itinéraire entre deux lieux spécifiés à un moment donné.
      *
-     * @param origin      la station ou les coordonnées de départ
-     * @param destination la station ou les coordonnées d'arrivée
-     * @param time        l'heure de départ
-     * @return la liste des itinéraires possibles sous forme de tableau de sections
+     * @param origin      la station ou les coordonnées de départ.
+     * @param destination la station ou les coordonnées d'arrivée.
+     * @param time        l'heure de départ.
+     * @return la liste des itinéraires possibles sous forme de tableau de sections.
      */
     public List<Section[]> searchItinerary(String origin, String destination, String time) {
         List<Section[]> trajects;
@@ -51,6 +51,12 @@ public class ItineraryService {
         return trajects;
     }
 
+    /**
+     * L'autocomplétion de la saisie dans la barre de recherche de stations.
+     *
+     * @param prefix le préfixe de la station recherchée.
+     * @return la liste des stations qui ont le préfixe demandé.
+     */
     public List<String> autocomplete(String prefix) {
         List<Station> stationSuggested = reseau.getStations().stream().filter(station -> station.getNomLieu().toLowerCase().startsWith(prefix)).toList();
         List<String> stationSuggestedNames = new ArrayList<>();
@@ -58,6 +64,12 @@ public class ItineraryService {
         return stationSuggestedNames;
     }
 
+    /**
+     * Retourne tous les horaires de passage des trains pour une station donnée.
+     *
+     * @param stationName la station pour laquelle on cherche les horaires de passage.
+     * @return les horaires de passage des trains, avec la direction correspondante.
+     */
     public Map<String, List<LocalTime>> getStationSchedules(String stationName) {
         Station station = reseau.getStation(stationName);
 
