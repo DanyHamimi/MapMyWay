@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Acceuil</title>
     <link rel="stylesheet" href="/css/map.css">
-    <link rel="stylesheet" href="/webjars/leaflet/1.7.1/dist/leaflet.css" />
-    <script src="/webjars/leaflet/1.7.1/dist/leaflet.js"></script>
-    <script src="/webjars/leaflet/1.7.1/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/leaflet/leaflet.css"/>
+    <script src="/leaflet/leaflet.js"></script>
+    <script src="/leaflet/leaflet.js"></script>
+    <script src="/jquery/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/jquery/jquery-ui.css">
+    <script src="/jquery/jquery-ui.min.js"></script>
 </head>
 <body style=" background-color: rgb(96 235 232);
     margin: 0;
@@ -19,20 +18,23 @@
 
 <div style="display: flex; flexDirection: row; width: 100vw; height: 100vh;">
 
-    <div style=" margin-left: 1% ; width: 30vw !important; height: 68vh;
-
-    ">
+    <div style=" margin-left: 2% ; width: 33vw !important; height: 68vh;">
         <div class="form-structor">
             <div class="chercher ">
-                <h2 class="form-title" id="chercher">Chercher un trajet</h2>
+                <h2 class="form-title" id="chercher" style="font-size: 200% !important;">Chercher un trajet</h2>
 
                 <div class="form-holder">
                     <input type="text" class="input" placeholder="De" id="origine" required/>
-                    <input type="text" class="input" placeholder="A" id="destination" required />
-                    <button id="remove-marker">Supprimer les marqueur</button>
-                    <div class="label-horaire">
-                        Horaire de depart
-                        <input type="time" class="horaire" min="09:00" max="18:00" required />
+                    <input type="text" class="input" placeholder="A" id="destination" required/>
+                    <button class="switch" id="switch_btn">
+                        <img src="/css/image/switch.svg" alt="" width="19" height="23">
+                    </button>
+                    <div class="aligner">
+                        <div class="label-horaire">
+                            Horaire de depart
+                            <input type="time" id = 'hour' class="horaire" required/>
+                        </div>
+                        <button class="voirHoraire" id="rechercher-btn">Voir les horaires des trains</button>
                     </div>
 
 
@@ -42,441 +44,74 @@
             </div>
             <div class="options slide-up">
                 <div class="center">
-                    <h2 class="form-title" id="options">Options de trajet</h2>
+                    <h2 class="form-title" id="options">Personnaliser le trajet</h2>
                     <div class="form-holder">
+                        <h3>Mode paresseux</h3>
                         <div>
-                            <input type="radio" id="Plan0" name="drone" value="Plan0">
-                            <label for="Plan0">Plan0</label>
+                            <input type="radio" id="lazy0" name="typetrajet" value="lazy0">
+                            <label for="lazy0">Marcher le moins possible</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="lazy1" name="typetrajet" value="lazy1">
+                            <label for="lazy1">Marcher au +</label>
+                            <input type="number" id="lazy_distance" name="lazy_distance" placeholder="Nombre de km" min="0">
+                            km pour aller plus vite
                         </div>
 
+                        <h3>Mode sportif</h3>
                         <div>
-                            <input type="radio" id="Plan1" name="drone" value="Plan1">
-                            <label for="Plan1">Plan1</label>
+                            <input type="radio" id="sport0" name="typetrajet" value="sport0">
+                            <label for="sport0">Trajet à pied</label>
                         </div>
-
                         <div>
-                            <input type="radio" id="Plan2" name="drone" value="Plan2">
-                            <label for="Plan2">Plan2</label>
+                            <input type="radio" id="sport1" name="typetrajet" value="sport1">
+                            <label for="sport1">Marcher au moins</label>
+                            <input type="number" id="sport_distance" name="sport_distance" placeholder="Nombre de km" min="0">
+                            km
                         </div>
-
                         <div>
-                            <input type="radio" id="Plan3" name="drone" value="Plan3">
-                            <label for="Plan3">Plan3</label>
+                            <input type="radio" id="sport2" name="typetrajet" value="sport2">
+                            <label for="sport2">Marcher au moins</label>
+                            <input type="number" id="sport_minutes" name="sport_minutes" placeholder="Nombre de minutes" min="0">
+                            Minutes
                         </div>
                     </div>
-                    <button class="submit-btn">Appliquer</button>
+                    <button class="submit-btn" id="apply-btn" style="font-size: 120% !important;    font-family: 'FjallaOne-Regular';">Appliquer</button>
                 </div>
             </div>
         </div>
 
-        <div id="liste" style="
-        border: 2px solid rgb(145 134 134 / 70%);
-        height: 44%;
-        border-radius: 10px;
-        text-align: center;
-        background-color: rgb(96 235 232);
-        overflow: auto;">
-
-            <button onclick="AfficheDetails(1)" class="resultat">Trajet1
-
-                <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
-                     alt="">
-                <div class="ligne1"></div>
-                <div class="ligne12"></div>
-                <div class="dureeTrajet">43min</div>
-
-                <div class="details" id="details1" style="display: none">
-                    <h2>Trajet 1</h2>
-                    <p>Voici les détails que vous avez demandés...</p>
-                </div>
-            </button>
-            <button onclick="AfficheDetails(2)" class="resultat">Trajet2
-                <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
-                     alt="">
-                <div class="ligneA"></div>
-                <div class="ligne8"></div>
-
-                <div class="dureeTrajet">11min</div>
-
-                <div class="details" id="details2" style="display: none">
-                    <h2>Détails</h2>
-                    <p>Voici les détails que vous avez demandés...</p>
-                </div>
-            </button>            <button onclick="AfficheDetails(3)" class="resultat">Trajet3
-
-            <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
-                 alt="">
-            <div class="ligne1"></div>
-            <div class="ligne2"></div>
-            <div class="ligne12"></div>
-            <div class="ligne7"></div>
-
-            <div class="dureeTrajet">1min</div>
-
-            <div class="details" id="details3" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>            <button onclick="AfficheDetails(4)" class="resultat">Trajet4
-            <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
-                 alt="">
-            <div class="ligneF"></div>
-            <div class="dureeTrajet">16min</div>
-
-            <div class="details" id="details4" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>            <button onclick="AfficheDetails(5)" class="resultat">Trajet5
-            <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
-                 alt="">
-            <div class="ligneA"></div>
-            <div class="dureeTrajet">30min</div>
-
-            <div class="details" id="details5" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>            <button onclick="AfficheDetails(6)" class="resultat">Trajet6
-            <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
-                 alt="">
-            <div class="ligne1"></div>
-            <div class="dureeTrajet">1h</div>
-
-            <div class="details" id="details6" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>
-            </button>            <button onclick="AfficheDetails(7)" class="resultat">Trajet7
-            <img class="marcher" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Man_walking_icon_1410105361.svg/1218px-Man_walking_icon_1410105361.svg.png"
-                 alt="">
-            <div class="ligne12"></div>
-            <div class="dureeTrajet">23min</div>
-
-            <div class="details" id="details7" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>        </button>            <button onclick="AfficheDetails(8)" class="resultat">Trajet8
-
-            <div class="details" id="details8" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>        </button>            <button onclick="AfficheDetails(9)" class="resultat">Trajet9
-
-            <div class="details" id="details9" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>        </button>            <button onclick="AfficheDetails(10)" class="resultat">Trajet10
-
-            <div class="details" id="details10" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>        </button>            <button onclick="AfficheDetails(11)" class="resultat">Trajet11
-
-            <div class="details" id="details11" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>        </button>            <button onclick="AfficheDetails(12)" class="resultat">Trajet12
-
-            <div class="details" id="details12" style="display: none">
-                <h2>Détails</h2>
-                <p>Voici les détails que vous avez demandés...</p>
-            </div>
-        </button>
+        <div id="liste" class="trajets" style="display: none">
+            <button onclick="AfficheDetails(1)" class="resultat" style="display: none;" id="det1"></button>
+            <button onclick="AfficheDetails(2)" class="resultat" style="display: none;" id="det2"></button>
+            <button onclick="AfficheDetails(3)" class="resultat" style="display: none;" id="det3"></button>
+            <button onclick="AfficheDetails(4)" class="resultat" style="display: none;" id="det4"></button>
+            <button onclick="AfficheDetails(5)" class="resultat" style="display: none;" id="det5"></button>
         </div>
 
+        <div id="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; background-color: white; border: 1px solid black; border-radius: 5px; padding: 10px; box-sizing: border-box;">
+            <div style="position: absolute; bottom: 10px; right: 10px;">
+                <button class="lobster-min" id="rechercher-annuler">Fermer</button>
+            </div>
+            <h3 class="lobster">Rechercher des horaires</h3>
+            <input class="lobster-min-recherche" type="text" id="rechercher-input-horaires">
+            <button class="lobster-min" id="rechercher-submit">Rechercher</button>
+            <div class="aligner">
+                <div id="vers" ></div>
+                <div id="modal-content">
+                </div>
+            </div>
+            <div id="ul_lignes"></div>
+        </div>
 
     </div>
 
-    <div class="map" id="map" style=" width: 67vw; height: 99vh; margin: 5px 10px 5px 30px; border-radius: 5%;">
-
-
-    </div>
-    <script>
-
-        // Créer une instance de la carte avec des coordonnées et un niveau de zoom
-        /*var map = L.map('map').setView([48.858093, 2.294694], 15);
-
-        // Ajouter une couche de tuiles OpenStreetMap à la carte
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-            maxZoom: 18,
-        }).addTo(map);
-
-        // Ajouter un marqueur à l'emplacement spécifié
-        var longitude = 48.858093, latitude = 2.294694;
-        var marker = L.marker([longitude, latitude]).addTo(map);
-        marker.bindPopup("<b>Vous êtes ici !</b>").openPopup();*/
-        //marker.removeFrom(map);
-    </script>
-
-
-    <script>
-
-        // ... code d'initialisation de la carte et ajout du marqueur ...
-
-        // Gestionnaire d'événements pour supprimer le marqueur lors du clic sur le bouton
-        document.getElementById("remove-marker").addEventListener("click", function() {
-            if (originMarker) {
-                originMarker.remove();
-                originMarker = null;
-            }
-            if (destinationMarker) {
-                destinationMarker.remove();
-                destinationMarker = null;
-            }
-        });
-    </script>
-
+    <div class="map" id="map" style=" width: 60vw; height: 99vh; margin: 5px 10px 5px 60px; border-radius: 5%; z-index: 1"></div>
 </div>
+<script src="JS/search-itenerary.js"></script>
+<script src="JS/index.js"></script>
 <script>
-    let originMarker = null;
-    let destinationMarker = null;
-    $(function(){
-        $("#origine, #destination").autocomplete({
-            source: "/AskForStations",
-            minLength: 1,
-        });
-    });
 
-
-
-    const stations = [
-        { nom: "Nation", longitude: 2.3958439887237373, latitude: 48.848084289973976 },
-        { nom: "Reuilly - Diderot", longitude: 2.3869585404965377, latitude: 48.847094767969466 },
-        { nom: "Gare de Lyon", longitude: 2.372519782814122, latitude: 48.8442498880687 },
-        { nom: "Bastille", longitude: 2.3695064282002, latitude: 48.853425461693256 },
-        { nom: "Saint-Paul (Le Marais)", longitude: 2.3608852562751967, latitude: 48.85518742160445 },
-        { nom: "Hôtel de Ville", longitude: 2.3514239919428728, latitude: 48.85760073633446 },
-        { nom: "Châtelet", longitude: 2.346411849769497, latitude: 48.85955653272677 },
-        { nom: "Louvre - Rivoli", longitude: 2.340969623285269, latitude: 48.86087121270759 }
-    ];
-
-    let a = stations[0];
-    let b = stations[1];
-    const section1 = [a, b];
-
-    let c = stations[1];
-    let d = stations[2];
-    const section2 = [c, d];
-
-    let e = stations[2];
-    let f = stations[3];
-    const section3 = [e, f];
-
-    let g = stations[3];
-    let h = stations[4];
-    const section4 = [g, h];
-
-    listeTrajet = [
-        ["1",[section1,section2,] ],
-        ["2",[section3,section4]
-        ]];
-
-
-
-
-
-    $(function() {
-        $("#origine, #destination").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    url: "/autocomplete",
-                    dataType: "json",
-                    data: {
-                        term: request.term
-                    },
-                    success: function(data) {
-                        console.log( data.forEach((fruit) => {
-                            console.log(fruit.split(";")[0]); //affiche les noms autocomplete dans la console
-                        }))
-                        response(data);
-                    }
-                });
-            },
-            minLength: 1,
-            select: function(event, ui) {
-                //When clicking on a suggestion, fill the input with the suggestion
-                this.value = ui.item.value.toString().split(";")[0];
-
-                // Récupérer les coordonnées de la station sélectionnée
-                let stationInfo = ui.item.value.split(";");
-                let stationName = stationInfo[0];
-                let stationLatitude = parseFloat(stationInfo[2]);
-                let stationLongitude = parseFloat(stationInfo[1]);
-
-                // Vérifier si l'élément sélectionné est "origine" ou "destination"
-                if (this.id === "origine") {
-                    // Supprimer le marqueur précédent s'il existe
-                    if (originMarker) {
-                        originMarker.remove();
-                    }
-
-                    // Créer un nouveau marqueur d'origine aux coordonnées spécifiées
-                    originMarker = L.marker([stationLatitude, stationLongitude]).addTo(map);
-                    originMarker.bindPopup(`<b>Origine: ${stationName}</b>`).openPopup();
-                } else if (this.id === "destination") {
-                    // Supprimer le marqueur précédent s'il existe
-                    if (destinationMarker) {
-                        destinationMarker.remove();
-                    }
-
-                    // Créer un nouveau marqueur de destination aux coordonnées spécifiées
-                    destinationMarker = L.marker([stationLatitude, stationLongitude]).addTo(map);
-                    destinationMarker.bindPopup(`<b>Destination: ${stationName}</b>`).openPopup();
-                }
-
-                // Empêcher la valeur sélectionnée de s'afficher dans le champ de saisie
-                event.preventDefault();
-
-                if (originMarker && destinationMarker) {
-                    // Obtenir les coordonnées des deux marqueurs
-                    let originLatLng = originMarker.getLatLng();
-                    let destinationLatLng = destinationMarker.getLatLng();
-
-                    // Créer un groupe de points pour les deux marqueurs
-                    let markersGroup = new L.LatLngBounds([originLatLng, destinationLatLng]);
-
-                    // Adapter le zoom et le centrage de la carte pour afficher les deux marqueurs
-                    map.fitBounds(markersGroup);
-                }
-            }
-        });
-    });
 </script>
-
-
-
 </body>
-
-<script>
-
-    console.clear();
-
-    const optionsBtn = document.getElementById('options');
-    const searchBtn = document.getElementById('chercher');
-
-    optionsBtn.addEventListener('click', (e) => {
-        let parent = e.target.parentNode.parentNode;
-        Array.from(e.target.parentNode.parentNode.classList).find((element) => {
-            if(element !== "slide-up") {
-                parent.classList.add('slide-up')
-            }else{
-                searchBtn.parentNode.classList.add('slide-up')
-                parent.classList.remove('slide-up')
-            }
-        });
-    });
-
-    searchBtn.addEventListener('click', (e) => {
-        let parent = e.target.parentNode;
-        Array.from(e.target.parentNode.classList).find((element) => {
-            if(element !== "slide-up") {
-                parent.classList.add('slide-up')
-            }else{
-                optionsBtn.parentNode.parentNode.classList.add('slide-up')
-                parent.classList.remove('slide-up')
-            }
-        });
-    });
-
-
-
-    // Gerer erreur saisie
-    const showValueButton = document.getElementById('search-btn');
-    const errorSig = document.getElementById('errorSig');
-
-    showValueButton.addEventListener('click', function() {
-
-        var origine = document.getElementById('origine');
-        var destination = document.getElementById('destination');
-        var orig = origine.value;
-        var dest = destination.value;
-
-        if(orig!="" && dest!="") {
-            console.log("origine : "+orig+" destination : " +dest);
-
-        }else{
-            var afficher_message = document.getElementById('chercher')
-            var messageDiv = document.createElement("div");
-            messageDiv.setAttribute("id","errorSig");
-            messageDiv.innerHTML = "Veuillez remplir les champs";
-            afficher_message.appendChild(messageDiv);
-
-            setTimeout(function() {
-                afficher_message.removeChild(messageDiv);
-            }, 3000);
-        }
-
-        origine.value = "";
-        destination.value = "";
-
-    });
-
-    // Créer une instance de la carte avec des coordonnées et un niveau de zoom
-    var map = L.map('map').setView([48.858093, 2.294694], 15);
-
-    // Ajouter une couche de tuiles OpenStreetMap à la carte
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-        maxZoom: 18,
-    }).addTo(map);
-
-    //Afficher les details
-    function AfficheDetails(num) {
-        var message = document.getElementById("details" + num);
-        if (message.style.display=== "none")
-            message.style.display = "block"; // afficher le message
-        else
-            message.style.display = "none"; // masquer le message
-
-    }
-
-    // Créer une fonction pour ajouter des marqueurs et des lignes rouges
-    function addStationMarkersAndLinesByList(trajets) {
-        trajets.forEach(trajet => {
-            let lineColor;
-            switch (trajet[0]) {
-                case "1":
-                    const div = document.getElementsByClassName("ligne1");
-
-                    const style = window.getComputedStyle(div[0]);
-                    const backgroundColor = style.backgroundColor;
-                    lineColor = backgroundColor;
-                    break;
-                case "2":
-                    lineColor = "blue";
-                    break;
-                // Ajouter d'autres couleurs pour les autres numéros de ligne
-                default:
-                    lineColor = "black";
-            }
-
-            trajet[1].forEach(section => {
-                let lineCoordinates = [];
-                for (let i = 0; i < section.length; i++) {
-                    let station = section[i];
-
-                    let marker = L.marker([station.latitude, station.longitude]).addTo(map);
-                    marker.bindPopup(`<b>${station.nom}</b>`).openPopup();
-                    lineCoordinates.push([station.latitude, station.longitude]);
-                }
-
-                // Ajouter une ligne de la couleur spécifiée reliant les marqueurs
-                let coloredLine = L.polyline(lineCoordinates, {color: lineColor}).addTo(map);
-            });
-        });
-    }
-
-    // Appeler la fonction pour ajouter des marqueurs et des lignes aux trajets
-    addStationMarkersAndLinesByList(listeTrajet);
-
-</script>
-
 </html>

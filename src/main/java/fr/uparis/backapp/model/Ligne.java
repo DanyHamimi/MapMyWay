@@ -1,20 +1,25 @@
 package fr.uparis.backapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.uparis.backapp.model.lieu.Station;
+
 import java.time.LocalTime;
 import java.util.*;
 
 /**
- * Représente une Ligne du Reseau de transport
+ * Représente une Ligne de transport dans le Reseau.
  */
 public class Ligne {
     final private String nomLigne; //nom de la ligne, unique
+    @JsonIgnore
     final private Set<Station> stations; //stations de la ligne
     final private Set<LocalTime> horairesDepart;//TODO it will maybe deleted, to be discussed
 
     /**
      * Constructeur de la classe Ligne à partir de tous les attributs.
-     * @param nomLigne nom de la Ligne.
-     * @param stations liste des Station desservies par la Ligne.
+     *
+     * @param nomLigne       nom de la Ligne.
+     * @param stations       liste des Station desservies par la Ligne.
      * @param horairesDepart liste des horaires de departs de cette Ligne.
      */
     public Ligne(String nomLigne, Set<Station> stations, Set<LocalTime> horairesDepart) {
@@ -25,6 +30,7 @@ public class Ligne {
 
     /**
      * Constructeur de la classe Ligne à partir du nom de la Ligne.
+     *
      * @param nomLigne nom de la Ligne.
      */
     public Ligne(String nomLigne) {
@@ -95,6 +101,15 @@ public class Ligne {
     }
 
     /**
+     * Renvoie la direction de la ligne.
+     *
+     * @return le terminus de la ligne.
+     */
+    public Station getDirection() {
+        return (Station) stations.toArray()[stations.size() - 1];
+    }
+
+    /**
      * Comparaison de deux Ligne.
      *
      * @param o objet avec lequel comparer.
@@ -125,12 +140,13 @@ public class Ligne {
 
     /**
      * Retourne une représentation sous forme de chaîne de caractères d'un objet Ligne.
+     *
      * @return la représentation sous forme de chaîne de caractères d'un objet Ligne.
      */
     @Override
     public String toString() {
         String s = nomLigne + " : ";
-        for (Station station : stations) s += station.getNomStation() + " ";
+        for (Station station : stations) s += station.getNomLieu() + " ";
         for (LocalTime time : horairesDepart) s += "\n    " + time;
         return s;
     }

@@ -1,18 +1,17 @@
 package fr.uparis.backapp.model;
 
+import fr.uparis.backapp.model.lieu.Station;
+import fr.uparis.backapp.model.section.SectionTransport;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Testeur de la classe Reseau
+ * Testeur de la classe Reseau.
  */
 public class TestReseau {
     final private Reseau reseau = Reseau.getInstance();
@@ -37,23 +36,29 @@ public class TestReseau {
         Set<Station> stations = reseau.getStations();
         assertEquals(NB_STATIONS, stations.size());
 
+
         //cas d'ajout et suppression simples
         Station station = new Station("station", new Coordonnee(1, 0));
 
         reseau.removeStation(station);
         assertEquals(NB_STATIONS, stations.size());
+        assertNull(reseau.getStation("station"));
+        assertNull(reseau.getStation(new Coordonnee(1, 0)));
 
         reseau.addStation(station);
         reseau.addStation(station); //doublon
         assertEquals(NB_STATIONS + 1, stations.size());
+        assertEquals(station, reseau.getStation("station"));
+        assertEquals(station, reseau.getStation(new Coordonnee(1, 0)));
 
         reseau.removeStation(station);
         assertEquals(NB_STATIONS, stations.size());
 
-        //Cas où supprimer une section supprime aussi les stations
+
+        //Cas où supprimer une station supprime aussi sections et stations en cascade
         Station station1 = new Station("station 1", new Coordonnee(1, 0));
         Station station2 = new Station("station 2", new Coordonnee(1, 0));
-        Section section = new Section(station1, station2, Duration.of(5, ChronoUnit.SECONDS), 1.0, new Ligne("ligne"));
+        SectionTransport section = new SectionTransport(station1, station2, Duration.of(5, ChronoUnit.SECONDS), 1.0, new Ligne("ligne"));
         reseau.addSection(section);
         assertEquals(NB_STATIONS + 2, stations.size());
 
@@ -66,12 +71,12 @@ public class TestReseau {
      */
     @Test
     void testsSections() {
-        Set<Section> sections = reseau.getSections();
+        Set<SectionTransport> sections = reseau.getSections();
         assertEquals(NB_SECTIONS, sections.size());
 
         Station station1 = new Station("station 1", new Coordonnee(1, 0));
         Station station2 = new Station("station 2", new Coordonnee(1, 0));
-        Section section = new Section(station1, station2, Duration.of(5, ChronoUnit.SECONDS), 1.0, new Ligne("ligne"));
+        SectionTransport section = new SectionTransport(station1, station2, Duration.of(5, ChronoUnit.SECONDS), 1.0, new Ligne("ligne"));
 
         reseau.removeSection(section);
         assertEquals(NB_SECTIONS, sections.size());
@@ -84,52 +89,5 @@ public class TestReseau {
         reseau.removeSection(section);
         assertEquals(NB_SECTIONS, sections.size());
         assertEquals(NB_STATIONS, reseau.getStations().size());
-    }
-
-    /**
-     * Teste le calcul de distance entre deux coordonnées.
-     */
-    /*@Test
-    void testDistanceBetween(){
-        Coordonnee origine1 = new Coordonnee(52.2296756, 21.0122287);
-        Coordonnee destination1 = new Coordonnee(52.2296756, 21.0122287);
-        assertEquals(0.000, Reseau.distanceBetween(origine1, destination1));
-
-        Coordonnee origine2 = new Coordonnee(48.948559, 2.063739);
-        Coordonnee destination2 = new Coordonnee(48.94796491807184, 2.0651253924818516);
-        assertEquals(0.121, Reseau.distanceBetween(origine2, destination2)); //résultat depuis Google Maps
-
-        Coordonnee origine3 = new Coordonnee(52.2296756, 21.0122287);
-        Coordonnee destination3 = new Coordonnee(52.406374, 16.9251681);
-        assertEquals(278.537, Reseau.distanceBetween(origine3, destination3)); //résultat depuis un site de calcul
-    }*/
-
-    /**
-     * Teste si les stations proches obtenues sont celles attendues.
-     */
-    @Test
-    void testsGetNearStations() {
-        Coordonnee coordonnee = new Coordonnee(2.289435418542214, 48.87566737659971); //coordonnée d'une station
-        double maxDistance = 0.1; //100 m
-        double minDistance = 0.0; //0 m
-        List<Station> near1 = reseau.getNearStations(coordonnee, maxDistance, minDistance);
-        assertEquals(1, near1.size()); //la station elle-même
-
-        Station station = new Station("station test", coordonnee);
-        reseau.addStation(station);
-        List<Station> near2 = reseau.getNearStations(coordonnee, maxDistance, minDistance);
-        assertEquals(2, near2.size());
-
-        reseau.removeStation(station);
-        List<Station> near3 = reseau.getNearStations(coordonnee, maxDistance, minDistance);
-        assertEquals(1, near3.size());
-    }
-
-    /**
-     * Teste le calcul des plus courts chemins du Reseau
-     */
-    @Test
-    void testDjikstra() {
-        //TODO write tests
     }
 }

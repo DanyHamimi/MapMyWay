@@ -1,5 +1,6 @@
 package fr.uparis.backapp.model;
 
+import fr.uparis.backapp.model.lieu.Station;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testeur de la classe Ligne
+ * Testeur de la classe Ligne.
  */
 public class TestLigne {
     final private Ligne ligne = new Ligne("L1");
@@ -24,7 +25,7 @@ public class TestLigne {
      * Teste la construction de Ligne avec des paramètres null.
      */
     @Test
-    public void testConstructorWithNullValues() {
+    public void testsConstructorWithNullValues() {
         Ligne ligne = new Ligne(null, null, null);
         assertNotNull(ligne);
         assertNull(ligne.getNomLigne());
@@ -85,6 +86,23 @@ public class TestLigne {
         assertEquals(1, ligne.getHorairesDepart().size());
         assertFalse(ligne.getHorairesDepart().contains(horaire1));
         assertTrue(ligne.getHorairesDepart().contains(horaire2));
+    }
+
+    /**
+     * Teste le renvoie de terminus d'une ligne.
+     */
+    @Test
+    public void testsGetDirection() {
+        Station station1 = new Station("station1", new Coordonnee("1,1"));
+        Station station2 = new Station("station2", new Coordonnee("1,1"));
+        Station station3 = new Station("station3", new Coordonnee("1,1"));
+        ligne.addStation(station1);
+        ligne.addStation(station2);
+        ligne.addStation(station3);
+
+        assertNotEquals(station1, ligne.getDirection());
+        assertNotEquals(station2, ligne.getDirection());
+        assertEquals(station3, ligne.getDirection());
     }
 
     /**

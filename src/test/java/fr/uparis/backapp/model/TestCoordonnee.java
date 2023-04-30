@@ -2,12 +2,13 @@ package fr.uparis.backapp.model;
 
 import org.junit.jupiter.api.Test;
 
+import static fr.uparis.backapp.model.Coordonnee.isCoordinate;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Testeur de la classe Coordonnee
+ * Testeur de la classe Coordonnee.
  */
-public class TestCoordonnee{
+public class TestCoordonnee {
     /**
      * Teste la construction de la classe à partir de deux doubles.
      * Teste les getters de latitude et longitude, en degrés et en radians.
@@ -28,12 +29,22 @@ public class TestCoordonnee{
      */
     @Test
     public void testsConstructorString() {
-        Coordonnee coordonnee = new Coordonnee("48.8566,2.3522");
+        Coordonnee coordonnee = new Coordonnee("2.3522,48.8566");
         assertEquals(48.8566, coordonnee.getLatitude(), 0.0);
         assertEquals(2.3522, coordonnee.getLongitude(), 0.0);
 
         assertThrows(IllegalArgumentException.class, () -> new Coordonnee("48.8566;2.3522"));
         assertThrows(NumberFormatException.class, () -> new Coordonnee("48.8566,e2.3522"));
+    }
+
+    /**
+     * Teste si une chaîne de caractères est une coordonnée valide.
+     */
+    @Test
+    public void testsIsCoordinate() {
+        assertTrue(isCoordinate("2.3522,48.8566"));
+        assertFalse(isCoordinate("48.8566;2.3522"));
+        assertFalse(isCoordinate("48.8566,e2.3522"));
     }
 
     /**
