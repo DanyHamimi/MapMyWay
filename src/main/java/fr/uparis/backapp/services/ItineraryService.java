@@ -25,7 +25,7 @@ public class ItineraryService {
     private final Reseau reseau;
 
     @Autowired
-    public ItineraryService(Reseau reseau) {
+    public ItineraryService() {
         this.reseau = Reseau.getInstance();
     }
 

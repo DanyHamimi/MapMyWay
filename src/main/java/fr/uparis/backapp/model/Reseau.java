@@ -10,7 +10,6 @@ import java.util.*;
 /**
  * Représente le Reseau de transport.
  */
-@Component
 public class Reseau {
     private static Reseau instance = null;
     private static Set<Station> stations;
@@ -19,7 +18,7 @@ public class Reseau {
     /**
      * Constructeur privé pour créer une instance de la classe Reseau.
      */
-    public Reseau() {
+    private Reseau() {
         Parser parser = Parser.getInstance();
         sections = parser.getSections();
         stations = new HashSet<>();
