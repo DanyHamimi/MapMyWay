@@ -75,7 +75,7 @@ public class ItineraryService {
 
         if (station == null)
             return new HashMap<>();
-        // recupérer toutes les sections qui partent de cette station
+        //Recupérer toutes les sections qui partent de cette station
         List<SectionTransport> sectionTransports = reseau.getSections().stream().filter(section -> section.isStationDepart(station)).toList();
         return getSchedulesByLine(sectionTransports);
     }

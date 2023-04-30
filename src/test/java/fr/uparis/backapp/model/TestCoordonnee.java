@@ -2,6 +2,7 @@ package fr.uparis.backapp.model;
 
 import org.junit.jupiter.api.Test;
 
+import static fr.uparis.backapp.model.Coordonnee.isCoordinate;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -34,6 +35,16 @@ public class TestCoordonnee {
 
         assertThrows(IllegalArgumentException.class, () -> new Coordonnee("48.8566;2.3522"));
         assertThrows(NumberFormatException.class, () -> new Coordonnee("48.8566,e2.3522"));
+    }
+
+    /**
+     * Teste si une chaîne de caractères est une coordonnée valide.
+     */
+    @Test
+    public void testsIsCoordinate() {
+        assertTrue(isCoordinate("2.3522,48.8566"));
+        assertFalse(isCoordinate("48.8566;2.3522"));
+        assertFalse(isCoordinate("48.8566,e2.3522"));
     }
 
     /**

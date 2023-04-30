@@ -89,6 +89,23 @@ public class TestLigne {
     }
 
     /**
+     * Teste le renvoie de terminus d'une ligne.
+     */
+    @Test
+    public void testsGetDirection() {
+        Station station1 = new Station("station1", new Coordonnee("1,1"));
+        Station station2 = new Station("station2", new Coordonnee("1,1"));
+        Station station3 = new Station("station3", new Coordonnee("1,1"));
+        ligne.addStation(station1);
+        ligne.addStation(station2);
+        ligne.addStation(station3);
+
+        assertNotEquals(station1, ligne.getDirection());
+        assertNotEquals(station2, ligne.getDirection());
+        assertEquals(station3, ligne.getDirection());
+    }
+
+    /**
      * Tests d'égalité.
      */
     @Test

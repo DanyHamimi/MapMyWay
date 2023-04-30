@@ -83,15 +83,6 @@ public class Ligne {
     }
 
     /**
-     * Renvoie la direction de la ligne.
-     *
-     * @return le terminus de la ligne.
-     */
-    public Station getDirection() {
-        return (Station) stations.toArray()[stations.size() - 1];
-    }
-
-    /**
      * Ajout d'un horaire de départ à la Ligne, si elle n'y est pas déjà.
      *
      * @param horaire l'horaire de départ à ajouter à la Ligne.
@@ -107,6 +98,15 @@ public class Ligne {
      */
     public void removeHoraireDepart(LocalTime horaire) {
         this.horairesDepart.remove(horaire);
+    }
+
+    /**
+     * Renvoie la direction de la ligne.
+     *
+     * @return le terminus de la ligne.
+     */
+    public Station getDirection() {
+        return (Station) stations.toArray()[stations.size() - 1];
     }
 
     /**

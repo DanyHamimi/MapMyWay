@@ -1,12 +1,23 @@
 package fr.uparis.backapp.utils;
 
+import fr.uparis.backapp.exceptions.StationNotFoundException;
 import fr.uparis.backapp.model.Coordonnee;
+import fr.uparis.backapp.model.Ligne;
+import fr.uparis.backapp.model.Reseau;
+import fr.uparis.backapp.model.lieu.Station;
+import fr.uparis.backapp.model.section.SectionTransport;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static fr.uparis.backapp.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Testeur de la classe Utils.
@@ -110,5 +121,70 @@ public class TestUtils {
         assertEquals(0, distanceOfWalkingDuration(Duration.ofSeconds(-5)));
         assertEquals(0.91, distanceOfWalkingDuration(Duration.ofSeconds(655)));
         assertEquals(0.919, distanceOfWalkingDuration(Duration.ofSeconds(662)));
+    }
+
+    /**
+     * Teste l'obtention des horaires de passage des trains.
+     */
+    @Test
+    public void testGetSchedulesByLine() {
+        Station station = new Station("station", new Coordonnee("1,1"));
+        Station station1 = new Station("station1", new Coordonnee("1,1"));
+        Station station2 = new Station("station2", new Coordonnee("1,1"));
+
+
+        Set<Station> stations1 = new HashSet<>();
+        stations1.add(station);
+        stations1.add(station1);
+        Ligne ligne1 = new Ligne("ligne1", stations1, new HashSet<>());
+
+        Set<Station> stations2 = new HashSet<>();
+        stations2.add(station);
+        stations2.add(station2);
+        Ligne ligne2 = new Ligne("ligne2", stations2, new HashSet<>());
+
+
+        SectionTransport section1 = new SectionTransport(station, station1, Duration.ofSeconds(50), 1.5, ligne1);
+        section1.addHoraireDepart(LocalTime.of(12, 10));
+        section1.addHoraireDepart(LocalTime.of(12, 15));
+        station.addCorrespondance(section1);
+
+        SectionTransport section2 = new SectionTransport(station, station2, Duration.ofSeconds(50), 1.5, ligne2);
+        section2.addHoraireDepart(LocalTime.of(13, 27));
+        section2.addHoraireDepart(LocalTime.of(13, 15));
+        section2.addHoraireDepart(LocalTime.of(13, 39));
+        station.addCorrespondance(section2);
+
+
+        Map<String, List<LocalTime>> horaires = getSchedulesByLine(station.getCorrespondances().stream().toList());
+
+        assertEquals(2, horaires.values().size());
+        assertEquals(2, horaires.get("ligne1;station1").size());
+        assertEquals(3, horaires.get("ligne2;station2").size());
+        assertEquals(LocalTime.of(13, 27), horaires.get("ligne2;station2").get(1)); //trié
+    }
+
+    /**
+     * Test la transformation d'une chaîne de caractères en LocalTime.
+     */
+    @Test
+    public void testsGetTimeFromString() {
+        assertEquals(LocalTime.of(5, 10), getTimeFromString("5:10"));
+        assertEquals(LocalTime.of(5, 10), getTimeFromString("05:10"));
+        assertEquals(LocalTime.of(0, 0), getTimeFromString("0:0"));
+        assertEquals(LocalTime.of(0, 0), getTimeFromString("0:00"));
+        assertEquals(LocalTime.of(0, 0), getTimeFromString("00:0"));
+        assertEquals(LocalTime.of(0, 0), getTimeFromString("00:00"));
+    }
+
+    /**
+     * Teste la récupération de coordonnées depuis un nom de station ou une coordonnée.
+     */
+    @Test
+    public void testsFetchCoordinates() throws StationNotFoundException{
+        assertEquals(new Coordonnee("1,1"), fetchCoordinates("1, 1"));
+        assertEquals(new Coordonnee(1, 1), fetchCoordinates("1, 1"));
+        assertEquals(Reseau.getInstance().getStation("Gare de Lyon").getLocalisation(), fetchCoordinates("Gare de Lyon"));
+        assertThrows(StationNotFoundException.class, () -> fetchCoordinates("stationTest"));
     }
 }
