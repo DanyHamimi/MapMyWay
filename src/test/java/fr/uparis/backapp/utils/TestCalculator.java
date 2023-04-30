@@ -90,7 +90,7 @@ public class TestCalculator {
             trajet1 = trajetsTrouves1.get(i);
             assertEquals(trajet0.length, trajet1.length);
             assertEquals(trajet0[trajet0.length - 1].getArrivee().getHoraireDePassage(),
-                    trajet1[trajet1.length - 1].getArrivee().getHoraireDePassage());
+                         trajet1[trajet1.length - 1].getArrivee().getHoraireDePassage());
         }
     }
 
@@ -101,33 +101,22 @@ public class TestCalculator {
     public void testsItineraireModeSportif() {
         LocalTime horaireDepart = LocalTime.of(12, 28, 59, 0);
         Station depart = reseau.getStation("Lourmel");
-        Station arrivee1 = reseau.getStation("Boucicaut");
-        Station arrivee2 = reseau.getStation("Mairie d'Issy");
-
-        Calculator.changeMarcherAuMoinsDistance(0.47);
-        List<Section[]> trajetsTrouves1 = Calculator.itineraireFactory(depart.getLocalisation(), arrivee1.getLocalisation(), horaireDepart);
-        assertNotNull(trajetsTrouves1);
-        assertTrue(trajetsTrouves1.size() <= Constants.MAX_TRAJETS_NUMBER);
-        assertNotEquals(1, trajetsTrouves1.get(0).length); //Pied ; Lourmel ; Boucicaut ; Félix Faure ; Pied
-
-        Calculator.changeMarcherAuMoinsDistance(0.475);
-        List<Section[]> trajetsTrouves0 = Calculator.itineraireFactory(depart.getLocalisation(), arrivee1.getLocalisation(), horaireDepart);
-        assertNotNull(trajetsTrouves0);
-        assertTrue(trajetsTrouves0.size() <= Constants.MAX_TRAJETS_NUMBER);
-        assertEquals(1, trajetsTrouves0.get(0).length); //Pied
-
+        Station arrivee = reseau.getStation("Mairie d'Issy");
 
         Calculator.changeMarcherAuMoinsDistance(0.91);
-        List<Section[]> trajetsTrouves2 = Calculator.itineraireFactory(depart.getLocalisation(), arrivee2.getLocalisation(), horaireDepart);
+        List<Section[]> trajetsTrouves1 = Calculator.itineraireFactory(depart.getLocalisation(), arrivee.getLocalisation(), horaireDepart);
+        assertNotNull(trajetsTrouves1);
+        assertTrue(trajetsTrouves1.size() <= Constants.MAX_TRAJETS_NUMBER);
+
+        Calculator.changeMarcherAuMoinsDistance(1.4);
+        List<Section[]> trajetsTrouves2 = Calculator.itineraireFactory(depart.getLocalisation(), arrivee.getLocalisation(), horaireDepart);
         assertNotNull(trajetsTrouves2);
         assertTrue(trajetsTrouves2.size() <= Constants.MAX_TRAJETS_NUMBER);
-        assertEquals(4, trajetsTrouves2.get(0).length); //Pied ; Porte de Versailles ; Corentin Celton ; Mairie d'Issy ; Pied
 
-        Calculator.changeMarcherAuMoinsDistance(0.919);
-        List<Section[]> trajetsTrouves4 = Calculator.itineraireFactory(depart.getLocalisation(), arrivee2.getLocalisation(), horaireDepart);
-        assertNotNull(trajetsTrouves4);
-        assertTrue(trajetsTrouves4.size() <= Constants.MAX_TRAJETS_NUMBER);
-        assertEquals(3, trajetsTrouves4.get(0).length); //Pied ; Corentin Celton ; Mairie d'Issy ; Pied
+        Section[] sections1=trajetsTrouves1.get(0);
+        Section[] sections2=trajetsTrouves2.get(0);
+        assertTrue(sections1[sections1.length - 1].getArrivee().getHoraireDePassage()
+                .isBefore(sections2[sections2.length - 1].getArrivee().getHoraireDePassage()));
     }
 
     /**

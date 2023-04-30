@@ -23,6 +23,10 @@ public class Constants {
      * Délimiteur utilisé par le fichier CSV.
      */
     public static final String DELIMITER = ";";
+    public static final String COLON = ":";
+    public static final String SPACE = " ";
+    public static final String COORDINATE_REGEX = "^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?"
+            + "(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$";
 
 
     /**

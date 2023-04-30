@@ -35,26 +35,28 @@ $(document).ready(function () {
             return;
         }
 
-        document.getElementById('liste').style.display="block"
+        document.getElementById('liste').style.display = "block"
 
         var data = {
             origin: origine,
             destination: destination,
             time: timeValue
         };
-
-
         // Envoyer les données au backend via une requête AJAX
         $.ajax({
             type: 'GET',
-            url: '/iteneray',
+            url: '/itinerary',
             data: data,
             success: function (response) {
                 // Traitement de la réponse du backend en cas de succès
                 console.log(response)
                 itenaries = response
+
+                if (itenaries.length === 0) {
+                    alert("Station inexistantes dans le réseau de transport")
+                }
                 //hide all det from previous search
-                for(var i=1; i<=5; i++){
+                for (var i = 1; i <= 5; i++) {
                     document.getElementById("det" + i).style.display = "none";
                 }
                 for (let index = 0; index < itenaries.length; index++) {
@@ -168,8 +170,6 @@ $(document).ready(function () {
         return traject_duration.getUTCHours() !== 0 ? traject_duration.getUTCHours() + " h " + traject_duration.getUTCMinutes() + ' min' : traject_duration.getUTCMinutes() + ' min';
     }
 
-    let markersAndLinesGroup = L.layerGroup().addTo(map);
-
     function parseISO8601Time(timeString) {
         const [hours, minutes, seconds] = timeString.split(':').map(Number);
         const date = new Date();
@@ -232,8 +232,8 @@ function pingLocalizations(index) {
             lignetmp = section.ligne.nomLigne.split(' ')[0];
         }
 
-        let longitude = section.depart.localisation.latitude;
-        let latitude = section.depart.localisation.longitude;
+        let latitude = section.depart.localisation.latitude;
+        let longitude = section.depart.localisation.longitude;
         let nom_station = section.depart.nomLieu;
         const marker = L.marker([latitude, longitude]).addTo(map)
             .bindPopup(`<b>${nom_station}</b>`).openPopup();
@@ -292,17 +292,17 @@ function displayTraject(idTraject) {
 function isEmpty(field) {
     if (field === '' || field === null || field === undefined) {
 
-            var afficher_message = document.getElementById('chercher')
-            var messageDiv = document.createElement("div");
-            messageDiv.setAttribute("id", "errorSig");
-            messageDiv.innerHTML = "Veuillez remplir les champs";
-            afficher_message.appendChild(messageDiv);
+        var afficher_message = document.getElementById('chercher')
+        var messageDiv = document.createElement("div");
+        messageDiv.setAttribute("id", "errorSig");
+        messageDiv.innerHTML = "Veuillez remplir les champs";
+        afficher_message.appendChild(messageDiv);
 
-            setTimeout(function () {
-                afficher_message.removeChild(messageDiv);
-            }, 3000);
+        setTimeout(function () {
+            afficher_message.removeChild(messageDiv);
+        }, 3000);
 
-            return true;
+        return true;
     }
     return false;
 }
