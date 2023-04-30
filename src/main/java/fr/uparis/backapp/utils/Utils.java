@@ -160,16 +160,11 @@ public class Utils {
      * @return les coordonnées du lieu, sous forme d'objet Coordonnee.
      * @throws StationNotFoundException si le paramètre "place" n'est ni coordonnées valides, ni nom d'une station existante dans le réseau.
      */
-
     public static Coordonnee fetchCoordinates(String place) throws StationNotFoundException {
-        if (isCoordinate(place)) {
-            return new Coordonnee(place);
-        } else {
-            Station station = Reseau.getInstance().getStation(place);
-            if (station == null) {
-                throw new StationNotFoundException("Station not found: " + place);
-            }
-            return station.getLocalisation();
-        }
+        if (isCoordinate(place)) return new Coordonnee(place);
+        Station station = Reseau.getInstance().getStation(place);
+        if (station == null)
+            throw new StationNotFoundException("Station not found: " + place);
+        return station.getLocalisation();
     }
 }

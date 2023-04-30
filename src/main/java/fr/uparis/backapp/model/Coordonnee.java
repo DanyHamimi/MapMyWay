@@ -83,11 +83,11 @@ public class Coordonnee {
     }
 
     /**
-     * Vérifie si une chaîne donnée correspond à une coordonnée géographique valide au format décimal
-     * (latitudine, longitude).
+     * Vérifie si une chaîne de caractères donnée correspond à une coordonnée géographique valide,
+     * au format décimal (latitude, longitude).
      *
-     * @param input La chaîne à vérifier.
-     * @return true si la chaîne est une coordonnée valide, false sinon.
+     * @param input La chaîne de caractères à vérifier.
+     * @return true si la chaîne de caractères est une coordonnée valide, false sinon.
      */
     public static boolean isCoordinate(String input) {
         return input.matches(COORDINATE_REGEX);
