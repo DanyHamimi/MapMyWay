@@ -1,6 +1,7 @@
 const optionsBtn = document.getElementById('options');
 const searchBtn = document.getElementById('chercher');
 let lastClickedValue = 'origine';
+const applyBtn = document.getElementById('apply-btn');
 
 optionsBtn.addEventListener('click', (e) => {
     let parent = e.target.parentNode.parentNode;
@@ -104,8 +105,8 @@ $(function () {
 var map = L.map('map').setView([48.858093, 2.294694], 15);
 // Définir les limites de la carte
 var bounds = L.latLngBounds(
-    L.latLng(48.8156, 2.2242), // Coin inférieur gauche
-    L.latLng(48.9022, 2.4699)  // Coin supérieur droit
+    L.latLng(48.714072, 2.077789), // Coin inférieur gauche
+    L.latLng(49.004997, 2.628479)  // Coin supérieur droit
 );
 map.setMaxBounds(bounds);
 
