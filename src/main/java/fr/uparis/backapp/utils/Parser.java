@@ -5,8 +5,10 @@ import fr.uparis.backapp.model.section.SectionTransport;
 import fr.uparis.backapp.utils.constants.Constants;
 import fr.uparis.backapp.config.Config;
 import fr.uparis.backapp.model.*;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,7 +34,7 @@ public class Parser {
      * Constructeur privé pour créer une instance de la classe Parser.
      * Initialise les structures de données carte et sectionsSet.
      */
-    public Parser() {
+    private Parser() {
         lignes = new LinkedHashMap<>();
         stations = new HashMap<>();
         sections = new LinkedHashSet<>();
@@ -94,16 +96,13 @@ public class Parser {
         List<String[]> lines = new ArrayList<>();
 
         try {
-//            InputStream ins = Parser.class.getClassLoader().getResourceAsStream(filePath);
-            Path path = Paths.get(Parser.class.getResource("/input/" + filePath).toURI());
-            lines = Files.readAllLines(path)
+            InputStream ins = Parser.class.getClassLoader().getResourceAsStream(filePath);
+            lines = IOUtils.readLines(ins, "UTF-8")
                     .stream()
                     .map(line -> line.split(Constants.DELIMITER))
                     .toList();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
         }
         return lines;
     }
