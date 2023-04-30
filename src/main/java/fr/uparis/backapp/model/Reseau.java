@@ -3,12 +3,14 @@ package fr.uparis.backapp.model;
 import fr.uparis.backapp.model.lieu.Station;
 import fr.uparis.backapp.model.section.SectionTransport;
 import fr.uparis.backapp.utils.Parser;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 /**
  * Représente le Reseau de transport.
  */
+@Component
 public class Reseau {
     private static Reseau instance = null;
     private static Set<Station> stations;
@@ -17,7 +19,7 @@ public class Reseau {
     /**
      * Constructeur privé pour créer une instance de la classe Reseau.
      */
-    private Reseau() {
+    public Reseau() {
         Parser parser = Parser.getInstance();
         sections = parser.getSections();
         stations = new HashSet<>();
@@ -30,7 +32,7 @@ public class Reseau {
      * @return l'instance de la classe Reseau.
      */
     public static Reseau getInstance() {
-        if(instance == null) instance = new Reseau();
+        if (instance == null) instance = new Reseau();
         return instance;
     }
 
@@ -50,8 +52,8 @@ public class Reseau {
      * @return la station qui porte le nom qu'on cherche.
      */
     public Station getStation(String nameStation) {
-        for(Station s: stations)
-            if(s.getNomLieu().equals(nameStation))
+        for (Station s : stations)
+            if (s.getNomLieu().equals(nameStation))
                 return s;
         return null;
     }
@@ -63,8 +65,8 @@ public class Reseau {
      * @return la station qui se trouve à la coordonnée précisée.
      */
     public Station getStation(Coordonnee coordonneeStation) {
-        for(Station s: stations)
-            if(s.getLocalisation().equals(coordonneeStation))
+        for (Station s : stations)
+            if (s.getLocalisation().equals(coordonneeStation))
                 return s;
         return null;
     }
@@ -86,9 +88,9 @@ public class Reseau {
     public void removeStation(Station station) {
         stations.remove(station);
         List<SectionTransport> toDelete = sections.stream()
-                                         .filter(s -> s.isStationDepart(station) || s.isStationArrivee(station))
-                                         .toList();
-        for(SectionTransport section: toDelete) removeSection(section);
+                .filter(s -> s.isStationDepart(station) || s.isStationArrivee(station))
+                .toList();
+        for (SectionTransport section : toDelete) removeSection(section);
     }
 
     /**
@@ -120,9 +122,9 @@ public class Reseau {
      */
     public void removeSection(SectionTransport section) {
         sections.remove(section);
-        if(sections.stream().noneMatch(s -> s.isStationDepart(section.getDepart()) || s.isStationArrivee(section.getDepart())))
+        if (sections.stream().noneMatch(s -> s.isStationDepart(section.getDepart()) || s.isStationArrivee(section.getDepart())))
             removeStation(section.getDepart());
-        if(sections.stream().noneMatch(s -> s.isStationDepart(section.getArrivee()) || s.isStationArrivee(section.getArrivee())))
+        if (sections.stream().noneMatch(s -> s.isStationDepart(section.getArrivee()) || s.isStationArrivee(section.getArrivee())))
             removeStation(section.getArrivee());
     }
 }

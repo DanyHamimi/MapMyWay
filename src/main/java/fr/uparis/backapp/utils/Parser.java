@@ -7,7 +7,9 @@ import fr.uparis.backapp.config.Config;
 import fr.uparis.backapp.model.*;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -30,7 +32,7 @@ public class Parser {
      * Constructeur privé pour créer une instance de la classe Parser.
      * Initialise les structures de données carte et sectionsSet.
      */
-    private Parser() {
+    public Parser() {
         lignes = new LinkedHashMap<>();
         stations = new HashMap<>();
         sections = new LinkedHashSet<>();
@@ -43,7 +45,7 @@ public class Parser {
      * @return l'instance unique de la classe Parser.
      */
     public static Parser getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new Parser();
             instance.parseMap();
             instance.parseTime();
@@ -90,13 +92,18 @@ public class Parser {
      */
     private static List<String[]> getFileLines(String filePath) {
         List<String[]> lines = new ArrayList<>();
+
         try {
-            lines = Files.readAllLines(Paths.get(filePath))
-                         .stream()
-                         .map(line -> line.split(Constants.DELIMITER))
-                         .toList();
+//            InputStream ins = Parser.class.getClassLoader().getResourceAsStream(filePath);
+            Path path = Paths.get(Parser.class.getResource("/input/" + filePath).toURI());
+            lines = Files.readAllLines(path)
+                    .stream()
+                    .map(line -> line.split(Constants.DELIMITER))
+                    .toList();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
         return lines;
     }
@@ -171,7 +178,7 @@ public class Parser {
      */
     private void addSchedulesToLines(Map<String, Map<String, List<LocalTime>>> map) {
         map.forEach((variant, timesByTerminal) ->
-            timesByTerminal.values().forEach(times -> times.forEach(time -> lignes.get(variant).addHoraireDepart(time)))
+                timesByTerminal.values().forEach(times -> times.forEach(time -> lignes.get(variant).addHoraireDepart(time)))
         );
     }
 
@@ -183,13 +190,13 @@ public class Parser {
      */
     private void calculate_schedules(Map<String, Map<String, List<LocalTime>>> map) {
         map.forEach((variant, timesByTerminal) ->
-            timesByTerminal.forEach((terminal, times) -> {
-                SectionTransport sectionDepart = findSectionDepart(terminal, variant);
-                if(sectionDepart == null)
-                    throw new IllegalArgumentException("Station départ introuvable dans le réseau");
-                sectionDepart.addHorairesDepart(times);
-                propagateSchedules(sectionDepart);
-            })
+                timesByTerminal.forEach((terminal, times) -> {
+                    SectionTransport sectionDepart = findSectionDepart(terminal, variant);
+                    if (sectionDepart == null)
+                        throw new IllegalArgumentException("Station départ introuvable dans le réseau");
+                    sectionDepart.addHorairesDepart(times);
+                    propagateSchedules(sectionDepart);
+                })
         );
     }
 
@@ -202,7 +209,7 @@ public class Parser {
      */
     private SectionTransport findSectionDepart(String nameStation, String lineVariant) {
         Station stationDepart = new Station(nameStation, null);
-        for (SectionTransport section: sections)
+        for (SectionTransport section : sections)
             if (section.isStationDepart(stationDepart) && section.getLigne().getNomLigne().equals(lineVariant))
                 return section;
         return null;
@@ -223,8 +230,8 @@ public class Parser {
             SectionTransport finalCurrentSection = currentSection;
             SectionTransport finalNextSectionInTheSameLine = nextSectionInTheSameLine;
             currentSection.getHorairesDepart().forEach(time ->
-                finalNextSectionInTheSameLine.addHoraireDepart(time.plus(finalCurrentSection.getDuree())
-                                                                   .plus(Duration.ofSeconds(40)))); //40 secondes d'arrêt
+                    finalNextSectionInTheSameLine.addHoraireDepart(time.plus(finalCurrentSection.getDuree())
+                            .plus(Duration.ofSeconds(40)))); //40 secondes d'arrêt
 
             currentSection = nextSectionInTheSameLine;
             nextSectionInTheSameLine = currentSection.moveToNextSectionInTheSameLine(sections);
