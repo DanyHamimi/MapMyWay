@@ -26,26 +26,16 @@ function fillCurrentHour() {
 $(document).ready(function () {
 
     $('#search-btn').click(function () {
-        var origine = $('#origine').val();
-        var destination = $('#destination').val();
-        var timeValue = $('#hour').val();
-
-        if (isEmpty(origine) || isEmpty(destination) || isEmpty(timeValue)) {
-            console.log("origine ou destination vide")
-            return;
-        }
-
         document.getElementById('liste').style.display = "block"
 
-        var data = {
-            origin: origine,
-            destination: destination,
-            time: timeValue
-        };
+        let dataToSend = getFormData();
+        let urlQuery = dataToSend[0];
+        let data = dataToSend[1];
+
         // Envoyer les données au backend via une requête AJAX
         $.ajax({
             type: 'GET',
-            url: '/itinerary',
+            url: urlQuery,
             data: data,
             success: function (response) {
                 // Traitement de la réponse du backend en cas de succès
@@ -305,4 +295,66 @@ function isEmpty(field) {
         return true;
     }
     return false;
+}
+
+// fonction qui permet de recuperer les données à envoyer à l'API selon l'option de trajet selectionnée
+function getFormData() {
+
+    var origine = $('#origine').val();
+    var destination = $('#destination').val();
+    var timeValue = $('#hour').val();
+
+    if (isEmpty(origine) || isEmpty(destination) || isEmpty(timeValue)) {
+        console.log("origine ou destination vide")
+        return;
+    }
+
+    var selectedOption = $('input[name="typetrajet"]:checked').val();
+    var data = {}
+    var url = ''
+    if (selectedOption === 'lazy0') {
+        url = 'itinerary/optimal'
+        data = {
+            "origin": origine,
+            "destination": destination,
+            "time": timeValue
+        }
+    } else if (selectedOption === 'lazy1') {
+        var distanceMax = $('#lazy_distance').val();
+        url = 'itinerary/lazy'
+        data = {
+            "origin": origine,
+            "destination": destination,
+            "time": timeValue,
+            "distanceMax": distanceMax
+        }
+    } else if (selectedOption === 'sport0') {
+        url = 'itinerary/fullSport'
+        data = {
+            "origin": origine,
+            "destination": destination,
+            "time": timeValue
+        }
+    } else if (selectedOption === 'sport1') {
+        var distanceMax = $('#sport_distance').val();
+        url = 'itinerary/sport/distance'
+        data = {
+            "origin": origine,
+            "destination": destination,
+            "time": timeValue,
+            "distanceMax": distanceMax
+        }
+    } else if (selectedOption === 'sport2') {
+        var walkingTimeMax = $('#sport_minutes').val();
+        url = 'itinerary/sport/time'
+        data = {
+            "origin": origine,
+            "destination": destination,
+            "time": timeValue,
+            "walkingTimeMax": walkingTimeMax
+        }
+    }
+    console.log('url : ', url)
+    console.log('data ', data)
+    return [url, data]
 }

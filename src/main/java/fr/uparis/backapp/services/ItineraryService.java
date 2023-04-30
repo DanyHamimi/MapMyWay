@@ -51,6 +51,19 @@ public class ItineraryService {
         return trajects;
     }
 
+    public List<Section[]> searchLazyItinerary(String origin, String destination, String time, int distanceMax) {
+        List<Section[]> trajects;
+        LocalTime trajectTime = getTimeFromString(time);
+        try {
+            Coordonnee originCoordinates = fetchCoordinates(origin);
+            Coordonnee destinationCoordinates = fetchCoordinates(destination);
+            trajects = itineraireFactory(originCoordinates, destinationCoordinates, trajectTime);
+        } catch (StationNotFoundException e) {
+            trajects = new ArrayList<>();
+        }
+        return trajects;
+    }
+
     /**
      * L'autocomplétion de la saisie dans la barre de recherche de stations.
      *
@@ -79,5 +92,7 @@ public class ItineraryService {
         List<SectionTransport> sectionTransports = reseau.getSections().stream().filter(section -> section.isStationDepart(station)).toList();
         return getSchedulesByLine(sectionTransports);
     }
+
+
 
 }
