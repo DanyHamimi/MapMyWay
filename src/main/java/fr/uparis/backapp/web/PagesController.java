@@ -45,7 +45,7 @@ public class PagesController {
      * @return la liste des itinéraires possibles sous forme de tableau de sections.
      */
     @ResponseBody
-    @GetMapping("/iteneray")
+    @GetMapping("/itinerary")
     public List<Section[]> searchItinerary(@RequestParam("origin") String origin, @RequestParam("destination") String destination, @RequestParam("time") String time) {
         return itineraryService.searchItinerary(origin, destination, time);
     }

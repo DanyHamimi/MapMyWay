@@ -45,14 +45,14 @@ $(document).ready(function () {
         // Envoyer les données au backend via une requête AJAX
         $.ajax({
             type: 'GET',
-            url: '/iteneray',
+            url: '/itinerary',
             data: data,
             success: function (response) {
                 // Traitement de la réponse du backend en cas de succès
                 console.log(response)
                 itenaries = response
 
-                if (itenaries.length == 0) {
+                if (itenaries.length === 0) {
                     alert("Station inexistantes dans le réseau de transport")
                 }
                 //hide all det from previous search
@@ -169,8 +169,6 @@ $(document).ready(function () {
         var traject_duration = horaire_arrivee > horaire_depart ? new Date(Math.abs(horaire_arrivee - horaire_depart)) : new Date(Math.abs(horaire_arrivee.setDate(horaire_arrivee.getDate() + 1) - horaire_depart));
         return traject_duration.getUTCHours() !== 0 ? traject_duration.getUTCHours() + " h " + traject_duration.getUTCMinutes() + ' min' : traject_duration.getUTCMinutes() + ' min';
     }
-
-    let markersAndLinesGroup = L.layerGroup().addTo(map);
 
     function parseISO8601Time(timeString) {
         const [hours, minutes, seconds] = timeString.split(':').map(Number);
