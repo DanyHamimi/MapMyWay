@@ -362,7 +362,7 @@ function isEmpty(field) {
 
         setTimeout(function () {
             afficher_message.removeChild(messageDiv);
-        }, 3000);
+        }, 5000);
 
         return true;
     }
@@ -371,7 +371,16 @@ function isEmpty(field) {
 
 function checkEmptyAndAlert(field, message) {
     if (field === '' || field === null || field === undefined) {
-        alert('Veuillez remplir le champ ' + message);
+        //alert('Veuillez remplir le champ ' + message);
+        var afficher_message = document.getElementById('chercher')
+        var messageDiv = document.createElement("div");
+        messageDiv.setAttribute("id", "errorSig");
+        messageDiv.innerHTML = "Veuillez remplir les champs "+ message;
+        afficher_message.appendChild(messageDiv);
+
+        setTimeout(function () {
+            afficher_message.removeChild(messageDiv);
+        }, 5000);
         return true;
     }
     return false;
