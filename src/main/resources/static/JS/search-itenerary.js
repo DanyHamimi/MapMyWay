@@ -215,6 +215,20 @@ function pingLocalizations(index) {
     if (itenerary === undefined)
         return;
     var prevValues = null;
+    console.log("LITINERARY")
+    console.log(itenerary);
+    if(itenerary.length == 1) {
+        let polyline = L.polyline([
+            [itenerary[0].depart.localisation.latitude, itenerary[0].depart.localisation.longitude],
+            [itenerary[0].arrivee.localisation.latitude, itenerary[0].arrivee.localisation.longitude]
+        ],{color: 'black',
+            weight: 8,
+            dashArray: [10, 20]
+        }).addTo(map);
+        itineraryPolylines.push(polyline);
+        return;
+    }
+    let i = 0
     itenerary.forEach(section => {
         let lineColor;
         let lignetmp;
@@ -232,7 +246,11 @@ function pingLocalizations(index) {
             .bindPopup(`<b>${nom_station}</b>`).openPopup();
         itineraryMarkers.push(marker);
 
+
         if (prevValues) {
+            i = i + 1;
+            console.log("a la "+ i +" itération mon ancienne ligne est " + prevValues.ligne.nomLigne)
+            console.log("Je rentre ici pour la "+ i +" fois avec station comme départ" + section.depart.nomLieu + " et station comme arrivée" + section.arrivee.nomLieu)
             let polyline;
             if (prevValues.ligne.nomLigne === 'sectionMarche') {
                 lineColor = 'black';
@@ -253,9 +271,27 @@ function pingLocalizations(index) {
             itineraryPolylines.push(polyline);
         }
 
+        let polyline2;
         if (section.arrivee.nomLieu !== FIN) {
             prevValues = {marker: marker, ligne: lignetmp};
+        } else {
+            if (section.ligne == null) { //Donc si il faut marcher à la fin
+                let latitude = section.arrivee.localisation.latitude;
+                let longitude = section.arrivee.localisation.longitude;
+                let nom_station = "Arrivée";
+                const markerARR = L.marker([latitude, longitude]).addTo(map)
+                    .bindPopup(`<b>${nom_station}</b>`).openPopup();
+                itineraryMarkers.push(markerARR);
+                //Now draw the polyline between marker and markerARR
+                polyline2 = L.polyline([marker.getLatLng(), markerARR.getLatLng()], {
+                    color: 'black',
+                    weight: 8,
+                    dashArray: [10, 20]
+                }).addTo(map);
+                itineraryPolylines.push(polyline2);
+            }
         }
+
     });
 }
 
