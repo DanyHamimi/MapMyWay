@@ -21,7 +21,7 @@ public class PagesController {
      */
     @Autowired
     public PagesController(ItineraryService itineraryService) {
-        this.itineraryService= itineraryService;
+        this.itineraryService = itineraryService;
     }
 
     /**
@@ -45,9 +45,42 @@ public class PagesController {
      * @return la liste des itinéraires possibles sous forme de tableau de sections.
      */
     @ResponseBody
-    @GetMapping("/itinerary")
+    @GetMapping("itinerary/optimal")
     public List<Section[]> searchItinerary(@RequestParam("origin") String origin, @RequestParam("destination") String destination, @RequestParam("time") String time) {
         return itineraryService.searchItinerary(origin, destination, time);
+    }
+
+    /**
+     * Recherche un itinéraire entre deux lieux spécifiés à un moment donné.
+     *
+     * @param origin      la station ou les coordonnées de départ.
+     * @param destination la station ou les coordonnées d'arrivée.
+     * @param time        l'heure de départ.
+     * @param distanceMax la distance maximale à parcourir à pied.
+     * @return la liste des itinéraires possibles sous forme de tableau de sections.
+     */
+    @ResponseBody
+    @GetMapping("itinerary/lazy")
+    public List<Section[]> searchLazyItinerary(@RequestParam("origin") String origin, @RequestParam("destination") String destination, @RequestParam("time") String time, @RequestParam("distanceMax") double distanceMax) {
+        return itineraryService.searchLazyItinerary(origin, destination, time, distanceMax);
+    }
+
+    @ResponseBody
+    @GetMapping("itinerary/fullSport")
+    public List<Section[]> searchFullSportItinerary(@RequestParam("origin") String origin, @RequestParam("destination") String destination, @RequestParam("time") String time) {
+        return itineraryService.searchFullSportItinerary(origin, destination, time);
+    }
+
+    @ResponseBody
+    @GetMapping("itinerary/sport/distance")
+    public List<Section[]> searchItineraryWithMinWalkingDistance(@RequestParam("origin") String origin, @RequestParam("destination") String destination, @RequestParam("time") String time, @RequestParam("distanceMin") double distanceMin) {
+        return itineraryService.searchItineraryWithMinWalkingDistance(origin, destination, time, distanceMin);
+    }
+
+    @ResponseBody
+    @GetMapping("itinerary/sport/time")
+    public List<Section[]> searchItineraryWithMinWalkingDuration(@RequestParam("origin") String origin, @RequestParam("destination") String destination, @RequestParam("time") String time, @RequestParam("walkingTimeMax") double walkingTimeMax) {
+        return itineraryService.searchItineraryWithMinWalkingMinutes(origin, destination, time,walkingTimeMax);
     }
 
     /**
@@ -61,6 +94,5 @@ public class PagesController {
     public Map<String, List<LocalTime>> getStationSchedules(@RequestParam("station") String station) {
         return itineraryService.getStationSchedules(station);
     }
-
 
 }
