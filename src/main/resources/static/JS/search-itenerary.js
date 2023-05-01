@@ -1,5 +1,5 @@
 var itenaries;
-const DEPART = "Début";
+const DEPART = "Départ";
 const FIN = "Arrivée";
 const LIGNE = "ligne";
 const WALK_CLASS_HTML = '<img class="marcher" src="../css/image/marche.png" alt="">'
@@ -73,16 +73,32 @@ $(document).ready(function () {
         var itenerary = itenaries[index - 1];
         var stationsNames = [];
         var detailsHtml = '<div class="detailsTrajet">'
-
+        var LastLine = "";
         itenerary.forEach(section => {
             if (section.ligne != null) {
+                //check if the last element of stationsNames has the same line as the current section line if yes pop it
+                if (stationsNames.length > 0) {
+                    var lastElement = stationsNames[stationsNames.length - 1];
+                    var lastLine = lastElement.split(';')[1];
+                    if (lastLine === section.ligne.nomLigne.split(' ')[0]) {
+                        stationsNames.pop();
+                    }
+                }
                 stationsNames.push(section.depart.nomLieu + ";" + section.ligne.nomLigne.split(' ')[0] + ";" + section.depart.horaireDePassage);
+                stationsNames.push(section.arrivee.nomLieu + ";" + section.ligne.nomLigne.split(' ')[0] + ";" + section.arrivee.horaireDePassage);
             } else {
                 if (section.arrivee.nomLieu === FIN) {
-                    stationsNames.push(section.depart.nomLieu + " Arrivée");
+                    if(section.depart.nomLieu === "Départ"){
+                        stationsNames.push("Marcher pendant " + section.distance*1000 + " mètres");
+
+                    }
+                    else{
+                        stationsNames.push(section.depart.nomLieu + " Arrivée");
+                    }
                 }
             }
         })
+
 
         var oldNumLigne = stationsNames[0].split(';')[1];
         var currentDiv = '<div class="groupe groupe' + oldNumLigne + '">';
@@ -105,7 +121,6 @@ $(document).ready(function () {
                 var heure = horaireDePassage.split(":")[0]
                 var min = horaireDePassage.split(":")[1]
                 currentDiv += '<div class="station nomStation' + numLigne + '">' + heure + "h" + min + " : " + stationName + '</div>';
-
             } else
                 currentDiv += '<div class="station nomStation' + numLigne + '">' + stationName + '</div>';
 
@@ -124,18 +139,25 @@ $(document).ready(function () {
         // récupérer la indexième classe resultat
         var trajectResult = document.querySelectorAll('.resultat')[index - 1];
         // déclarer un set de noom de ligne
-        var linesNames = new Set();
+        var linesNames = []
         var itenerary = itenaries[index - 1];
         var htmlContent = '<div class="testAffichage"><div class="ligne-container">';
         itenerary.forEach((section, i) => {
+            let valToPush ="";
             if (section.depart.nomLieu !== DEPART && section.arrivee.nomLieu !== FIN) {
                 if (section.ligne != null) {
-                    linesNames.add(section.ligne.nomLigne.split(' ')[0]);
+                    valToPush = section.ligne.nomLigne.split(' ')[0];
                 } else {
-                    linesNames.add('sectionMarche');
+                    valToPush = 'sectionMarche';
                 }
             } else if (section.distance !== 0) {
-                linesNames.add('sectionMarche');
+                valToPush = 'sectionMarche';
+            }
+            if(valToPush !== ""){
+                var lastElement = linesNames[linesNames.length - 1];
+                if (lastElement !== valToPush) {
+                    linesNames.push(valToPush);
+                }
             }
         });
         linesNames.forEach(line => {
@@ -233,7 +255,7 @@ function pingLocalizations(index) {
         let lineColor;
         let lignetmp;
         //check if name == depart and name == arrivee
-        if (section.depart.nomLieu === "Départ" && section.arrivee.nomLieu === "Arrivée") {
+        if (section.depart.nomLieu === DEPART && section.arrivee.nomLieu === FIN) {
             if(prevValues){
                 let latitude = section.depart.localisation.latitude;
                 let longitude = section.depart.localisation.longitude;
@@ -309,7 +331,7 @@ function pingLocalizations(index) {
                 if (section.ligne == null) { //Donc si il faut marcher à la fin
                     let latitude = section.arrivee.localisation.latitude;
                     let longitude = section.arrivee.localisation.longitude;
-                    let nom_station = "Arrivée";
+                    let nom_station = FIN;
                     const markerARR = L.marker([latitude, longitude]).addTo(map)
                         .bindPopup(`<b>${nom_station}</b>`).openPopup();
                     itineraryMarkers.push(markerARR);

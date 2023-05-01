@@ -329,7 +329,7 @@
 }
 
 .form-holder{
-  margin-top: 20% !important;
+  margin-top: calc(50% - 100px) !important;
   background-color: rgba(0, 0, 0, 0.2) !important;
 
 }
