@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.uparis.backapp.model.Coordonnee;
 import fr.uparis.backapp.model.section.SectionTransport;
 
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -37,6 +38,12 @@ public class Station extends Lieu {
      */
     public Station(String nomStation, Coordonnee localisationPrincipale) {
         this(nomStation, localisationPrincipale, new HashMap<>(), new HashSet<>());
+    }
+
+    private Station(String nomStation, Coordonnee localisation, LocalTime horaireDePassage) {
+        super(nomStation, localisation, horaireDePassage);
+        autresLocalisations = null;
+        correspondances = null;
     }
 
     /**
@@ -134,5 +141,12 @@ public class Station extends Lieu {
             s += nomLigne + " (" + autresLocalisations.getOrDefault(nomLigne, localisation) + ") ";
         }
         return s;
+    }
+
+    /**
+     * Fournit une copie de la station courante.
+     */
+    public Station copy() {
+        return new Station(nomLieu, localisation, horaireDePassage);
     }
 }
