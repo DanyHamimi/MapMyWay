@@ -400,8 +400,8 @@ function getFormData() {
             "distanceMin": distanceMin
         }
     } else if (selectedOption === 'sport2') {
-        var walkingTimeMax = $('#sport_minutes').val();
-        if (checkEmptyAndAlert(walkingTimeMax, 'temps de marche')) {
+        var walkingTimeMin = $('#sport_minutes').val();
+        if (checkEmptyAndAlert(walkingTimeMin, 'temps de marche')) {
             return null;
         }
         url = 'itinerary/sport/time'
@@ -409,7 +409,7 @@ function getFormData() {
             "origin": origine,
             "destination": destination,
             "time": timeValue,
-            "walkingTimeMax": walkingTimeMax
+            "walkingTimeMin": walkingTimeMin
         }
     }
     return [url, data]

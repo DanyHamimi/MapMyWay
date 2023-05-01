@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.concurrent.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,6 +33,32 @@ public class TestCalculator {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    /**
+     * Comparaison de deux trajets.
+     *
+     * @param trajet1 un des trajets à comparer.
+     * @param trajet2 un des trajets à comparer.
+     * @return si les deux trajets sont identiques ou non.
+     */
+    private boolean sameTrajet(List<Section[]> trajet1, List<Section[]> trajet2) {
+        if(trajet1.size() != trajet2.size()) return false;
+
+        Section[] sections1, sections2;
+        for(int i = 0; i < trajet1.size() ; i++) {
+            sections1 = trajet1.get(i);
+            sections2 = trajet2.get(i);
+            if(sections1.length != sections2.length) return false;
+
+            for(int j = 0; j < sections1.length; j++) {
+                if(!sections1[j].getDepart().getNomLieu().equals(sections2[j].getDepart().getNomLieu())) return false;
+                if(!sections1[j].getArrivee().getNomLieu().equals(sections2[j].getArrivee().getNomLieu())) return false;
+                if(!sections1[j].getDuree().equals(sections2[j].getDuree())) return false;
+                if(sections1[j].getDistance() != (sections2[j].getDistance())) return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -82,16 +107,7 @@ public class TestCalculator {
         Calculator.changeMarcherAuMoinsTemps(Duration.ofMinutes(10));
         List<Section[]> trajetsTrouves1 = Calculator.itineraireFactory(depart, arrivee, horaireDepart);
         assertNotNull(trajetsTrouves1);
-        assertEquals(trajetsTrouves0.size(), trajetsTrouves1.size());
-
-        Section[] trajet0, trajet1;
-        for(int i = 0; i < trajetsTrouves1.size(); i++) {
-            trajet0 = trajetsTrouves0.get(i);
-            trajet1 = trajetsTrouves1.get(i);
-            assertEquals(trajet0.length, trajet1.length);
-            assertEquals(trajet0[trajet0.length - 1].getArrivee().getHoraireDePassage(),
-                         trajet1[trajet1.length - 1].getArrivee().getHoraireDePassage());
-        }
+        assertTrue(sameTrajet(trajetsTrouves0, trajetsTrouves1));
     }
 
     /**
@@ -137,28 +153,13 @@ public class TestCalculator {
         Calculator.changeMarcherAuPlus(Constants.DEFAULT_MIN_DISTANCE);
         List<Section[]> trajetsTrouves1 = Calculator.itineraireFactory(depart, arrivee, horaireDepart);
         assertNotNull(trajetsTrouves1);
-        assertEquals(trajetsTrouves0.size(), trajetsTrouves1.size());
+        assertTrue(sameTrajet(trajetsTrouves0, trajetsTrouves1));
 
         //Trajet avec au moins 0 minute de marche
         Calculator.changeMarcherAuMoinsDistance(Constants.DEFAULT_MIN_DISTANCE);
         List<Section[]> trajetsTrouves2 = Calculator.itineraireFactory(depart, arrivee, horaireDepart);
         assertNotNull(trajetsTrouves2);
-        assertEquals(trajetsTrouves0.size(), trajetsTrouves2.size());
-
-        Section[] trajet0, trajet1, trajet2;
-        for(int i = 0; i < trajetsTrouves1.size(); i++) {
-            trajet0 = trajetsTrouves0.get(i);
-            trajet1 = trajetsTrouves1.get(i);
-            trajet2 = trajetsTrouves2.get(i);
-
-            assertEquals(trajet0.length, trajet1.length);
-            assertEquals(trajet0.length, trajet2.length);
-
-            assertEquals(trajet0[trajet0.length - 1].getArrivee().getHoraireDePassage(),
-                    trajet1[trajet1.length - 1].getArrivee().getHoraireDePassage());
-            assertEquals(trajet0[trajet0.length - 1].getArrivee().getHoraireDePassage(),
-                    trajet1[trajet2.length - 1].getArrivee().getHoraireDePassage());
-        }
+        assertTrue(sameTrajet(trajetsTrouves0, trajetsTrouves2));
     }
 
     /**
