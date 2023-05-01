@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * Testeur du lancement de l'application
  */
 @SpringBootTest
-class DemoApplicationTests {
+class MapMyWayTests {
     @Test
     void contextLoads() {
 
