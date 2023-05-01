@@ -23,7 +23,6 @@ import static fr.uparis.backapp.utils.constants.Constants.DELIMITER;
 
 @Service
 public class ItineraryService {
-
     private final Reseau reseau;
 
     @Autowired
@@ -136,6 +135,4 @@ public class ItineraryService {
         List<SectionTransport> sectionTransports = reseau.getSections().stream().filter(section -> section.isStationDepart(station)).toList();
         return getSchedulesByLine(sectionTransports);
     }
-
-
 }

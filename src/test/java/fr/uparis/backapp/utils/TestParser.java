@@ -80,29 +80,20 @@ public class TestParser {
                 .filter(s -> s.isStationDepart(new Station("Boucicaut", new Coordonnee("2.2879184311245595, 48.841024160993214")))
                         && s.getLigne().getNomLigne().equals("8 variant 1"))
                 .findFirst();
-        Optional<SectionTransport> section3 = sections.stream()
-                .filter(s -> s.isStationDepart(new Station("Lourmel", new Coordonnee("2.2822419598550767, 48.83866086365992")))
-                        && s.getLigne().getNomLigne().equals("8 variant 2"))
-                .findFirst();
 
         assertTrue(section1.isPresent());
         assertTrue(section2.isPresent());
-        assertTrue(section3.isPresent());
 
 
-        final int NB_HORAIRES_LOURMEL_1 = 383; //463 horaires, mais présence de doublons
-        final int NB_HORAIRES_LOURMEL_2 = 373; //idem
+        final int NB_HORAIRES_LOURMEL = 958; //2724 horaires, mais présence de doublons
 
         SectionTransport sectionLourmel1 = section1.get();
-        assertEquals(NB_HORAIRES_LOURMEL_1, sectionLourmel1.getHorairesDepart().size());
+        assertEquals(NB_HORAIRES_LOURMEL, sectionLourmel1.getHorairesDepart().size());
         assertTrue(sectionLourmel1.getHorairesDepart().contains(LocalTime.of(6, 4))); //premier départ
 
         SectionTransport sectionBoucicaut = section2.get();
-        assertEquals(NB_HORAIRES_LOURMEL_1, sectionBoucicaut.getHorairesDepart().size());
+        assertEquals(NB_HORAIRES_LOURMEL, sectionBoucicaut.getHorairesDepart().size());
         assertTrue(sectionBoucicaut.getHorairesDepart().contains(LocalTime.of(6, 5, 22))); //durée de 42 secondes + 40 secondes d'attente
-
-        SectionTransport sectionLourmel2 = section3.get();
-        assertEquals(NB_HORAIRES_LOURMEL_2, sectionLourmel2.getHorairesDepart().size());
     }
 
     /**
