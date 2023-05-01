@@ -232,65 +232,98 @@ function pingLocalizations(index) {
     itenerary.forEach(section => {
         let lineColor;
         let lignetmp;
-        // Check if section.ligne exists
-        if (section.ligne == null) {
-            lignetmp = {nomLigne: "sectionMarche"};
-        } else {
-            lignetmp = section.ligne.nomLigne.split(' ')[0];
-        }
-
-        let latitude = section.depart.localisation.latitude;
-        let longitude = section.depart.localisation.longitude;
-        let nom_station = section.depart.nomLieu;
-        const marker = L.marker([latitude, longitude]).addTo(map)
-            .bindPopup(`<b>${nom_station}</b>`).openPopup();
-        itineraryMarkers.push(marker);
-
-
-        if (prevValues) {
-            i = i + 1;
-            console.log("a la "+ i +" itération mon ancienne ligne est " + prevValues.ligne.nomLigne)
-            console.log("Je rentre ici pour la "+ i +" fois avec station comme départ" + section.depart.nomLieu + " et station comme arrivée" + section.arrivee.nomLieu)
-            let polyline;
-            if (prevValues.ligne.nomLigne === 'sectionMarche') {
-                lineColor = 'black';
-                polyline = L.polyline([prevValues.marker.getLatLng(), marker.getLatLng()], {
-                    color: 'black',
-                    weight: 8,
-                    dashArray: [10, 20]
-                }).addTo(map);
-            } else {
+        //check if name == depart and name == arrivee
+        if (section.depart.nomLieu === "Départ" && section.arrivee.nomLieu === "Arrivée") {
+            if(prevValues){
+                let latitude = section.depart.localisation.latitude;
+                let longitude = section.depart.localisation.longitude;
+                let nom_station = section.depart.nomLieu;
+                const marker = L.marker([latitude, longitude]).addTo(map)
+                    .bindPopup(`<b>${nom_station}</b>`).openPopup();
+                itineraryMarkers.push(marker);
                 const style = window.getComputedStyle(document.documentElement);
                 lineColor = style.getPropertyValue('--ligne' + prevValues.ligne);
                 polyline = L.polyline([prevValues.marker.getLatLng(), marker.getLatLng()], {
                     color: lineColor,
                     weight: 8
                 }).addTo(map);
+                itineraryPolylines.push(polyline);
             }
 
+            //do a line between depart and arrivee as pointillés
+            polyline = L.polyline([
+                [section.depart.localisation.latitude, section.depart.localisation.longitude],
+                [section.arrivee.localisation.latitude, section.arrivee.localisation.longitude]
+            ],{color: 'black',
+                weight: 8,
+                dashArray: [10, 20]
+            }).addTo(map);
             itineraryPolylines.push(polyline);
+            prevValues = null;
         }
 
-        let polyline2;
-        if (section.arrivee.nomLieu !== FIN) {
-            prevValues = {marker: marker, ligne: lignetmp};
-        } else {
-            if (section.ligne == null) { //Donc si il faut marcher à la fin
-                let latitude = section.arrivee.localisation.latitude;
-                let longitude = section.arrivee.localisation.longitude;
-                let nom_station = "Arrivée";
-                const markerARR = L.marker([latitude, longitude]).addTo(map)
-                    .bindPopup(`<b>${nom_station}</b>`).openPopup();
-                itineraryMarkers.push(markerARR);
-                //Now draw the polyline between marker and markerARR
-                polyline2 = L.polyline([marker.getLatLng(), markerARR.getLatLng()], {
-                    color: 'black',
-                    weight: 8,
-                    dashArray: [10, 20]
-                }).addTo(map);
-                itineraryPolylines.push(polyline2);
+        else{
+            // Check if section.ligne exists
+            if (section.ligne == null) {
+                lignetmp = {nomLigne: "sectionMarche"};
+            } else {
+                lignetmp = section.ligne.nomLigne.split(' ')[0];
+            }
+
+            let latitude = section.depart.localisation.latitude;
+            let longitude = section.depart.localisation.longitude;
+            let nom_station = section.depart.nomLieu;
+            const marker = L.marker([latitude, longitude]).addTo(map)
+                .bindPopup(`<b>${nom_station}</b>`).openPopup();
+            itineraryMarkers.push(marker);
+
+
+            if (prevValues) {
+                i = i + 1;
+                console.log("a la "+ i +" itération mon ancienne ligne est " + prevValues.ligne.nomLigne)
+                console.log("Je rentre ici pour la "+ i +" fois avec station comme départ" + section.depart.nomLieu + " et station comme arrivée" + section.arrivee.nomLieu)
+                let polyline;
+                if (prevValues.ligne.nomLigne === 'sectionMarche') {
+                    lineColor = 'black';
+                    polyline = L.polyline([prevValues.marker.getLatLng(), marker.getLatLng()], {
+                        color: 'black',
+                        weight: 8,
+                        dashArray: [10, 20]
+                    }).addTo(map);
+                } else {
+                    const style = window.getComputedStyle(document.documentElement);
+                    lineColor = style.getPropertyValue('--ligne' + prevValues.ligne);
+                    polyline = L.polyline([prevValues.marker.getLatLng(), marker.getLatLng()], {
+                        color: lineColor,
+                        weight: 8
+                    }).addTo(map);
+                }
+
+                itineraryPolylines.push(polyline);
+            }
+
+            let polyline2;
+            if (section.arrivee.nomLieu !== FIN) {
+                prevValues = {marker: marker, ligne: lignetmp};
+            } else {
+                if (section.ligne == null) { //Donc si il faut marcher à la fin
+                    let latitude = section.arrivee.localisation.latitude;
+                    let longitude = section.arrivee.localisation.longitude;
+                    let nom_station = "Arrivée";
+                    const markerARR = L.marker([latitude, longitude]).addTo(map)
+                        .bindPopup(`<b>${nom_station}</b>`).openPopup();
+                    itineraryMarkers.push(markerARR);
+                    //Now draw the polyline between marker and markerARR
+                    polyline2 = L.polyline([marker.getLatLng(), markerARR.getLatLng()], {
+                        color: 'black',
+                        weight: 8,
+                        dashArray: [10, 20]
+                    }).addTo(map);
+                    itineraryPolylines.push(polyline2);
+                }
             }
         }
+
 
     });
 }
@@ -400,8 +433,8 @@ function getFormData() {
             "distanceMin": distanceMin
         }
     } else if (selectedOption === 'sport2') {
-        var walkingTimeMin = $('#sport_minutes').val();
-        if (checkEmptyAndAlert(walkingTimeMin, 'temps de marche')) {
+        var walkingTimeMax = $('#sport_minutes').val();
+        if (checkEmptyAndAlert(walkingTimeMax, 'temps de marche')) {
             return null;
         }
         url = 'itinerary/sport/time'
@@ -409,7 +442,7 @@ function getFormData() {
             "origin": origine,
             "destination": destination,
             "time": timeValue,
-            "walkingTimeMin": walkingTimeMin
+            "walkingTimeMax": walkingTimeMax
         }
     }
     return [url, data]
