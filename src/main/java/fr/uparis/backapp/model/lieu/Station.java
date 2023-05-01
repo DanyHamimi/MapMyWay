@@ -40,6 +40,13 @@ public class Station extends Lieu {
         this(nomStation, localisationPrincipale, new HashMap<>(), new HashSet<>());
     }
 
+    /**
+     * Constructeur utilisé pour faire une copie de la Station, utilisé pour retourner un trajet sauvegardé.
+     *
+     * @param nomStation nom de la Station.
+     * @param localisation Coordonnee de la Station.
+     * @param horaireDePassage horaire de passage à la station.
+     */
     private Station(String nomStation, Coordonnee localisation, LocalTime horaireDePassage) {
         super(nomStation, localisation, horaireDePassage);
         autresLocalisations = null;
