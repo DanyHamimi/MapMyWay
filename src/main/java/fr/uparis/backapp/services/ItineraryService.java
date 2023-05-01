@@ -6,9 +6,11 @@ import fr.uparis.backapp.model.Reseau;
 import fr.uparis.backapp.model.lieu.Station;
 import fr.uparis.backapp.model.section.Section;
 import fr.uparis.backapp.model.section.SectionTransport;
+import fr.uparis.backapp.utils.Calculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,17 +53,59 @@ public class ItineraryService {
         return trajects;
     }
 
-    public List<Section[]> searchLazyItinerary(String origin, String destination, String time, int distanceMax) {
-        List<Section[]> trajects;
-        LocalTime trajectTime = getTimeFromString(time);
-        try {
-            Coordonnee originCoordinates = fetchCoordinates(origin);
-            Coordonnee destinationCoordinates = fetchCoordinates(destination);
-            trajects = itineraireFactory(originCoordinates, destinationCoordinates, trajectTime);
-        } catch (StationNotFoundException e) {
-            trajects = new ArrayList<>();
-        }
-        return trajects;
+    /**
+     * Recherche un itinéraire entre deux lieux spécifiés à un moment donné avec une distance de marche minimale sur l'ensemble du trajet.
+     *
+     * @param origin      la station ou les coordonnées de départ.
+     * @param destination la station ou les coordonnées d'arrivée.
+     * @param time        l'heure de départ.
+     * @param distanceMax la distance de marche maximum.
+     * @return la liste des itinéraires possibles sous forme de tableau de sections.
+     */
+    public List<Section[]> searchLazyItinerary(String origin, String destination, String time, double distanceMax) {
+        Calculator.changeMarcherAuPlus(distanceMax);
+        return searchItinerary(origin, destination, time);
+    }
+
+    /**
+     * Recherche un itinéraire à pied entre deux lieux spécifiés à un moment donné.
+     *
+     * @param origin      la station ou les coordonnées de départ.
+     * @param destination la station ou les coordonnées d'arrivée.
+     * @param time        l'heure de départ.
+     * @return la liste des itinéraires possibles sous forme de tableau de sections.
+     */
+    public List<Section[]> searchFullSportItinerary(String origin, String destination, String time) {
+        Calculator.changeAPied();
+        return searchItinerary(origin, destination, time);
+    }
+
+    /**
+     * Recherche un itinéraire entre deux lieux spécifiés à un moment donné en marchant au moins une certaine distance.
+     *
+     * @param origin      la station ou les coordonnées de départ.
+     * @param destination la station ou les coordonnées d'arrivée.
+     * @param time        l'heure de départ.
+     * @param distanceMin la distance de marche maximum.
+     * @return la liste des itinéraires possibles sous forme de tableau de sections.
+     */
+    public List<Section[]> searchItineraryWithMinWalkingDistance(String origin, String destination, String time, double distanceMin) {
+        Calculator.changeMarcherAuMoinsDistance(distanceMin);
+        return searchItinerary(origin, destination, time);
+    }
+
+    /**
+     * Recherche un itinéraire entre deux lieux spécifiés à un moment donné en marchant au moins pendant une certaine durée.
+     *
+     * @param origin      la station ou les coordonnées de départ.
+     * @param destination la station ou les coordonnées d'arrivée.
+     * @param time        l'heure de départ.
+     * @param walkingTimeMin la distance de marche maximum.
+     * @return la liste des itinéraires possibles sous forme de tableau de sections.
+     */
+    public List<Section[]> searchItineraryWithMinWalkingMinutes(String origin, String destination, String time, double walkingTimeMin) {
+        Calculator.changeMarcherAuMoinsTemps(Duration.ofMinutes((long) walkingTimeMin));
+        return searchItinerary(origin, destination, time);
     }
 
     /**
@@ -92,7 +136,6 @@ public class ItineraryService {
         List<SectionTransport> sectionTransports = reseau.getSections().stream().filter(section -> section.isStationDepart(station)).toList();
         return getSchedulesByLine(sectionTransports);
     }
-
 
 
 }

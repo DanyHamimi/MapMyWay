@@ -29,6 +29,9 @@ $(document).ready(function () {
         document.getElementById('liste').style.display = "block"
 
         let dataToSend = getFormData();
+        if (dataToSend === null) {
+            return;
+        }
         let urlQuery = dataToSend[0];
         let data = dataToSend[1];
 
@@ -297,6 +300,15 @@ function isEmpty(field) {
     return false;
 }
 
+function checkEmptyAndAlert(field, message) {
+    if (field === '' || field === null || field === undefined) {
+        alert('Veuillez remplir le champ ' + message);
+        return true;
+    }
+    return false;
+}
+
+
 // fonction qui permet de recuperer les données à envoyer à l'API selon l'option de trajet selectionnée
 function getFormData() {
 
@@ -313,6 +325,7 @@ function getFormData() {
     var data = {}
     var url = ''
     if (selectedOption === 'lazy0') {
+
         url = 'itinerary/optimal'
         data = {
             "origin": origine,
@@ -321,6 +334,9 @@ function getFormData() {
         }
     } else if (selectedOption === 'lazy1') {
         var distanceMax = $('#lazy_distance').val();
+        if (checkEmptyAndAlert(distanceMax, 'distance maximale')) {
+            return null;
+        }
         url = 'itinerary/lazy'
         data = {
             "origin": origine,
@@ -336,16 +352,22 @@ function getFormData() {
             "time": timeValue
         }
     } else if (selectedOption === 'sport1') {
-        var distanceMax = $('#sport_distance').val();
+        var distanceMin = $('#sport_distance').val();
+        if (checkEmptyAndAlert(distanceMin, 'distance minimale')) {
+            return null;
+        }
         url = 'itinerary/sport/distance'
         data = {
             "origin": origine,
             "destination": destination,
             "time": timeValue,
-            "distanceMax": distanceMax
+            "distanceMin": distanceMin
         }
     } else if (selectedOption === 'sport2') {
         var walkingTimeMax = $('#sport_minutes').val();
+        if (checkEmptyAndAlert(walkingTimeMax, 'temps de marche')) {
+            return null;
+        }
         url = 'itinerary/sport/time'
         data = {
             "origin": origine,
@@ -354,7 +376,5 @@ function getFormData() {
             "walkingTimeMax": walkingTimeMax
         }
     }
-    console.log('url : ', url)
-    console.log('data ', data)
     return [url, data]
 }

@@ -3,6 +3,12 @@ const searchBtn = document.getElementById('chercher');
 let lastClickedValue = 'origine';
 const applyBtn = document.getElementById('apply-btn');
 
+applyBtn.addEventListener('click', () => {
+//     appeler l'evènement de click sur optionsBtn
+    optionsBtn.click();
+    searchBtn.click();
+});
+
 optionsBtn.addEventListener('click', (e) => {
     let parent = e.target.parentNode.parentNode;
     Array.from(e.target.parentNode.parentNode.classList).find((element) => {
@@ -160,7 +166,7 @@ const btn = document.getElementById('rechercher-btn');
 const span = document.getElementById('rechercher-annuler');
 const submit = document.getElementById('rechercher-submit');
 
-submit.onclick = function() {
+submit.onclick = function () {
     $.ajax({
         url: "/schedules",
         dataType: "json",
@@ -180,7 +186,7 @@ submit.onclick = function() {
 
         $('#vers').html("<div class='vers'>Vers : </div>")
 
-        for(let i = 0; i < keys.length; i++) {
+        for (let i = 0; i < keys.length; i++) {
             let station = keys[i];
             let schedules = data[station];
 
@@ -195,7 +201,7 @@ submit.onclick = function() {
             // Add a label for the radio button
             let label = $("<label class='label_station'>").attr("for", "station-" + i).text(station.split(";")[1]);
             //set the radio button image
-            let imageUrl = "../css/image/M"+station.split(";")[0]+".png";
+            let imageUrl = "../css/image/M" + station.split(";")[0] + ".png";
             label.css({
                 "background-image": "url(" + imageUrl + ")",
                 "background-position-y": "bottom",
@@ -206,13 +212,16 @@ submit.onclick = function() {
                 "color": "rgba(255, 255, 255, 0.7)"
             });
             // Append the radio button and label to the modal content
-            $("#modal-content").css({"border": "1px solid rgb(145 134 134 / 70%)", "background-color":" rgba(0, 0, 0, 0.4)"})
+            $("#modal-content").css({
+                "border": "1px solid rgb(145 134 134 / 70%)",
+                "background-color": " rgba(0, 0, 0, 0.4)"
+            })
 
 
             $("#modal-content").append(radioButton, label);
 
             // Event listener for the radio button click
-            radioButton.on("click", function() {
+            radioButton.on("click", function () {
                 // Clear existing list items
                 $("#modal ul").html('');
 
@@ -221,7 +230,7 @@ submit.onclick = function() {
                 //let ul = $("<ul class='ul_lignes'>");
                 $('#ul_lignes').html('')
                 $('#ul_lignes').css({"border": "1px solid rgb(145 134 134 / 70%) "})
-                let imageUrl = "../css/image/M"+station.split(";")[0]+".png";
+                let imageUrl = "../css/image/M" + station.split(";")[0] + ".png";
                 for (let j = 0; j < schedules.length; j++) {
                     let schedule = schedules[j];
                     let li = $("<li>").html(schedule).css({
@@ -241,39 +250,39 @@ submit.onclick = function() {
         }
     });
 }
-btn.onclick = function() {
+btn.onclick = function () {
     modal.style.display = "block";
 }
 
-span.onclick = function() {
+span.onclick = function () {
     modal.style.display = "none";
 }
 
-window.onclick = function(event) {
+window.onclick = function (event) {
     if (event.target == modal) {
         //modal.style.display = "none";
     }
 }
 
 // Pour déplacer l'affichage d'horaires
-$(document).ready(function() {
+$(document).ready(function () {
     var isDragging = false;
     var modal = $('#modal');
-    var offset = {x:0, y:0};
+    var offset = {x: 0, y: 0};
 
-    modal.mousedown(function(e) {
+    modal.mousedown(function (e) {
         isDragging = true;
         offset.x = e.pageX - modal.offset().left;
         offset.y = e.pageY - modal.offset().top;
         modal.css('cursor', 'move');
     });
 
-    $(document).mouseup(function() {
+    $(document).mouseup(function () {
         isDragging = false;
         modal.css('cursor', 'default');
     });
 
-    $(document).mousemove(function(e) {
+    $(document).mousemove(function (e) {
         if (isDragging) {
             modal.offset({
                 top: e.pageY - offset.y,
@@ -287,12 +296,12 @@ const origine = document.getElementById('origine');
 const destination = document.getElementById('destination');
 const switchBtn = document.getElementById('switch_btn');
 
-switchBtn.addEventListener('click', function() {
-    if(origine.value != "" && destination.value != ""){
+switchBtn.addEventListener('click', function () {
+    if (origine.value != "" && destination.value != "") {
         const temp = origine.value;
         origine.value = destination.value;
         destination.value = temp;
-    }else{
+    } else {
         var afficher_message = document.getElementById('chercher')
         var messageDiv = document.createElement("div");
         messageDiv.setAttribute("id", "errorSig");
