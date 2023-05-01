@@ -232,7 +232,7 @@ submit.onclick = function () {
                 $('#ul_lignes').css({"border": "1px solid rgb(145 134 134 / 70%) "})
                 let imageUrl = "../css/image/M" + station.split(";")[0] + ".png";
                 for (let j = 0; j < schedules.length; j++) {
-                    let schedule = schedules[j];
+                    let schedule = schedules[j].split(":")[0]+":"+schedules[j].split(":")[1];
                     let li = $("<li>").html(schedule).css({
                         "list-style-type": "none",
                         "background-image": "url(" + imageUrl + ")",
