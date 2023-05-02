@@ -171,7 +171,11 @@ submit.onclick = function () {
 
         if (keys.length === 0) {
             // Pas d'horaires trouvés
-            alert("Station introuvable dans le réseau RATP");
+            const errorDiv = document.getElementById('errorRechercher');
+            errorDiv.style.display = 'block';
+            setTimeout(function() {
+                errorDiv.style.display = 'none';
+            }, 5000); // masque l'élément après 5 secondes
             return;
         }
 

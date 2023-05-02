@@ -195,6 +195,15 @@
 .groupe13{ border-left: 6px solid var(--ligne13);}
 .groupe14{ border-left: 6px solid var(--ligne14);}
 
+#errorRechercher{
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  color: rgb(254, 183, 66);
+  font-family: 'FjallaOne-Regular';
+  font-size: 120%;
+  width: 30%;
+}
 
 #errorSig{
   font-size: 85%;
