@@ -61,25 +61,27 @@ $(document).ready(function () {
 
     // Construit le trajet pictogramme
     function buildPictogrammeTraject(index) {
-        // Récupère le indexième résultat et initialise la construction du trajet pictogramme
+        // Récupère le indexième résultat
         var trajectResult = document.querySelectorAll('.resultat')[index - 1];
-        var linesNames = []
         var itinerary = itineraries[index - 1];
+
+        //Construction du trajet de pictogrammes
         var htmlContent = '<div class="testAffichage"><div class="ligne-container">';
+        var linesNames = [];
         itinerary.forEach(section => {
             let valToPush ="";
             if (section.ligne != null) valToPush = section.ligne.nomLigne.split(' ')[0];
             else if(section.distance > 0) valToPush = 'sectionMarche';
 
-            if(valToPush !== "" && linesNames[linesNames.length - 1] !== valToPush)
-                linesNames.push(valToPush);
+            if(valToPush !== "" && linesNames[linesNames.length - 1] !== valToPush) linesNames.push(valToPush);
         });
         linesNames.forEach(line => {
             if (line === 'sectionMarche') htmlContent += WALK_CLASS_HTML;
             else htmlContent += '<img src="../css/image/M' + line + '.png" alt="ligne ' + line + '" class="ligne" style="height: 30px;">';
         })
-        htmlContent += '</div><div class="dureeTrajet">' + buildDuration(index) + '</div></div>'
-        htmlContent += '<div class="details" id="details' + index + '"style="display: none"></div>'
+
+        htmlContent += '</div><div class="dureeTrajet">' + buildDuration(index) + '</div></div>';
+        htmlContent += '<div class="details" id="details' + index + '"style="display: none"></div>';
         trajectResult.innerHTML = (htmlContent)
     }
 
@@ -105,12 +107,13 @@ $(document).ready(function () {
     function addTrajectDetails(index) {
         var trajectDetails = document.getElementById("details" + index);
         var itinerary = itineraries[index - 1];
-        var stationsNames = [];
-        var detailsHtml = '<div class="detailsTrajet">'
 
+        var detailsHtml = '<div class="detailsTrajet">'
+        var stationsNames = [];
         itinerary.forEach(section => {
+            // Ajoute les stations du trajets
             if (section.ligne != null) {
-                //check if the last element of stationsNames has the same line as the current section line if yes pop it
+                // Vérifie si on change de ligne pour ajouter la station finale sur la ligne courante
                 if (stationsNames.length > 0) {
                     var lastElement = stationsNames[stationsNames.length - 1];
                     if (lastElement.split(';')[1] !== section.ligne.nomLigne.split(' ')[0])
@@ -118,13 +121,11 @@ $(document).ready(function () {
                 }
                 stationsNames.push(section.arrivee.nomLieu + ";" + section.ligne.nomLigne.split(' ')[0] + ";" + section.arrivee.horaireDePassage);
             }
+            // Ajoute les distance de marche
             else {
-                if (section.depart.nomLieu === DEPART && section.arrivee.nomLieu !== FIN)
-                    stationsNames.push("Départ");
-                if(section.distance > 0)
-                    stationsNames.push("Marcher pendant " + section.distance*1000 + " mètres");
-                if (section.depart.nomLieu !== DEPART && section.arrivee.nomLieu === FIN)
-                    stationsNames.push("Arrivée");
+                if (section.depart.nomLieu === DEPART && section.arrivee.nomLieu !== FIN) stationsNames.push("Départ");
+                if (section.distance > 0) stationsNames.push("Marcher pendant " + section.distance*1000 + " mètres");
+                if (section.depart.nomLieu !== DEPART && section.arrivee.nomLieu === FIN) stationsNames.push("Arrivée");
             }
         })
 
@@ -135,11 +136,12 @@ $(document).ready(function () {
             var stationName = station.split(';')[0];
 
             if (numLigne !== oldNumLigne) {
-                // Fermer le div précédent s'il existe
+                // Ferme le div précédent s'il existe
                 if (currentDiv !== '') currentDiv += '</div>';
 
-                // Créer un nouveau div pour le nouvel oldNumLigne
+                // Crée un nouveau div pour le nouvel numLigne
                 currentDiv += '<div class="groupe groupe' + numLigne + '">';
+                oldNumLigne = numLigne;
             }
 
             var horaireDePassage = station.split(';')[2]
@@ -149,8 +151,6 @@ $(document).ready(function () {
                 currentDiv += '<div class="station nomStation' + numLigne + '">' + heure + "h" + min + " : " + stationName + '</div>';
             }
             else currentDiv += '<div class="station nomStation' + numLigne + '">' + stationName + '</div>';
-
-            oldNumLigne = numLigne;
         });
 
         if (currentDiv !== '') currentDiv += '</div>';
@@ -183,23 +183,24 @@ $(document).ready(function () {
 })
 
 
-// Declare global arrays to hold markers and polylines
+// Déclare des tableaux globaux pour les markers et polylines
 var itineraryMarkers = [];
 var itineraryPolylines = [];
 
 function pingLocalizations(index) {
-    // Remove previous markers and polylines from the map
+    // Enlève les précédents markers et polylines de la carte
     itineraryMarkers.forEach(marker => marker.remove());
     itineraryPolylines.forEach(polyline => polyline.remove());
 
-    // Clear the arrays for the new itinerary
+    // Efface le contenu des tableaux pour le nouvel itinéraire
     itineraryMarkers = [];
     itineraryPolylines = [];
 
     var itinerary = itineraries[index - 1];
     if (itinerary === undefined) return;
-
     var prevValues = null;
+
+    // Trajet à pied
     if(itinerary.length == 1) {
         let polyline = L.polyline([
             [itinerary[0].depart.localisation.latitude, itinerary[0].depart.localisation.longitude],
@@ -214,7 +215,7 @@ function pingLocalizations(index) {
     itinerary.forEach(section => {
         let lineColor;
         let lignetmp;
-        //check if name == depart and name == arrivee
+        // Section de marche au milieu d'un trajet
         if (section.depart.nomLieu === DEPART && section.arrivee.nomLieu === FIN) {
             if (prevValues) {
                 let latitude = section.depart.localisation.latitude;
@@ -232,7 +233,7 @@ function pingLocalizations(index) {
                 itineraryPolylines.push(polyline);
             }
 
-            //do a line between depart and arrivee as pointillés
+            // Relie le départ et l'arrivée avec des pointillés
             polyline = L.polyline([
                 [section.depart.localisation.latitude, section.depart.localisation.longitude],
                 [section.arrivee.localisation.latitude, section.arrivee.localisation.longitude]
@@ -243,8 +244,9 @@ function pingLocalizations(index) {
             itineraryPolylines.push(polyline);
             prevValues = null;
         }
+        // Section de transport, ou marche vers transport/lieu
         else {
-            // Check if section.ligne exists
+            // Vérifie si la ligne existe, sinon c'est un trajet à pied
             if (section.ligne == null) lignetmp = {nomLigne: "sectionMarche"};
             else lignetmp = section.ligne.nomLigne.split(' ')[0];
 
@@ -272,27 +274,25 @@ function pingLocalizations(index) {
                         weight: 8
                     }).addTo(map);
                 }
-
                 itineraryPolylines.push(polyline);
             }
 
             let polyline2;
             if (section.arrivee.nomLieu !== FIN) prevValues = {marker: marker, ligne: lignetmp};
-            else {
-                if (section.ligne == null) { //Donc si il faut marcher à la fin
-                    let latitude = section.arrivee.localisation.latitude;
-                    let longitude = section.arrivee.localisation.longitude;
-                    let nom_station = FIN;
-                    const markerARR = L.marker([latitude, longitude]).addTo(map)
-                        .bindPopup(`<b>${nom_station}</b>`).openPopup();
-                    itineraryMarkers.push(markerARR);
-                    polyline2 = L.polyline([marker.getLatLng(), markerARR.getLatLng()], {
-                        color: 'black',
-                        weight: 8,
-                        dashArray: [10, 20]
-                    }).addTo(map);
-                    itineraryPolylines.push(polyline2);
-                }
+            // S'il faut marcher à la fin
+            else if (section.ligne == null) {
+                let latitude = section.arrivee.localisation.latitude;
+                let longitude = section.arrivee.localisation.longitude;
+                let nom_station = FIN;
+                const markerARR = L.marker([latitude, longitude]).addTo(map)
+                    .bindPopup(`<b>${nom_station}</b>`).openPopup();
+                itineraryMarkers.push(markerARR);
+                polyline2 = L.polyline([marker.getLatLng(), markerARR.getLatLng()], {
+                    color: 'black',
+                    weight: 8,
+                    dashArray: [10, 20]
+                }).addTo(map);
+                itineraryPolylines.push(polyline2);
             }
         }
     });
@@ -302,16 +302,15 @@ function AfficheDetails(num) {
     var message = document.getElementById("details" + num);
 
     var allDetailsDivs = document.querySelectorAll(".details");
-    for (var i = 0; i < allDetailsDivs.length; i++) {
+    for (var i = 0; i < allDetailsDivs.length; i++)
         if (allDetailsDivs[i].style.display === "block" && allDetailsDivs[i] !== message)
             allDetailsDivs[i].style.display = "none";
-    }
 
     if (message.style.display === "none") {
-        message.style.display = "block"; // Show the message
+        message.style.display = "block"; // Affiche le message
         pingLocalizations(num);
     }
-    else message.style.display = "none"; // Hide the message
+    else message.style.display = "none"; // Cache le message
 }
 
 function displayTraject(idTraject) {
@@ -338,22 +337,22 @@ function isEmpty(field) {
 
 function checkEmptyAndAlert(field, message) {
     if (field === '' || field === null || field === undefined) {
-        //alert('Veuillez remplir le champ ' + message);
-        var afficher_message = document.getElementById('chercher')
+        var afficher_message = document.getElementById('chercher');
         var messageDiv = document.createElement("div");
         messageDiv.setAttribute("id", "errorSig");
-        messageDiv.innerHTML = "Veuillez remplir les champs "+ message;
+        messageDiv.innerHTML = "Veuillez remplir les champs " + message;
         afficher_message.appendChild(messageDiv);
 
         setTimeout(function () {
             afficher_message.removeChild(messageDiv);
         }, 5000);
+
         return true;
     }
     return false;
 }
 
-// fonction qui permet de récupérer les données à envoyer à l'API selon l'option de trajet sélectionnée
+// Fonction qui permet de récupérer les données à envoyer à l'API selon l'option de trajet sélectionnée
 function getFormData() {
     var origine = $('#origine').val();
     var destination = $('#destination').val();
@@ -374,9 +373,7 @@ function getFormData() {
     }
     else if (selectedOption === 'lazy1') {
         var distanceMax = $('#lazy_distance').val();
-        if (checkEmptyAndAlert(distanceMax, 'distance maximale')) {
-            return null;
-        }
+        if (checkEmptyAndAlert(distanceMax, 'distance maximale')) return null;
         url = 'itinerary/lazy'
         data = {
             "origin": origine,
@@ -395,9 +392,7 @@ function getFormData() {
     }
     else if (selectedOption === 'sport1') {
         var distanceMin = $('#sport_distance').val();
-        if (checkEmptyAndAlert(distanceMin, 'distance minimale')) {
-            return null;
-        }
+        if (checkEmptyAndAlert(distanceMin, 'distance minimale')) return null;
         url = 'itinerary/sport/distance'
         data = {
             "origin": origine,
@@ -408,9 +403,7 @@ function getFormData() {
     }
     else if (selectedOption === 'sport2') {
         var walkingTimeMin = $('#sport_minutes').val();
-        if (checkEmptyAndAlert(walkingTimeMin, 'temps de marche')) {
-            return null;
-        }
+        if (checkEmptyAndAlert(walkingTimeMin, 'temps de marche')) return null;
         url = 'itinerary/sport/time'
         data = {
             "origin": origine,
