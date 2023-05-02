@@ -104,6 +104,7 @@ $(document).ready(function () {
         stationsNames.forEach(station => {
 
             var numLigne = station.split(';')[1];
+            console.log(numLigne)
             var stationName = station.split(';')[0];
 
             if (numLigne !== oldNumLigne) {

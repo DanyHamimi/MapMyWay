@@ -181,10 +181,12 @@
 .groupe1{ border-left: 6px solid var(--ligne1);}
 .groupe2{ border-left: 6px solid var(--ligne2);}
 .groupe3{ border-left: 6px solid var(--ligne3);}
+.groupe3B{ border-left: 6px solid var(--ligne3B);}
 .groupe4{ border-left: 6px solid var(--ligne4);}
 .groupe5{ border-left: 6px solid var(--ligne5);}
 .groupe6{ border-left: 6px solid var(--ligne6);}
 .groupe7{ border-left: 6px solid var(--ligne7);}
+.groupe7B{ border-left: 6px solid var(--ligne7B);}
 .groupe8{ border-left: 6px solid var(--ligne8);}
 .groupe9{ border-left: 6px solid var(--ligne9);}
 .groupe10{ border-left: 6px solid var(--ligne10);}
