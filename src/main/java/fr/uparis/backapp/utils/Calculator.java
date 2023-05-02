@@ -119,9 +119,21 @@ public class Calculator {
             }
 
             isCalculating = false;
+            setCorrectTime(res);
             return res;
         }
         return null;
+    }
+
+    /**
+     * Modifie les horaires de départ des lieux pour prendre en compte les correspondances.
+     *
+     * @param trajets les trajets concernés par la modification.
+     */
+    private static void setCorrectTime(List<Section[]> trajets) {
+        for(Section[] sections: trajets)
+            for(int i = 1; i < sections.length; i++)
+                sections[i].getDepart().setHoraireDePassage(sections[i].getArrivee().getHoraireDePassage().minus(sections[i].getDuree()));
     }
 
     /**
@@ -368,8 +380,7 @@ public class Calculator {
                     if(previousLigne != null && currentLigne != null && previousLigne != section.getLigne()) {
                         Coordonnee c1 = currentStation.getLocalisation(previousLigne.getNomLigne());
                         Coordonnee c2 = currentStation.getLocalisation(section.getLigne().getNomLigne());
-                        Duration duree = walkingDurationOf(distanceBetween(c1, c2));
-                        prochainDepart = prochainDepart.plus(duree);
+                        prochainDepart = prochainDepart.plus(walkingDurationOf(distanceBetween(c1, c2)));
                     }
                 }
 
