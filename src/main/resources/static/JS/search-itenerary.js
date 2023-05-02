@@ -42,7 +42,6 @@ $(document).ready(function () {
             data: data,
             success: function (response) {
                 // Traitement de la réponse du backend en cas de succès
-                console.log(response)
                 itenaries = response
 
                 if (itenaries.length === 0) {
@@ -61,8 +60,8 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {
                 // Traitement de la réponse du backend en cas d'erreur
-                console.log("failed")
-                console.log(xhr.responseText);
+                //console.log("failed")
+                //console.log(xhr.responseText);
                 // Faire quelque chose en cas d'erreur
             }
         });
@@ -167,7 +166,6 @@ $(document).ready(function () {
                 htmlContent += '<img src="../css/image/M' + line + '.png" alt="ligne ' + line + '" class="ligne" style="height: 30px;">';
             }
         })
-        console.log("traject duration ===> " + buildDuration(index))
         htmlContent += '</div><div class="dureeTrajet">' + buildDuration(index) + '</div></div>'
 
         htmlContent += '<div class="details" id="details' + index + '"style="display: none"></div>'
@@ -237,8 +235,6 @@ function pingLocalizations(index) {
     if (itenerary === undefined)
         return;
     var prevValues = null;
-    console.log("LITINERARY")
-    console.log(itenerary);
     if(itenerary.length == 1) {
         let polyline = L.polyline([
             [itenerary[0].depart.localisation.latitude, itenerary[0].depart.localisation.longitude],
@@ -250,7 +246,6 @@ function pingLocalizations(index) {
         itineraryPolylines.push(polyline);
         return;
     }
-    let i = 0
     itenerary.forEach(section => {
         let lineColor;
         let lignetmp;
@@ -301,12 +296,8 @@ function pingLocalizations(index) {
 
 
             if (prevValues) {
-                i = i + 1;
-                console.log("a la "+ i +" itération mon ancienne ligne est " + prevValues.ligne.nomLigne)
-                console.log("Je rentre ici pour la "+ i +" fois avec station comme départ" + section.depart.nomLieu + " et station comme arrivée" + section.arrivee.nomLieu)
                 let polyline;
                 if (prevValues.ligne.nomLigne === 'sectionMarche') {
-                    lineColor = 'black';
                     polyline = L.polyline([prevValues.marker.getLatLng(), marker.getLatLng()], {
                         color: 'black',
                         weight: 8,
@@ -335,7 +326,6 @@ function pingLocalizations(index) {
                     const markerARR = L.marker([latitude, longitude]).addTo(map)
                         .bindPopup(`<b>${nom_station}</b>`).openPopup();
                     itineraryMarkers.push(markerARR);
-                    //Now draw the polyline between marker and markerARR
                     polyline2 = L.polyline([marker.getLatLng(), markerARR.getLatLng()], {
                         color: 'black',
                         weight: 8,
@@ -417,7 +407,7 @@ function getFormData() {
     var timeValue = $('#hour').val();
 
     if (isEmpty(origine) || isEmpty(destination) || isEmpty(timeValue)) {
-        console.log("origine ou destination vide")
+        //console.log("origine ou destination vide")
         return;
     }
 
