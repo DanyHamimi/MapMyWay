@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fr.uparis.backapp"},{"l":"fr.uparis.backapp.config"},{"l":"fr.uparis.backapp.model"},{"l":"fr.uparis.backapp.Utils"},{"l":"fr.uparis.backapp.Utils.Constants"}];updateSearchResults();
