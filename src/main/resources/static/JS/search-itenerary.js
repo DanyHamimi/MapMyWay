@@ -23,6 +23,7 @@ function fillCurrentHour() {
 
 $(document).ready(function () {
     $('#search-btn').click(function () {
+        document.getElementById('liste').style.display = "block"
 
         let dataToSend = getFormData();
         if (dataToSend === null) return;
@@ -36,7 +37,9 @@ $(document).ready(function () {
             data: data,
             // Traitement de la réponse du backend en cas de succès
             success: function (response) {
-                document.getElementById('liste').style.display = "block"
+                $("#liste").css({
+                        "border": "2px solid rgb(145 134 134 / 70%)"
+                    })
 
                 // Cache les résultats d'une recherche précédente
                 for (var i = 1; i <= 5; i++) document.getElementById("det" + i).style.display = "none";
