@@ -3,7 +3,6 @@ package fr.uparis.backapp.model;
 import fr.uparis.backapp.model.lieu.Station;
 import fr.uparis.backapp.model.section.SectionTransport;
 import fr.uparis.backapp.utils.Parser;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 

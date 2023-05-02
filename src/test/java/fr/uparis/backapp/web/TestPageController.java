@@ -96,7 +96,7 @@ public class TestPageController{
 
         List<Section[]> trajetService = controller.searchItinerary(departString, arriveeString, horaireString);
 
-        assertTrue(trajetService.size() == 0);
+        assertEquals(0, trajetService.size());
     }
 
     /**

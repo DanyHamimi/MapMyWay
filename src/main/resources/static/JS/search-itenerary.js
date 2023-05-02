@@ -1,4 +1,4 @@
-var itenaries;
+var itineraries;
 const DEPART = "Départ";
 const FIN = "Arrivée";
 const LIGNE = "ligne";
@@ -16,50 +16,42 @@ function fillCurrentHour() {
     var date = new Date();
     var hours = date.getHours();
     var minutes = date.getMinutes();
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
+    if (minutes < 10) minutes = "0" + minutes;
     time = hours + ":" + minutes;
     document.getElementById('hour').value = time;
 }
 
 $(document).ready(function () {
-
     $('#search-btn').click(function () {
         document.getElementById('liste').style.display = "block"
 
         let dataToSend = getFormData();
-        if (dataToSend === null) {
-            return;
-        }
+        if (dataToSend === null) return;
         let urlQuery = dataToSend[0];
         let data = dataToSend[1];
 
-        // Envoyer les données au backend via une requête AJAX
+        // Envoie les données au backend via une requête AJAX
         $.ajax({
             type: 'GET',
             url: urlQuery,
             data: data,
+            // Traitement de la réponse du backend en cas de succès
             success: function (response) {
-                // Traitement de la réponse du backend en cas de succès
-                itenaries = response
+                // Cache les résultats d'une recherche précédente
+                for (var i = 1; i <= 5; i++) document.getElementById("det" + i).style.display = "none";
 
-                if (itenaries.length === 0) {
-                    alert("Station inexistantes dans le réseau de transport")
-                }
-                //hide all det from previous search
-                for (var i = 1; i <= 5; i++) {
-                    document.getElementById("det" + i).style.display = "none";
-                }
-                for (let index = 0; index < itenaries.length; index++) {
-                    buildTraject(index + 1);
+                itineraries = response
+                if (itineraries.length === 0) alert("Station inexistantes dans le réseau de transport")
+                for (let index = 0; index < itineraries.length; index++) {
+                    buildPictogrammeTraject(index + 1);
+                    addTrajectDetails(index + 1);
                     displayTraject(index + 1);
                 }
-
                 pingLocalizations(1);
             },
+            // Traitement de la réponse du backend en cas d'erreur
+            //TODO?
             error: function (xhr, status, error) {
-                // Traitement de la réponse du backend en cas d'erreur
                 //console.log("failed")
                 //console.log(xhr.responseText);
                 // Faire quelque chose en cas d'erreur
@@ -67,119 +59,36 @@ $(document).ready(function () {
         });
     });
 
-    function addTrajectDetails(index) {
-        var trajectDetails = document.getElementById("details" + index);
-        var itenerary = itenaries[index - 1];
-        var stationsNames = [];
-        var detailsHtml = '<div class="detailsTrajet">'
-        var LastLine = "";
-        itenerary.forEach(section => {
-            if (section.ligne != null) {
-                //check if the last element of stationsNames has the same line as the current section line if yes pop it
-                if (stationsNames.length > 0) {
-                    var lastElement = stationsNames[stationsNames.length - 1];
-                    var lastLine = lastElement.split(';')[1];
-                    if (lastLine === section.ligne.nomLigne.split(' ')[0]) {
-                        stationsNames.pop();
-                    }
-                }
-                stationsNames.push(section.depart.nomLieu + ";" + section.ligne.nomLigne.split(' ')[0] + ";" + section.depart.horaireDePassage);
-                stationsNames.push(section.arrivee.nomLieu + ";" + section.ligne.nomLigne.split(' ')[0] + ";" + section.arrivee.horaireDePassage);
-            } else {
-                if (section.arrivee.nomLieu === FIN) {
-                    if(section.depart.nomLieu === "Départ"){
-                        stationsNames.push("Marcher pendant " + section.distance*1000 + " mètres");
-
-                    }
-                    else{
-                        stationsNames.push(section.depart.nomLieu + " Arrivée");
-                    }
-                }
-            }
-        })
-
-
-        var oldNumLigne = stationsNames[0].split(';')[1];
-        var currentDiv = '<div class="groupe groupe' + oldNumLigne + '">';
-        stationsNames.forEach(station => {
-
-            var numLigne = station.split(';')[1];
-            console.log(numLigne)
-            var stationName = station.split(';')[0];
-
-            if (numLigne !== oldNumLigne) {
-                // Fermer le div précédent s'il existe
-                if (currentDiv !== '') {
-                    currentDiv += '</div>';
-                }
-                // Créer un nouveau div pour le nouvel oldNumLigne
-                currentDiv += '<div class="groupe groupe' + numLigne + '">';
-            }
-
-            var horaireDePassage = station.split(';')[2]
-            if (horaireDePassage != null) {
-                var heure = horaireDePassage.split(":")[0]
-                var min = horaireDePassage.split(":")[1]
-                currentDiv += '<div class="station nomStation' + numLigne + '">' + heure + "h" + min + " : " + stationName + '</div>';
-            } else
-                currentDiv += '<div class="station nomStation' + numLigne + '">' + stationName + '</div>';
-
-            oldNumLigne = numLigne;
-
-        });
-
-        if (currentDiv !== '') {
-            currentDiv += '</div>';
-        }
-        detailsHtml += currentDiv;
-        trajectDetails.innerHTML = (detailsHtml)
-    }
-
-    function buildTraject(index) {
-        // récupérer la indexième classe resultat
+    // Construit le trajet pictogramme
+    function buildPictogrammeTraject(index) {
+        // Récupère le indexième résultat et initialise la construction du trajet pictogramme
         var trajectResult = document.querySelectorAll('.resultat')[index - 1];
-        // déclarer un set de noom de ligne
         var linesNames = []
-        var itenerary = itenaries[index - 1];
+        var itinerary = itineraries[index - 1];
         var htmlContent = '<div class="testAffichage"><div class="ligne-container">';
-        itenerary.forEach((section, i) => {
+        itinerary.forEach(section => {
             let valToPush ="";
-            if (section.depart.nomLieu !== DEPART && section.arrivee.nomLieu !== FIN) {
-                if (section.ligne != null) {
-                    valToPush = section.ligne.nomLigne.split(' ')[0];
-                } else {
-                    valToPush = 'sectionMarche';
-                }
-            } else if (section.distance !== 0) {
-                valToPush = 'sectionMarche';
-            }
-            if(valToPush !== ""){
-                var lastElement = linesNames[linesNames.length - 1];
-                if (lastElement !== valToPush) {
-                    linesNames.push(valToPush);
-                }
-            }
+            if (section.ligne != null) valToPush = section.ligne.nomLigne.split(' ')[0];
+            else if(section.distance > 0) valToPush = 'sectionMarche';
+
+            if(valToPush !== "" && linesNames[linesNames.length - 1] !== valToPush)
+                linesNames.push(valToPush);
         });
         linesNames.forEach(line => {
-            if (line === 'sectionMarche') {
-                htmlContent += WALK_CLASS_HTML;
-            } else {
-                htmlContent += '<img src="../css/image/M' + line + '.png" alt="ligne ' + line + '" class="ligne" style="height: 30px;">';
-            }
+            if (line === 'sectionMarche') htmlContent += WALK_CLASS_HTML;
+            else htmlContent += '<img src="../css/image/M' + line + '.png" alt="ligne ' + line + '" class="ligne" style="height: 30px;">';
         })
         htmlContent += '</div><div class="dureeTrajet">' + buildDuration(index) + '</div></div>'
-
         htmlContent += '<div class="details" id="details' + index + '"style="display: none"></div>'
         trajectResult.innerHTML = (htmlContent)
-        addTrajectDetails(index);
     }
 
-
     function buildDuration(index) {
-        var itenerary = itenaries[index - 1];
-        var horaire_depart = parseISO8601Time(itenerary[0].depart.horaireDePassage);
-        var horaire_arrivee = parseISO8601Time(itenerary[itenerary.length - 1].arrivee.horaireDePassage);
-        // si l'horaire d'arrivée est inférieur à l'horaire de départ, on ajoute 1 jour à l'horaire d'arrivée (on arrive le lendemain)
+        var itinerary = itineraries[index - 1];
+        var horaire_depart = parseISO8601Time(itinerary[0].depart.horaireDePassage);
+        var horaire_arrivee = parseISO8601Time(itinerary[itinerary.length - 1].arrivee.horaireDePassage);
+
+        // Si l'horaire d'arrivée est inférieur à l'horaire de départ, on ajoute 1 jour à l'horaire d'arrivée (on arrive le lendemain)
         var traject_duration = horaire_arrivee > horaire_depart ? new Date(Math.abs(horaire_arrivee - horaire_depart)) : new Date(Math.abs(horaire_arrivee.setDate(horaire_arrivee.getDate() + 1) - horaire_depart));
         return traject_duration.getUTCHours() !== 0 ? traject_duration.getUTCHours() + " h " + traject_duration.getUTCMinutes() + ' min' : traject_duration.getUTCMinutes() + ' min';
     }
@@ -191,6 +100,62 @@ $(document).ready(function () {
         date.setMinutes(minutes);
         date.setSeconds(seconds);
         return date;
+    }
+
+    function addTrajectDetails(index) {
+        var trajectDetails = document.getElementById("details" + index);
+        var itinerary = itineraries[index - 1];
+        var stationsNames = [];
+        var detailsHtml = '<div class="detailsTrajet">'
+
+        itinerary.forEach(section => {
+            if (section.ligne != null) {
+                //check if the last element of stationsNames has the same line as the current section line if yes pop it
+                if (stationsNames.length > 0) {
+                    var lastElement = stationsNames[stationsNames.length - 1];
+                    if (lastElement.split(';')[1] !== section.ligne.nomLigne.split(' ')[0])
+                        stationsNames.push(section.depart.nomLieu + ";" + section.ligne.nomLigne.split(' ')[0] + ";" + section.depart.horaireDePassage);
+                }
+                stationsNames.push(section.arrivee.nomLieu + ";" + section.ligne.nomLigne.split(' ')[0] + ";" + section.arrivee.horaireDePassage);
+            }
+            else {
+                if (section.depart.nomLieu === DEPART && section.arrivee.nomLieu !== FIN)
+                    stationsNames.push("Départ");
+                if(section.distance > 0)
+                    stationsNames.push("Marcher pendant " + section.distance*1000 + " mètres");
+                if (section.depart.nomLieu !== DEPART && section.arrivee.nomLieu === FIN)
+                    stationsNames.push("Arrivée");
+            }
+        })
+
+        var oldNumLigne = stationsNames[0].split(';')[1];
+        var currentDiv = '<div class="groupe groupe' + oldNumLigne + '">';
+        stationsNames.forEach(station => {
+            var numLigne = station.split(';')[1];
+            var stationName = station.split(';')[0];
+
+            if (numLigne !== oldNumLigne) {
+                // Fermer le div précédent s'il existe
+                if (currentDiv !== '') currentDiv += '</div>';
+
+                // Créer un nouveau div pour le nouvel oldNumLigne
+                currentDiv += '<div class="groupe groupe' + numLigne + '">';
+            }
+
+            var horaireDePassage = station.split(';')[2]
+            if (horaireDePassage != null) {
+                var heure = horaireDePassage.split(":")[0]
+                var min = horaireDePassage.split(":")[1]
+                currentDiv += '<div class="station nomStation' + numLigne + '">' + heure + "h" + min + " : " + stationName + '</div>';
+            }
+            else currentDiv += '<div class="station nomStation' + numLigne + '">' + stationName + '</div>';
+
+            oldNumLigne = numLigne;
+        });
+
+        if (currentDiv !== '') currentDiv += '</div>';
+        detailsHtml += currentDiv;
+        trajectDetails.innerHTML = (detailsHtml)
     }
 
     function parseISO8601Duration(durationString) {
@@ -215,9 +180,9 @@ $(document).ready(function () {
     function durationMinutes(durationString) {
         return Math.ceil(parseISO8601Duration(durationString) / 60);
     }
-
-
 })
+
+
 // Declare global arrays to hold markers and polylines
 var itineraryMarkers = [];
 var itineraryPolylines = [];
@@ -231,15 +196,14 @@ function pingLocalizations(index) {
     itineraryMarkers = [];
     itineraryPolylines = [];
 
-    var itenerary = itenaries[index - 1];
+    var itinerary = itineraries[index - 1];
+    if (itinerary === undefined) return;
 
-    if (itenerary === undefined)
-        return;
     var prevValues = null;
-    if(itenerary.length == 1) {
+    if(itinerary.length == 1) {
         let polyline = L.polyline([
-            [itenerary[0].depart.localisation.latitude, itenerary[0].depart.localisation.longitude],
-            [itenerary[0].arrivee.localisation.latitude, itenerary[0].arrivee.localisation.longitude]
+            [itinerary[0].depart.localisation.latitude, itinerary[0].depart.localisation.longitude],
+            [itinerary[0].arrivee.localisation.latitude, itinerary[0].arrivee.localisation.longitude]
         ],{color: 'black',
             weight: 8,
             dashArray: [10, 20]
@@ -247,12 +211,12 @@ function pingLocalizations(index) {
         itineraryPolylines.push(polyline);
         return;
     }
-    itenerary.forEach(section => {
+    itinerary.forEach(section => {
         let lineColor;
         let lignetmp;
         //check if name == depart and name == arrivee
         if (section.depart.nomLieu === DEPART && section.arrivee.nomLieu === FIN) {
-            if(prevValues){
+            if (prevValues) {
                 let latitude = section.depart.localisation.latitude;
                 let longitude = section.depart.localisation.longitude;
                 let nom_station = section.depart.nomLieu;
@@ -279,14 +243,10 @@ function pingLocalizations(index) {
             itineraryPolylines.push(polyline);
             prevValues = null;
         }
-
-        else{
+        else {
             // Check if section.ligne exists
-            if (section.ligne == null) {
-                lignetmp = {nomLigne: "sectionMarche"};
-            } else {
-                lignetmp = section.ligne.nomLigne.split(' ')[0];
-            }
+            if (section.ligne == null) lignetmp = {nomLigne: "sectionMarche"};
+            else lignetmp = section.ligne.nomLigne.split(' ')[0];
 
             let latitude = section.depart.localisation.latitude;
             let longitude = section.depart.localisation.longitude;
@@ -294,7 +254,6 @@ function pingLocalizations(index) {
             const marker = L.marker([latitude, longitude]).addTo(map)
                 .bindPopup(`<b>${nom_station}</b>`).openPopup();
             itineraryMarkers.push(marker);
-
 
             if (prevValues) {
                 let polyline;
@@ -304,7 +263,8 @@ function pingLocalizations(index) {
                         weight: 8,
                         dashArray: [10, 20]
                     }).addTo(map);
-                } else {
+                }
+                else {
                     const style = window.getComputedStyle(document.documentElement);
                     lineColor = style.getPropertyValue('--ligne' + prevValues.ligne);
                     polyline = L.polyline([prevValues.marker.getLatLng(), marker.getLatLng()], {
@@ -317,9 +277,8 @@ function pingLocalizations(index) {
             }
 
             let polyline2;
-            if (section.arrivee.nomLieu !== FIN) {
-                prevValues = {marker: marker, ligne: lignetmp};
-            } else {
+            if (section.arrivee.nomLieu !== FIN) prevValues = {marker: marker, ligne: lignetmp};
+            else {
                 if (section.ligne == null) { //Donc si il faut marcher à la fin
                     let latitude = section.arrivee.localisation.latitude;
                     let longitude = section.arrivee.localisation.longitude;
@@ -336,8 +295,6 @@ function pingLocalizations(index) {
                 }
             }
         }
-
-
     });
 }
 
@@ -346,17 +303,15 @@ function AfficheDetails(num) {
 
     var allDetailsDivs = document.querySelectorAll(".details");
     for (var i = 0; i < allDetailsDivs.length; i++) {
-        if (allDetailsDivs[i].style.display === "block" && allDetailsDivs[i] !== message) {
+        if (allDetailsDivs[i].style.display === "block" && allDetailsDivs[i] !== message)
             allDetailsDivs[i].style.display = "none";
-        }
     }
 
     if (message.style.display === "none") {
         message.style.display = "block"; // Show the message
         pingLocalizations(num);
-    } else {
-        message.style.display = "none"; // Hide the message
     }
+    else message.style.display = "none"; // Hide the message
 }
 
 function displayTraject(idTraject) {
@@ -366,7 +321,6 @@ function displayTraject(idTraject) {
 
 function isEmpty(field) {
     if (field === '' || field === null || field === undefined) {
-
         var afficher_message = document.getElementById('chercher')
         var messageDiv = document.createElement("div");
         messageDiv.setAttribute("id", "errorSig");
@@ -399,31 +353,26 @@ function checkEmptyAndAlert(field, message) {
     return false;
 }
 
-
-// fonction qui permet de recuperer les données à envoyer à l'API selon l'option de trajet selectionnée
+// fonction qui permet de récupérer les données à envoyer à l'API selon l'option de trajet sélectionnée
 function getFormData() {
-
     var origine = $('#origine').val();
     var destination = $('#destination').val();
     var timeValue = $('#hour').val();
 
-    if (isEmpty(origine) || isEmpty(destination) || isEmpty(timeValue)) {
-        //console.log("origine ou destination vide")
-        return;
-    }
+    if (isEmpty(origine) || isEmpty(destination) || isEmpty(timeValue)) return;
 
     var selectedOption = $('input[name="typetrajet"]:checked').val();
     var data = {}
     var url = ''
     if (selectedOption === 'lazy0') {
-
         url = 'itinerary/optimal'
         data = {
             "origin": origine,
             "destination": destination,
             "time": timeValue
         }
-    } else if (selectedOption === 'lazy1') {
+    }
+    else if (selectedOption === 'lazy1') {
         var distanceMax = $('#lazy_distance').val();
         if (checkEmptyAndAlert(distanceMax, 'distance maximale')) {
             return null;
@@ -435,14 +384,16 @@ function getFormData() {
             "time": timeValue,
             "distanceMax": distanceMax
         }
-    } else if (selectedOption === 'sport0') {
+    }
+    else if (selectedOption === 'sport0') {
         url = 'itinerary/fullSport'
         data = {
             "origin": origine,
             "destination": destination,
             "time": timeValue
         }
-    } else if (selectedOption === 'sport1') {
+    }
+    else if (selectedOption === 'sport1') {
         var distanceMin = $('#sport_distance').val();
         if (checkEmptyAndAlert(distanceMin, 'distance minimale')) {
             return null;
@@ -454,7 +405,8 @@ function getFormData() {
             "time": timeValue,
             "distanceMin": distanceMin
         }
-    } else if (selectedOption === 'sport2') {
+    }
+    else if (selectedOption === 'sport2') {
         var walkingTimeMin = $('#sport_minutes').val();
         if (checkEmptyAndAlert(walkingTimeMin, 'temps de marche')) {
             return null;
