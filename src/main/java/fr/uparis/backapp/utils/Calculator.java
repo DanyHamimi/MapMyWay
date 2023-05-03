@@ -119,9 +119,21 @@ public class Calculator {
             }
 
             isCalculating = false;
+            setCorrectTime(res);
             return res;
         }
         return null;
+    }
+
+    /**
+     * Modifie les horaires de départ des lieux pour prendre en compte les correspondances.
+     *
+     * @param trajets les trajets concernés par la modification.
+     */
+    private static void setCorrectTime(List<Section[]> trajets) {
+        for(Section[] sections: trajets)
+            for(int i = 1; i < sections.length; i++)
+                sections[i].getDepart().setHoraireDePassage(sections[i].getArrivee().getHoraireDePassage().minus(sections[i].getDuree()));
     }
 
     /**
@@ -135,8 +147,8 @@ public class Calculator {
     private static Section walkingItineraire(Coordonnee depart, Coordonnee arrivee, LocalTime horaireDepart) {
         double distance = distanceBetween(depart, arrivee);
         Duration duree = walkingDurationOf(distance);
-        return new Section(new Lieu("Départ", depart, horaireDepart),
-                           new Lieu("Arrivée", arrivee, horaireDepart.plus(duree)),
+        return new Section(new Lieu(Constants.DEPART, depart, horaireDepart),
+                           new Lieu(Constants.ARRIVEE, arrivee, horaireDepart.plus(duree)),
                            duree,
                            distance);
     }
@@ -269,8 +281,8 @@ public class Calculator {
                         //Vérifie si le trajet est actuellement parmi les 5 trajets les plus optimaux
                         if(horaireArrivee.isBefore(maxTime)) {
                             //Si c'est le cas, faire une copie du trajet à ajouter
-                            Section sectionDebut = new Section(new Lieu("Départ", depart, horaireDepart), departCandidat, dureeDebut, distanceDebut);
-                            Section sectionFin = new Section(arriveeCandidat, new Lieu("Arrivée", arrivee, horaireArrivee), dureeFin, distanceFin);
+                            Section sectionDebut = new Section(new Lieu(Constants.DEPART, depart, horaireDepart), departCandidat, dureeDebut, distanceDebut);
+                            Section sectionFin = new Section(arriveeCandidat, new Lieu(Constants.ARRIVEE, arrivee, horaireArrivee), dureeFin, distanceFin);
                             Section[] sectionToSave = createNewTrajet(trajet, sectionDebut, sectionFin);
 
                             //Et l'ajouter dans les trajets, dans l'ordre chronologique d'horaire d'arrivée
@@ -368,8 +380,7 @@ public class Calculator {
                     if(previousLigne != null && currentLigne != null && previousLigne != section.getLigne()) {
                         Coordonnee c1 = currentStation.getLocalisation(previousLigne.getNomLigne());
                         Coordonnee c2 = currentStation.getLocalisation(section.getLigne().getNomLigne());
-                        Duration duree = walkingDurationOf(distanceBetween(c1, c2));
-                        prochainDepart = prochainDepart.plus(duree);
+                        prochainDepart = prochainDepart.plus(walkingDurationOf(distanceBetween(c1, c2)));
                     }
                 }
 

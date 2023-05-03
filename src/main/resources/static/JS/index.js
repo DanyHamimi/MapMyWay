@@ -1,10 +1,10 @@
 const optionsBtn = document.getElementById('options');
 const searchBtn = document.getElementById('chercher');
-let lastClickedValue = 'origine';
+let lastClickedValue = 'origine'; // stocke la dernière valeur cliquée ("origine" ou "destination")
 const applyBtn = document.getElementById('apply-btn');
 
 applyBtn.addEventListener('click', () => {
-//     appeler l'evènement de click sur optionsBtn
+    // Appelle l'évènement de click sur optionsBtn
     optionsBtn.click();
     searchBtn.click();
 });
@@ -12,9 +12,8 @@ applyBtn.addEventListener('click', () => {
 optionsBtn.addEventListener('click', (e) => {
     let parent = e.target.parentNode.parentNode;
     Array.from(e.target.parentNode.parentNode.classList).find((element) => {
-        if (element !== "slide-up") {
-            parent.classList.add('slide-up')
-        } else {
+        if (element !== "slide-up") parent.classList.add('slide-up')
+        else {
             searchBtn.parentNode.classList.add('slide-up')
             parent.classList.remove('slide-up')
         }
@@ -24,18 +23,17 @@ optionsBtn.addEventListener('click', (e) => {
 searchBtn.addEventListener('click', (e) => {
     let parent = e.target.parentNode;
     Array.from(e.target.parentNode.classList).find((element) => {
-        if (element !== "slide-up") {
-            parent.classList.add('slide-up')
-        } else {
+        if (element !== "slide-up") parent.classList.add('slide-up')
+        else {
             optionsBtn.parentNode.parentNode.classList.add('slide-up')
             parent.classList.remove('slide-up')
         }
     });
 });
 
+
 let originMarker = null;
 let destinationMarker = null;
-
 
 $(function () {
     $("#origine, #destination, #rechercher-input-horaires").autocomplete({
@@ -60,93 +58,86 @@ $(function () {
         },
         minLength: 1,
         select: function (event, ui) {
-            //When clicking on a suggestion, fill the input with the suggestion
+            // Complète la saisie en appuyant sur une suggestion
             this.value = ui.item.value.toString().split(";")[0];
 
-            // Récupérer les coordonnées de la station sélectionnée
+            // Récupère les coordonnées de la station sélectionnée
             let stationInfo = ui.item.value.split(";");
             let stationName = stationInfo[0];
             let stationLatitude = parseFloat(stationInfo[2]);
             let stationLongitude = parseFloat(stationInfo[1]);
 
-            // Vérifier si l'élément sélectionné est "origine" ou "destination"
+            // Vérifie si l'élément sélectionné est "origine" ou "destination"
             if (this.id === "origine") {
-                // Supprimer le marqueur précédent s'il existe
-                if (originMarker) {
-                    originMarker.remove();
-                }
+                // Supprime le marqueur précédent s'il existe
+                if (originMarker) originMarker.remove();
 
-                // Créer un nouveau marqueur d'origine aux coordonnées spécifiées
+                // Crée un nouveau marqueur d'origine aux coordonnées spécifiées
                 originMarker = L.marker([stationLatitude, stationLongitude]).addTo(map);
                 originMarker.bindPopup(`<b>Origine: ${stationName}</b>`).openPopup();
-            } else if (this.id === "destination") {
-                // Supprimer le marqueur précédent s'il existe
-                if (destinationMarker) {
-                    destinationMarker.remove();
-                }
+            }
+            else if (this.id === "destination") {
+                // Supprime le marqueur précédent s'il existe
+                if (destinationMarker) destinationMarker.remove();
 
-                // Créer un nouveau marqueur de destination aux coordonnées spécifiées
+                // Crée un nouveau marqueur de destination aux coordonnées spécifiées
                 destinationMarker = L.marker([stationLatitude, stationLongitude]).addTo(map);
                 destinationMarker.bindPopup(`<b>Destination: ${stationName}</b>`).openPopup();
             }
 
-            // Empêcher la valeur sélectionnée de s'afficher dans le champ de saisie
+            // Empêche la valeur sélectionnée de s'afficher dans le champ de saisie
             event.preventDefault();
 
             if (originMarker && destinationMarker) {
-                // Obtenir les coordonnées des deux marqueurs
+                // Obtient les coordonnées des deux marqueurs
                 let originLatLng = originMarker.getLatLng();
                 let destinationLatLng = destinationMarker.getLatLng();
 
-                // Créer un groupe de points pour les deux marqueurs
+                // Crée un groupe de points pour les deux marqueurs
                 let markersGroup = new L.LatLngBounds([originLatLng, destinationLatLng]);
 
-                // Adapter le zoom et le centrage de la carte pour afficher les deux marqueurs
+                // Adapte le zoom et le centrage de la carte pour afficher les deux marqueurs
                 map.fitBounds(markersGroup);
             }
         }
     });
 });
 
+
 var map = L.map('map').setView([48.858093, 2.294694], 15);
-// Définir les limites de la carte
+// Définit les limites de la carte
 var bounds = L.latLngBounds(
     L.latLng(48.714072, 2.077789), // Coin inférieur gauche
     L.latLng(49.004997, 2.628479)  // Coin supérieur droit
 );
 map.setMaxBounds(bounds);
 
-// Variable pour stocker la dernière valeur cliquée ("origine" ou "destination")
-
 // Fonction pour mettre à jour la variable "lastClickedValue" en fonction de l'ID du champ de saisie cliqué
 function updateLastClickedValue(inputId) {
     lastClickedValue = (inputId === 'origine') ? 'origine' : 'destination';
 }
 
-// Ajouter un listener au champ de saisie "origine" pour mettre à jour "lastClickedValue"
+// Ajoute un listener au champ de saisie "origine" pour mettre à jour "lastClickedValue"
 document.getElementById('origine').addEventListener('click', () => {
     updateLastClickedValue('origine');
 });
 
-// Ajouter un listener au champ de saisie "destination" pour mettre à jour "lastClickedValue"
+// Ajoute un listener au champ de saisie "destination" pour mettre à jour "lastClickedValue"
 document.getElementById('destination').addEventListener('click', () => {
     updateLastClickedValue('destination');
 });
 
 // Fonction pour ajouter un marqueur sur la carte Leaflet lorsque l'utilisateur clique
 function onMapClick(e) {
-    // Ajouter un marqueur à l'emplacement cliqué en fonction de la dernière valeur cliquée ("origine" ou "destination")
+    // Ajoute un marqueur à l'emplacement cliqué en fonction de la dernière valeur cliquée ("origine" ou "destination")
     if (lastClickedValue === 'origine') {
-        if (originMarker) {
-            originMarker.remove();
-        }
+        if (originMarker) originMarker.remove();
         originMarker = L.marker(e.latlng).addTo(map);
         originMarker.bindPopup(`<b>Origine</b>`).openPopup();
         document.getElementById('origine').value = `${e.latlng.lng}, ${e.latlng.lat}`;
-    } else if (lastClickedValue === 'destination') {
-        if (destinationMarker) {
-            destinationMarker.remove();
-        }
+    }
+    else if (lastClickedValue === 'destination') {
+        if (destinationMarker) destinationMarker.remove();
         destinationMarker = L.marker(e.latlng).addTo(map);
         destinationMarker.bindPopup(`<b>Destination</b>`).openPopup();
         document.getElementById('destination').value = `${e.latlng.lng}, ${e.latlng.lat}`;
@@ -175,12 +166,16 @@ submit.onclick = function () {
         },
     }).done(function (data) {
         let keys = Object.keys(data);
-        // Clear existing radio buttons and list items
+        // Enlève les radio boutons et items de liste existant
         $("#modal-content").html('');
 
         if (keys.length === 0) {
-            // No schedules found
-            alert("Station introuvable dans le réseau RATP");
+            // Pas d'horaires trouvés
+            const errorDiv = document.getElementById('errorRechercher');
+            errorDiv.style.display = 'block';
+            setTimeout(function() {
+                errorDiv.style.display = 'none';
+            }, 5000); // masque l'élément après 5 secondes
             return;
         }
 
@@ -190,7 +185,7 @@ submit.onclick = function () {
             let station = keys[i];
             let schedules = data[station];
 
-            // Create a radio button for each station
+            // Crée un radio bouton pour chaque station
             let radioButton = $("<input>").attr({
                 type: "radio",
                 name: "station",
@@ -198,9 +193,8 @@ submit.onclick = function () {
                 value: station
             });
 
-            // Add a label for the radio button
+            // Ajoute une image et un label pour le radio bouton
             let label = $("<label class='label_station'>").attr("for", "station-" + i).text(station.split(";")[1]);
-            //set the radio button image
             let imageUrl = "../css/image/M" + station.split(";")[0] + ".png";
             label.css({
                 "background-image": "url(" + imageUrl + ")",
@@ -211,23 +205,20 @@ submit.onclick = function () {
                 "min-width": "max-content",
                 "color": "rgba(255, 255, 255, 0.7)"
             });
-            // Append the radio button and label to the modal content
+            // Ajout du radio bouton et label dans le  modal content
             $("#modal-content").css({
                 "border": "1px solid rgb(145 134 134 / 70%)",
                 "background-color": " rgba(0, 0, 0, 0.4)"
             })
 
-
             $("#modal-content").append(radioButton, label);
 
-            // Event listener for the radio button click
+            // Event listener pour le click sur le radio button
             radioButton.on("click", function () {
-                // Clear existing list items
+                // Enlève les items de liste existant
                 $("#modal ul").html('');
 
-
-                // Create an unordered list for schedules
-                //let ul = $("<ul class='ul_lignes'>");
+                // Crée une liste non-ordonnée pour les horaires
                 $('#ul_lignes').html('')
                 $('#ul_lignes').css({"border": "1px solid rgb(145 134 134 / 70%) "})
                 let imageUrl = "../css/image/M" + station.split(";")[0] + ".png";
@@ -243,13 +234,11 @@ submit.onclick = function () {
                     });
                     $('#ul_lignes').append(li);
                 }
-
-                // Append the unordered list to the modal content
-                //$("#modal").append(ul)
             });
         }
     });
 }
+
 btn.onclick = function () {
     modal.style.display = "block";
 }
@@ -301,7 +290,8 @@ switchBtn.addEventListener('click', function () {
         const temp = origine.value;
         origine.value = destination.value;
         destination.value = temp;
-    } else {
+    }
+    else {
         var afficher_message = document.getElementById('chercher')
         var messageDiv = document.createElement("div");
         messageDiv.setAttribute("id", "errorSig");
@@ -312,7 +302,4 @@ switchBtn.addEventListener('click', function () {
             afficher_message.removeChild(messageDiv);
         }, 3000);
     }
-
 });
-
-

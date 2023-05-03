@@ -87,6 +87,16 @@ public class Constants {
 
 
     /**
+     * Nom du lieu de départ.
+     */
+    public static final String DEPART = "Départ";
+
+    /**
+     * Nom du lieu d'arrivée.
+     */
+    public static final String ARRIVEE = "Arrivée";
+
+    /**
      * Valeur par défaut de la distance minimale pour trouver les stations proches d'une coordonnée, en km.
      */
     public static final double DEFAULT_MIN_DISTANCE = 0.0;
