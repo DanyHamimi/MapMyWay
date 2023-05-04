@@ -380,7 +380,8 @@ public class Calculator {
                     if(previousLigne != null && currentLigne != null && previousLigne != section.getLigne()) {
                         Coordonnee c1 = currentStation.getLocalisation(previousLigne.getNomLigne());
                         Coordonnee c2 = currentStation.getLocalisation(section.getLigne().getNomLigne());
-                        prochainDepart = prochainDepart.plus(walkingDurationOf(distanceBetween(c1, c2)));
+                        prochainDepart = prochainDepart.plus(walkingDurationOf(distanceBetween(c1, c2)))
+                                                       .plus(Duration.ofMinutes(Constants.PENALTY));
                     }
                 }
 

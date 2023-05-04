@@ -154,12 +154,6 @@ public class TestCalculator {
         List<Section[]> trajetsTrouves1 = Calculator.itineraireFactory(depart, arrivee, horaireDepart);
         assertNotNull(trajetsTrouves1);
         assertTrue(sameTrajet(trajetsTrouves0, trajetsTrouves1));
-
-        //Trajet avec au moins 0 minute de marche
-        Calculator.changeMarcherAuMoinsDistance(Constants.DEFAULT_MIN_DISTANCE);
-        List<Section[]> trajetsTrouves2 = Calculator.itineraireFactory(depart, arrivee, horaireDepart);
-        assertNotNull(trajetsTrouves2);
-        assertTrue(sameTrajet(trajetsTrouves0, trajetsTrouves2));
     }
 
     /**

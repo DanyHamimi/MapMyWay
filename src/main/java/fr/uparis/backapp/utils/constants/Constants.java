@@ -23,8 +23,21 @@ public class Constants {
      * Délimiteur utilisé par le fichier CSV.
      */
     public static final String DELIMITER = ";";
+
+    /**
+     * Délimiteur deux points.
+     */
     public static final String COLON = ":";
+
+    /**
+     * Délimiteur espace.
+     */
     public static final String SPACE = " ";
+
+
+    /**
+     * Expression régulière pour une coordonnée.
+     */
     public static final String COORDINATE_REGEX = "^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?"
             + "(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$";
 
@@ -117,4 +130,9 @@ public class Constants {
      * Nombre maximal de trajets à renvoyer à l'utilisateur.
      */
     public static final int MAX_TRAJETS_NUMBER = 5;
+
+    /**
+     * Pénalité appliquée pour les correspondances.
+     */
+    public static final int PENALTY = 2;
 }
