@@ -2,12 +2,12 @@
   --ligne1: #FFCE00;
   --ligne2: #0064B0;
   --ligne3: #9F9825;
-  --ligne3bis : #98D4E2;
+  --ligne3B : #98D4E2;
   --ligne4: #C04191;
   --ligne5: #F28E42;
   --ligne6: #83C491;
   --ligne7: #F3A4BA;
-  --ligne7bis: #83C491;
+  --ligne7B: #83C491;
   --ligne8: #CEADD2;
   --ligne9: #D5C900;
   --ligne10: #E3B32A;
@@ -19,15 +19,34 @@
 
 @font-face {
   font-family: "Knewave-Regular";
-  src: url("fonts/Knewave-Regular.ttf");
+  src: url("Fonts/Knewave-Regular.ttf");
 }
 @font-face {
   font-family: "Lobster-Regular";
-  src: url("fonts/Lobster-Regular.ttf");
+  src: url("Fonts/Lobster-Regular.ttf");
 }
 @font-face {
   font-family: "FjallaOne-Regular";
-  src: url("fonts/FjallaOne-Regular.ttf");
+  src: url("Fonts/FjallaOne-Regular.ttf");
+}
+
+.options-titre{
+  font-family: FjallaOne-Regular !important;
+}
+
+.options-input{
+  padding: 2px;
+  border-radius: 30%;
+  width: 18%;
+}
+
+.options-space{
+  margin-top: 1%;
+}
+
+.options-font{
+  font-family: "Roboto Light";
+  padding: 3%;
 }
 
 .switch{
@@ -162,10 +181,12 @@
 .groupe1{ border-left: 6px solid var(--ligne1);}
 .groupe2{ border-left: 6px solid var(--ligne2);}
 .groupe3{ border-left: 6px solid var(--ligne3);}
+.groupe3B{ border-left: 6px solid var(--ligne3B);}
 .groupe4{ border-left: 6px solid var(--ligne4);}
 .groupe5{ border-left: 6px solid var(--ligne5);}
 .groupe6{ border-left: 6px solid var(--ligne6);}
 .groupe7{ border-left: 6px solid var(--ligne7);}
+.groupe7B{ border-left: 6px solid var(--ligne7B);}
 .groupe8{ border-left: 6px solid var(--ligne8);}
 .groupe9{ border-left: 6px solid var(--ligne9);}
 .groupe10{ border-left: 6px solid var(--ligne10);}
@@ -174,17 +195,26 @@
 .groupe13{ border-left: 6px solid var(--ligne13);}
 .groupe14{ border-left: 6px solid var(--ligne14);}
 
+#errorRechercher{
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  color: rgb(254, 183, 66);
+  font-family: 'FjallaOne-Regular';
+  font-size: 120%;
+  width: 30%;
+}
 
 #errorSig{
-  font-size: 70%;
+  font-size: 85%;
   position: fixed;
   top: 8%;
   left: 0;
-  color: white;
+  color: rgb(254, 183, 66);
   text-align: center;
   margin: 16% 0%;
   width: 100%;
-  font-family: 'Roboto Light' !important;
+  font-family: FjallaOne-Regular !important;
 }
 
 .nomStation{
@@ -209,7 +239,6 @@
 }
 
 .trajets {
-  border: 2px solid rgb(145 134 134 / 70%);
   height: 44%;
   border-radius: 10px;
   text-align: center;
@@ -278,7 +307,7 @@
   outline: none;
   box-shadow: none;
   display: block;
-  height: 30px;
+  height: 20%;
   line-height: 30px;
   padding: 8px 15px;
   width: 100%;
@@ -310,7 +339,7 @@
 }
 
 .form-holder{
-  margin-top: 25% !important;
+  margin-top: calc(50% - 100px) !important;
   background-color: rgba(0, 0, 0, 0.2) !important;
 
 }

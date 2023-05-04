@@ -9,6 +9,7 @@
     <script src="/jquery/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="/jquery/jquery-ui.css">
     <script src="/jquery/jquery-ui.min.js"></script>
+    <title>Map My Way</title>
 </head>
 <body style=" background-color: rgb(96 235 232);
     margin: 0;
@@ -32,7 +33,7 @@
                     <div class="aligner">
                         <div class="label-horaire">
                             Horaire de depart
-                            <input type="time" id = 'hour' class="horaire" required/>
+                            <input type="time" id='hour' class="horaire" required/>
                         </div>
                         <button class="voirHoraire" id="rechercher-btn">Voir les horaires des trains</button>
                     </div>
@@ -45,38 +46,43 @@
             <div class="options slide-up">
                 <div class="center">
                     <h2 class="form-title" id="options">Personnaliser le trajet</h2>
-                    <div class="form-holder">
-                        <h3>Mode paresseux</h3>
-                        <div>
-                            <input type="radio" id="lazy0" name="typetrajet" value="lazy0">
+                    <div style="margin-top: 15% !important;" class="options-font form-holder">
+                        <h3 class="options-titre">Mode paresseux</h3>
+                        <div class="options-space">
+                            <input type="radio" id="lazy0" name="typetrajet" value="lazy0" checked>
                             <label for="lazy0">Marcher le moins possible</label>
                         </div>
-                        <div>
+                        <div class="options-space">
                             <input type="radio" id="lazy1" name="typetrajet" value="lazy1">
-                            <label for="lazy1">Marcher au +</label>
-                            <input type="number" id="lazy_distance" name="lazy_distance" placeholder="Nombre de km" min="0">
+                            <label for="lazy1">Marcher au plus</label>
+                            <input class="options-input" type="number" id="lazy_distance" name="lazy_distance"
+                                   placeholder=" " min="0">
                             km pour aller plus vite
                         </div>
 
-                        <h3>Mode sportif</h3>
-                        <div>
+                        <h3 class="options-titre">Mode sportif</h3>
+                        <div class="options-space">
                             <input type="radio" id="sport0" name="typetrajet" value="sport0">
                             <label for="sport0">Trajet à pied</label>
                         </div>
-                        <div>
+                        <div class="options-space">
                             <input type="radio" id="sport1" name="typetrajet" value="sport1">
                             <label for="sport1">Marcher au moins</label>
-                            <input type="number" id="sport_distance" name="sport_distance" placeholder="Nombre de km" min="0">
+                            <input class="options-input" type="number" id="sport_distance" name="sport_distance"
+                                   placeholder=" " min="0">
                             km
                         </div>
-                        <div>
+                        <div class="options-space">
                             <input type="radio" id="sport2" name="typetrajet" value="sport2">
                             <label for="sport2">Marcher au moins</label>
-                            <input type="number" id="sport_minutes" name="sport_minutes" placeholder="Nombre de minutes" min="0">
-                            Minutes
+                            <input class="options-input" type="number" id="sport_minutes" name="sport_minutes"
+                                   placeholder=" " min="0">
+                            minutes
                         </div>
                     </div>
-                    <button class="submit-btn" id="apply-btn" style="font-size: 120% !important;    font-family: 'FjallaOne-Regular';">Appliquer</button>
+                    <button class="submit-btn" id="apply-btn"
+                            style="font-size: 120% !important;    font-family: 'FjallaOne-Regular';">Appliquer
+                    </button>
                 </div>
             </div>
         </div>
@@ -89,15 +95,18 @@
             <button onclick="AfficheDetails(5)" class="resultat" style="display: none;" id="det5"></button>
         </div>
 
-        <div id="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; background-color: white; border: 1px solid black; border-radius: 5px; padding: 10px; box-sizing: border-box;">
+        <div id="modal"
+             style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 500px; background-color: white; border: 1px solid black; border-radius: 5px; padding: 10px; box-sizing: border-box;">
             <div style="position: absolute; bottom: 10px; right: 10px;">
                 <button class="lobster-min" id="rechercher-annuler">Fermer</button>
             </div>
+            <div id="errorRechercher" style="display: none ">Station introuvable dans le réseau RATP</div>
             <h3 class="lobster">Rechercher des horaires</h3>
-            <input class="lobster-min-recherche" type="text" id="rechercher-input-horaires">
+            <input placeholder="Saisir nom de la station" class="lobster-min-recherche" type="text"
+                   id="rechercher-input-horaires">
             <button class="lobster-min" id="rechercher-submit">Rechercher</button>
             <div class="aligner">
-                <div id="vers" ></div>
+                <div id="vers"></div>
                 <div id="modal-content">
                 </div>
             </div>
@@ -106,7 +115,8 @@
 
     </div>
 
-    <div class="map" id="map" style=" width: 60vw; height: 99vh; margin: 5px 10px 5px 60px; border-radius: 5%; z-index: 1"></div>
+    <div class="map" id="map"
+         style=" width: 60vw; height: 99vh; margin: 5px 10px 5px 60px; border-radius: 5%; z-index: 1"></div>
 </div>
 <script src="JS/search-itenerary.js"></script>
 <script src="JS/index.js"></script>

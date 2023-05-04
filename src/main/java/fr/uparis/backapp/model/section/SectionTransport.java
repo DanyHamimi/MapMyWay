@@ -163,7 +163,7 @@ public class SectionTransport extends Section {
      */
     @Override
     public Section copy() {
-        return new SectionTransport(getDepart(), getArrivee(), duree, distance, ligne);
+        return new SectionTransport(getDepart().copy(), getArrivee().copy(), duree, distance, ligne);
     }
 
     /**
@@ -209,5 +209,4 @@ public class SectionTransport extends Section {
                 return section;
         return null;
     }
-
 }
