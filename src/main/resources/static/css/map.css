@@ -19,15 +19,15 @@
 
 @font-face {
   font-family: "Knewave-Regular";
-  src: url("fonts/Knewave-Regular.ttf");
+  src: url("Fonts/Knewave-Regular.ttf");
 }
 @font-face {
   font-family: "Lobster-Regular";
-  src: url("fonts/Lobster-Regular.ttf");
+  src: url("Fonts/Lobster-Regular.ttf");
 }
 @font-face {
   font-family: "FjallaOne-Regular";
-  src: url("fonts/FjallaOne-Regular.ttf");
+  src: url("Fonts/FjallaOne-Regular.ttf");
 }
 
 .options-titre{
